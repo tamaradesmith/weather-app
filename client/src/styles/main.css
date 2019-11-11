@@ -1,0 +1,21 @@
+@import url("./reset.css");
+
+:root {
+  --primary-colour: #05050;
+  --secondary-colour: #1B4353;
+}
+body{
+  font-size: 2em;
+}
+
+header{
+  display: flex;
+  flex-direction: row;
+  justify-content: space-evenly;
+}
+.App{
+  width: 800px;
+  height: 480px;
+  border: 1px solid var(--primary-colour);
+  background: var(--secondary-colour);
+}
