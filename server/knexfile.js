@@ -1,21 +1,21 @@
 // Update with your config settings.
 
-module.exports = {
+  module.exports = {
 
-  development: {
-    client: 'pg',
-    connection: {
-      database: 'weather_app',
-      username: 'tamara',
-      password: 'tamara'
+    development: {
+      client: 'pg',
+      connection: {
+        database: 'weather_app',
+        username: 'tamara',
+        password: 'tamara'
+      },
+
+      migrations: {
+        directory: 'db/migrations',
+      },
+      seeds: {
+        directory: 'db/seeds'
+      },
     },
 
-    migrations: {
-      directory: 'db/migrations',
-    },
-    seeds: {
-      directory: 'db/seeds'
-    },
-  },
-
-}
+  };

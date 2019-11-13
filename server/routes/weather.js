@@ -1,29 +1,43 @@
 const express = require('express');
 const router = express.Router();
-
-
 const app = express();
-const weather = require('./routes/weather');
-
-
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
-app.use(express.static(path.join(__dirname, 'public')));
-app.use(cookieParser());
-app.use(express.urlencoded({ extended: true }));
-app.use(express.json())
-app.use(cors());
-app.use(logger('dev'));
+// query
+const SensorQuery = require('../db/queries/sensorQuesry');
 
-app.use(weather);
+// Save Reading to DB
 
+router.post('/sensors/readings', (req, res) => {
+  console.log("hi Hudson and Aurora")
+  const postParams = {
+    node: req.body.node,
+    device: req.body.device,
+    sensor: req.body.sensor,
+    date: req.body.date,
+    value: req.body.value,
+  };
+  SensorQuery.saveSensorReading(postParams);
+  res.send(postParams.sensor);
+})
 
-const PORT = '0.0.0.0';
-const ADDRESS = "localhost";
+// sensor requests
 
-app.listen(PORT, ADDRESS, ()=>{
-  console.log(`Listening`)
+router.get('/sensor/:id', async (req, res) => {
+  const sensorId = req.params.id;
+  const lastSensorReading = await SensorQuery.getLastReading(sensorId);
+  res.send(lastSensorReading);
 });
+
+router.get('/sensors/temperature', async (req, res) => {
+  const sensors = await SensorQuery.getTemperatureSensors();
+  res.send(sensors);
+});
+
+router.get('/sensors/windDirection', async (req, res) => {
+const windDirection = await SensorQuery.getWindDirection();
+res.send(windDirection);
+})
 
 module.exports = router;
