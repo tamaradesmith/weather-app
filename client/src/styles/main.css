@@ -2,20 +2,40 @@
 
 :root {
   --primary-colour: #05050;
-  --secondary-colour: #1B4353;
+  --secondary-colour: #C9DAEA;
 }
 body{
   font-size: 2em;
+  color: var(--primary-colour)
 }
 
 header{
   display: flex;
   flex-direction: row;
   justify-content: space-evenly;
+   padding: .5em 0;
+   margin-bottom: .5em;
+   font-size: .9em;
+   border-bottom: 1px solid #050505;
 }
 .App{
   width: 800px;
   height: 480px;
   border: 1px solid var(--primary-colour);
   background: var(--secondary-colour);
+}
+.Dashboard{
+  display: flex;
+  flex-direction: row;
+  justify-content: space-evenly;
+ 
+}
+.Temperature{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  
+}
+.temperature-label{
+  text-align: center;
 }

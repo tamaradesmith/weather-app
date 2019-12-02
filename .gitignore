@@ -1,6 +1,6 @@
 # Created by https://www.gitignore.io/api/node,linux,macos
 # Edit at https://www.gitignore.io/?templates=node,linux,macos
-Over_blown_home_environment _monitoring_and_contral_system.code-workspace
+./node_modules
 /erd
 ### Linux ###
 *~
