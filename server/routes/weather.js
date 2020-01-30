@@ -24,6 +24,8 @@ router.post('/sensors/readings', (req, res) => {
 
 // sensor requests
 
+// TEMPERATURE
+
 router.get('/sensor/:id', async (req, res) => {
   const sensorId = req.params.id;
   const lastSensorReading = await SensorQuery.getLastReading(sensorId);
@@ -35,9 +37,16 @@ router.get('/sensors/temperature', async (req, res) => {
   res.send(sensors);
 });
 
+router.get('/sensor/:id/highslows', async (req, res) => {
+  const sensorId = req.params.id;
+  const highslows = await SensorQuery.getHighsAndLows(sensorId);
+  res.send(highslows);
+})
+
+// WIND
 router.get('/sensors/windDirection', async (req, res) => {
-const windDirection = await SensorQuery.getWindDirection();
-res.send(windDirection);
+  const windDirection = await SensorQuery.getWindDirection();
+  res.send(windDirection);
 })
 
 module.exports = router;

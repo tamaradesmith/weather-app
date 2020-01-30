@@ -3,11 +3,13 @@ import { Sensor } from '../js/requests';
 import Temperature from './Temperature';
 import Wind from './Wind';
 
-function Dashboard() {
+function DashboardTemperature() {
 
   const [temperatureSensors, setTemperatureSensors] = useState(null);
+  
   async function getTemperatureSensors() {
     const sensors = await Sensor.getTemperatureSensors();
+    console.log("TCL: getTemperatureSensors -> sensors", sensors)
     setTemperatureSensors(sensors)
   }
   if (temperatureSensors === null) {
@@ -19,15 +21,15 @@ function Dashboard() {
   return (
     <main className="Dashboard">
 
-      {/* <h1>Dashboard</h1> */}
-      <Wind />
-      {temperatureSensors.map(sensor => (
+      {/* <Wind /> */}
 
-        <Temperature key={sensor.id} sensorId={sensor.id} location={sensor.location} />
+      {temperatureSensors.map(sensor => (
+        <Temperature key={sensor.id} sensorId={sensor.id} name={sensor.name} />
       ))}
+
     </main>
   )
 };
 
 
-export default Dashboard;
+export default DashboardTemperature;

@@ -8,15 +8,24 @@ import { Sensor } from '../js/requests';
 function Temperature(props) {
 
   const [temperature, setTemerature] = useState(null);
-
+  const [highsLows, setHighLows] = useState(null);
 
   async function getLastReading() {
     const reading = await Sensor.getLastReading(props.sensorId)
     setTemerature((reading.value).toFixed(0))
   }
-
   getLastReading(props.sensorId)
 
+  async function getHighsAndLows(){
+    const highsAndLows = await Sensor.getHighsAndLows(props.sensorId)
+   
+   setHighLows((highsAndLows))
+    console.log("TCL: getHighsAndLows -> highsAndLows", highsAndLows)
+  }
+  if (highsLows === null){
+
+    getHighsAndLows()
+  }
 
   if (temperature === null) {
     return "loading";
@@ -25,7 +34,7 @@ function Temperature(props) {
   return (
 
     <div className="Temperature">
-<h4>{props.location}</h4>
+      <h4>{props.name}</h4>
       <JqxLinearGauge value={temperature} ranges={ranges} style={{ marginLeft: '60px', float: 'left', fontSize: "1em" }}
         width={100} height={325} max={40} min={-30} pointer={pointerStyle}
         animationDuration={1500}
