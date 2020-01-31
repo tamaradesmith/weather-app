@@ -2,40 +2,110 @@
 
 :root {
   --primary-colour: #05050;
-  --secondary-colour: #C9DAEA;
+  --secondary-colour: #c9daea;
 }
-body{
+body {
   font-size: 2em;
-  color: var(--primary-colour)
+  color: var(--primary-colour);
+  padding: 0.25em;
 }
 
-header{
+header {
   display: flex;
   flex-direction: row;
   justify-content: space-evenly;
-   padding: .5em 0;
-   margin-bottom: .5em;
-   font-size: .9em;
-   border-bottom: 1px solid #050505;
+  padding: 0.5em 0;
+  margin-bottom: 0.5em;
+  font-size: 0.9em;
+  border-bottom: 1px solid #050505;
 }
-.App{
+.App {
   width: 800px;
   height: 480px;
   border: 1px solid var(--primary-colour);
   background: var(--secondary-colour);
 }
-.Dashboard{
+.dashboard {
   display: flex;
   flex-direction: row;
   justify-content: space-evenly;
- 
+  align-items: center;
 }
-.Temperature{
+.gauge-header {
+  margin: 0 auto;
+  text-align: center;
+  text-transform: capitalize;
+}
+/* TEMPERATURE  */
+.Temperature {
   display: flex;
   flex-direction: column;
   align-items: center;
-  
 }
-.temperature-label{
+.temperature-label {
   text-align: center;
+}
+.temperature-div {
+  display: grid;
+  grid-template-columns: auto auto;
+}
+.temperature-thermometer {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+.temperature-range {
+  font-size: 0.8em;
+  text-align: center;
+}
+/* WIND  */
+.wind-div {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+.wind-header {
+  margin-bottom: 0.5em;
+  background: transparent;
+}
+/* .wind-gauge{
+  font-size: 1em;
+} */
+.wind-linear {
+  margin-left: 1em;
+}
+.wind-thermometer {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: stretch;
+}
+.wind-group {
+  display: flex;
+}
+
+/* Humidity */
+.humidity-div {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0.5em;
+  width: 250px;
+  height: 250px;
+  border-radius: 50%;
+  border: 2px solid blue;
+  /* background-image: linear-gradient(
+    transparent 0%,
+    transparent 50%,
+    blue 55%,
+    blue 100%
+  ); */
+}
+.humidity-text {
+  color: black;
+  -webkit-text-fill-color: white;
+  -webkit-text-stroke-width: 2px;
+  -webkit-text-stroke-color: black;
+  font-size: 2em;
 }

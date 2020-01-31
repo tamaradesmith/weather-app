@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { Sensor } from '../js/requests';
-import Temperature from './Temperature';
-import Wind from './Wind';
+import Temperature from './gauges/Temperature';
 
 function DashboardTemperature() {
 
@@ -9,27 +8,21 @@ function DashboardTemperature() {
   
   async function getTemperatureSensors() {
     const sensors = await Sensor.getTemperatureSensors();
-    console.log("TCL: getTemperatureSensors -> sensors", sensors)
-    setTemperatureSensors(sensors)
+    setTemperatureSensors(sensors);
   }
+
   if (temperatureSensors === null) {
     getTemperatureSensors();
+    return "loading";
   }
-  if (temperatureSensors === null){
-    return "loading"
-  }
+ 
   return (
-    <main className="Dashboard">
-
-      {/* <Wind /> */}
-
+    <main className="DashboardTemperature dashboard">
       {temperatureSensors.map(sensor => (
         <Temperature key={sensor.id} sensorId={sensor.id} name={sensor.name} />
       ))}
-
     </main>
   )
 };
-
 
 export default DashboardTemperature;

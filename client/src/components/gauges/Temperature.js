@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
-import './../../node_modules/jqwidgets-scripts/jqwidgets/styles/jqx.base.css'
-import JqxLinearGauge from './../../node_modules/jqwidgets-scripts/jqwidgets-react-tsx/jqxlineargauge';
-import { Sensor } from '../js/requests';
+import JqxLinearGauge from 'jqwidgets-scripts/jqwidgets-react-tsx/jqxlineargauge'
+import { Sensor } from '../../js/requests';
 
 
 
@@ -14,40 +13,40 @@ function Temperature(props) {
     const reading = await Sensor.getLastReading(props.sensorId)
     setTemerature((reading.value).toFixed(0))
   }
-  getLastReading(props.sensorId)
-
-  async function getHighsAndLows(){
+  async function getHighsAndLows() {
     const highsAndLows = await Sensor.getHighsAndLows(props.sensorId)
-   
-   setHighLows((highsAndLows))
-    console.log("TCL: getHighsAndLows -> highsAndLows", highsAndLows)
+    setHighLows((highsAndLows))
   }
-  if (highsLows === null){
-
+  if (highsLows === null) {
     getHighsAndLows()
+    return 'loading';
   }
-
   if (temperature === null) {
+    getLastReading(props.sensorId)
     return "loading";
   }
 
   return (
 
     <div className="Temperature">
-      <h4>{props.name}</h4>
-      <JqxLinearGauge value={temperature} ranges={ranges} style={{ marginLeft: '60px', float: 'left', fontSize: "1em" }}
-        width={100} height={325} max={40} min={-30} pointer={pointerStyle}
-        animationDuration={1500}
-        background={{ visible: false }}
-        labels={{
-          position: 'near', fontSize: '20px', offset: 8,
-        }}
-      />
+      <div className="temperature-thermometer">
+      <h4 className="gauge-header">{props.name}</h4>
+        <JqxLinearGauge value={temperature} ranges={ranges} style={{ margin: '0 auto', float: 'left', fontSize: "1em" }}
+          width={100} height={315} max={40} min={-30} pointer={pointerStyle}
+          animationDuration={1500}
+          background={{ visible: false }}
+          labels={{
+            position: 'near', fontSize: '20px', offset: 8,
+          }}
+        />
       <p className="temperature-label">
-        {temperature}
+        Current: {temperature}
       </p>
+      <p className="temperature-range">
+        high/low: {highsLows.high}/{highsLows.low} 
+      </p>
+      </div>
     </div>
-
   )
 }
 export default Temperature;

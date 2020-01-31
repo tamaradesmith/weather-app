@@ -1,9 +1,10 @@
 import React from 'react';
+import Humidily from "./gauges/Humidity"
 
 function DashboardHumidily(){
   return(
     <main>
-      <p>DashboardHumudily</p>
+      <Humidily />
     </main>
   );
 };

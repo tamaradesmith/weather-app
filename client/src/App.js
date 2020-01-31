@@ -15,7 +15,7 @@ function App() {
       <Router>
         <NavBar />
         <Switch>
-          <Route path="/" exact component={DashboardTemperature} />
+          <Route path="/" exact component={DashboardWind} />
           <Route path="/DashboardTemperature" component={DashboardTemperature} />
           <Route path="/DashboardWind"  component = {DashboardWind} />
           <Route path="/DashboardHumidily" component={DashboardHumidily} />
