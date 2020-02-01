@@ -2,28 +2,24 @@ const BASE_URL = 'http://localhost:4000';
 
 const Sensor = {
   async getLastReading(sensorId) {
-    const res = await fetch(`${BASE_URL}/sensor/${sensorId}`);
+    const res = await fetch(`${BASE_URL}/sensor/${sensorId}/reading`);
     return res.json();
   },
-  // temperature 
-  async getTemperatureSensors() {
-    const res = await fetch(`${BASE_URL}/sensors/temperature`);
-    return res.json();
+  async getSensorsbyType(type) {
+    const res = await fetch(`${BASE_URL}/sensors/type/${type}`)
+    return res.json()
   },
-  async getHighsAndLows(sensorId){
+  // temperature  
+  async getHighsAndLows(sensorId) {
     const res = await fetch(`${BASE_URL}/sensor/${sensorId}/highslows`);
     return res.json();
   },
-  // Wind
-  async getWindSensors(){
-    const res = await fetch(`${BASE_URL}/sensors/wind`);
-    return res.json();
-  },
-  async getWindSensorReading(sensorId) {
-    const res = await fetch(`${BASE_URL}/sensors/wind/${sensorId}/reading`);
+  async getLast24Readings(sensorId) {
+    const res = await fetch(`${BASE_URL}/sensor/${sensorId}/24`)
     return res.json();
   },
 }
+ 
 
 
 export { Sensor };

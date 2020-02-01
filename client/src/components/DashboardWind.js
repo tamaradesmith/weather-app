@@ -1,20 +1,20 @@
 import React, { useState } from 'react';
 import WindDirection from "./gauges/WindDirection";
 import WindSpeed from './gauges/WindSpeed'
-import WindSpeed2 from './gauges/WindSpeed2'
+import WindSpeedLinear from './gauges/WindSpeedLinear'
 import { Sensor } from "../js/requests"
 
 function Dashboardwind() {
 
   const [windSensors, setWindSensors] = useState(null);
 
-  async function getWindSensors() {
-    const sensors = await Sensor.getWindSensors();
+  async function getSensorsbyType(type) {
+    const sensors = await Sensor.getSensorsbyType(type);
     setWindSensors(sensors);
   }
 
   if (windSensors === null) {
-    getWindSensors();
+    getSensorsbyType("wind");
     return "Loading";
   };
 
@@ -25,10 +25,11 @@ function Dashboardwind() {
           {sensor.name === "wind direction" ? (
             <WindDirection sensor={sensor} />
           ) : (
-            <div className="wind-group">
-      <WindSpeed sensor={sensor} />
-      <WindSpeed2 sensor={sensor} />
-            </div>
+              <div className="wind-group">
+           
+                <WindSpeed sensor={sensor} />
+                <WindSpeedLinear sensor={sensor} />
+              </div>
             )}
         </div>
       ))}

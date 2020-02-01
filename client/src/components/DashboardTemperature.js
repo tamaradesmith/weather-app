@@ -6,20 +6,20 @@ function DashboardTemperature() {
 
   const [temperatureSensors, setTemperatureSensors] = useState(null);
   
-  async function getTemperatureSensors() {
-    const sensors = await Sensor.getTemperatureSensors();
+  async function getTemperatureSensors(type) {
+    const sensors = await Sensor.getSensorsbyType(type);
     setTemperatureSensors(sensors);
   }
 
   if (temperatureSensors === null) {
-    getTemperatureSensors();
+    getTemperatureSensors("temperature");
     return "loading";
   }
  
   return (
     <main className="DashboardTemperature dashboard">
       {temperatureSensors.map(sensor => (
-        <Temperature key={sensor.id} sensorId={sensor.id} name={sensor.name} />
+        <Temperature key={sensor.id} sensor={sensor} />
       ))}
     </main>
   )

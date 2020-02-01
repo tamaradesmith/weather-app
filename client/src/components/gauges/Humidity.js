@@ -1,24 +1,29 @@
-import React, {useState} from "react";
+import React, { useState, useEffect } from "react";
+import { Sensor } from "../../js/requests";
 
 function Humidity(props) {
-  
-  const [loading, setLoading] = useState(null)
-function updateBackground(){
-const background = document.getElementById(`humidity`);
-const start = 70;
-const end = 75;
-  background.style.backgroundImage = `linear-gradient(' transparent 0%, transparent ${start}, blue ${end}, blue 100%)`;
-  background.innerText= "hi there"
-}
+  const { sensor } = props;
+  const [humidityLevel, setHumidityLevel] = useState(null);
+ 
+  async function getHumidityReading() {
+    const humidity = await Sensor.getLastReading(sensor.id)
+    setHumidityLevel(humidity.value);
+  }
 
-return (
-  <div className="Humidily">
-      <div id="humidity" className="humidity-div">
-        <p className="humidity-text">56%</p>
+  if (humidityLevel === null) {
+    getHumidityReading()
+  };
+
+  return (
+    <div className="Humidily wind-div">
+      <h4 className="gauge-header">{sensor.name}</h4>
+      <div id="humidity" className="humidity-div" style={{
+        'backgroundImage': `linear-gradient(transparent 0%, transparent ${100 - (humidityLevel)}%, blue ${100 - (humidityLevel - 5)}% ,blue 100%)`
+      }}>
+        <p className="humidity-text"
+        >{humidityLevel}%</p>
       </div>
-      <button onClick={()=>{updateBackground()}}> click me
 
-     </button>
     </div>
   )
 }

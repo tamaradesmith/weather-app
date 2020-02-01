@@ -6,15 +6,16 @@ import { Sensor } from '../../js/requests';
 
 function Temperature(props) {
 
+  const { sensor } = props;
   const [temperature, setTemerature] = useState(null);
   const [highsLows, setHighLows] = useState(null);
 
   async function getLastReading() {
-    const reading = await Sensor.getLastReading(props.sensorId)
+    const reading = await Sensor.getLastReading(sensor.id)
     setTemerature((reading.value).toFixed(0))
   }
   async function getHighsAndLows() {
-    const highsAndLows = await Sensor.getHighsAndLows(props.sensorId)
+    const highsAndLows = await Sensor.getHighsAndLows(sensor.id)
     setHighLows((highsAndLows))
   }
   if (highsLows === null) {
@@ -22,7 +23,7 @@ function Temperature(props) {
     return 'loading';
   }
   if (temperature === null) {
-    getLastReading(props.sensorId)
+    getLastReading()
     return "loading";
   }
 
@@ -30,21 +31,22 @@ function Temperature(props) {
 
     <div className="Temperature">
       <div className="temperature-thermometer">
-      <h4 className="gauge-header">{props.name}</h4>
-        <JqxLinearGauge value={temperature} ranges={ranges} style={{ margin: '0 auto', float: 'left', fontSize: "1em" }}
-          width={100} height={315} max={40} min={-30} pointer={pointerStyle}
+        <h4 className="gauge-header">{sensor.name}</h4>
+        <JqxLinearGauge value={temperature} ranges={ranges}
+          style={{ margin: '0 auto', float: 'left', fontSize: "1em" }}
+          width={100} height={300} max={40} min={-30} pointer={pointerStyle}
           animationDuration={1500}
           background={{ visible: false }}
           labels={{
             position: 'near', fontSize: '20px', offset: 8,
           }}
         />
-      <p className="temperature-label">
-        Current: {temperature}
-      </p>
-      <p className="temperature-range">
-        high/low: {highsLows.high}/{highsLows.low} 
-      </p>
+        <p className="temperature-label">
+          Current: {temperature}
+        </p>
+        <p className="temperature-range">
+          high/low: {highsLows.high}/{highsLows.low}
+        </p>
       </div>
     </div>
   )
@@ -63,7 +65,7 @@ const ranges = [
 const pointerStyle = {
   pointerType: 'arrow',
   style: { fill: '#554477', stroke: '#050505' },
-  size: '20%',
+  size: '15%',
   offset: 3,
   visible: true
 }
