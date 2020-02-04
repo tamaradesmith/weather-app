@@ -17,10 +17,15 @@ module.exports = {
   },
   // get last reading one sensor
   async getLastReading(sensorId) {
-    const reading = await knex('readings').select('*').where({ sensor_id: sensorId }).orderBy('time', "desc").limit(1)
+    const reading = await knex('readings').select('value').where({ sensor_id: sensorId }).orderBy('time', "desc").limit(1)
     return reading[0];
   },
-  //  Get Temperature Sensor
+  // get Sensor by Type 
+  async getSensorsByType(type){
+    const sensors = await knex('sensors').select("*").where({type: type, active: true});
+    return sensors;
+  },
+  //  Get Temperature Sensor- Inside and outside only
   async getTemperatureSensors() {
     const sensors = await knex("sensors").select("*").where({ location: 'inside' }).orWhere({ location: 'outside' }).andWhere({ type: "temperature", active: true })
     return sensors
@@ -31,10 +36,8 @@ module.exports = {
     const readings = {high: reading[reading.length - 1].value, low: reading[0].value}
     return readings
   },
-  //  Wind Direction
-  async getWindDirection() {
-    const windSensor = await knex('sensors').select("*").where({ propose: 'Wind direction' });
-    const windDirection = await this.getLastReading(windSensor[0].id)
-    return windDirection;
-  }
+  async getLast24ReadingsBySensor(sensorId){
+    const readings = await knex('readings').select("value", "time").where({sensor_id: sensorId}).orderBy('time', "desc").limit(12);
+    return readings
+  },
 }
