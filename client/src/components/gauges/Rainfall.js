@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Sensor } from '../../js/requests';
-import RainGauge from './RainGauge'
+import RainGauge from './RainGauge';
 
 function Rainfall(props) {
 
@@ -23,6 +23,7 @@ function Rainfall(props) {
   }
 
   if (rainHour === null) {
+  
     getLastReading();
     return "Loading";
   };
@@ -34,12 +35,9 @@ function Rainfall(props) {
 
   return (
     <div>
-      <h4 className="gauge-header" >{sensor.name}</h4>
-
+      <h4 className="rain-gauge-header" >{sensor.name}</h4>
      <RainGauge amount={rainHour} label={["Hourly", 8, 4 , 0] }/>
      <RainGauge amount={rainDaily} label={["Daily", 60, 30, 0] }/>
-
-
     </div>
   );
 };
