@@ -165,12 +165,33 @@ img {
   height: 100%;
 }
 /* configure */
-
+.config{
+  padding: .25em;
+}
 .config-icon{
   width: 30px;
   height: 30px;
 }
+.config-select{
+  font-size: .8em;
+  background: transparent;
+  border: 1px solid black;
+}
+.config-header{
+grid-column: 1/4;
+text-align: center;
+margin: .5em;
+}
 .config-form{
   display: grid;
   grid-template-columns: auto auto auto;
+  grid-gap: .25em;
+
+}
+.config-field{
+  grid-column: 2/4;
+}
+.config-checked{
+height: 25px;
+width: 25px;
 }
