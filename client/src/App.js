@@ -7,7 +7,7 @@ import DashboardWind from './components/DashboardWind';
 import DashboardHumidily from './components/DashboardHumidily';
 import DashboardIndoors from './components/DashboardIndoors';
 import DashboardOutdoors from './components/DashboardOutdoors';
-import ConfigNodes from './components/ConfigNodes'
+import DashboardConfig from './components/DashboardConfig'
 
 
 function App() {
@@ -22,7 +22,7 @@ function App() {
           <Route path="/DashboardHumidily" component={DashboardHumidily} />
           <Route path="/DashboardIndoors" component={DashboardIndoors} />
           <Route path="/DashboardOutdoors"  component = {DashboardOutdoors} />
-          <Route path="/ConfigNodes"  component = {ConfigNodes} />
+          <Route path="/DashboardConfig"  component = {DashboardConfig} />
 
         </Switch>
       </Router>

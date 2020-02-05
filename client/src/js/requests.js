@@ -1,5 +1,16 @@
 const BASE_URL = 'http://localhost:4000';
 
+const Node = {
+  async getNodesLocation() {
+    const res = await fetch(`${BASE_URL}/nodes/locations`);
+    return res.json();
+  },
+  async getNodes(){
+    const res = await fetch(`${BASE_URL}/nodes`);
+    return res.json();
+  }
+}
+
 const Sensor = {
   async getLastReading(sensorId) {
     const res = await fetch(`${BASE_URL}/sensor/${sensorId}/reading`);
@@ -19,7 +30,7 @@ const Sensor = {
     return res.json();
   },
 }
- 
 
 
-export { Sensor };
+
+export { Sensor, Node };

@@ -6,7 +6,7 @@ function NavBar() {
   return (
 
     <header>
-      <NavLink to="/ConfigNodes"><img className="config-icon" src={configIcon} alt={"config"} /> </NavLink>
+      <NavLink to="/DashboardConfig"><img className="config-icon" src={configIcon} alt={"config"} /> </NavLink>
       <NavLink to="/DashboardTemperature"> Tempature</NavLink>
       <NavLink to="/DashboardHumidily">Humidily</NavLink>
       <NavLink to="/DashboardWind"> Wind</NavLink>

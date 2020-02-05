@@ -1,8 +1,9 @@
 @import url("./reset.css");
 
 :root {
-  --primary-colour: #05050;
+  --primary-colour: #050505;
   --secondary-colour: #c9daea;
+  --hover-colour: #050505
 }
 body {
   font-size: 2em;
@@ -39,6 +40,9 @@ img {
   text-align: center;
   text-transform: capitalize;
   margin-bottom: 0.3em;
+}
+.hidden{
+  display: none;
 }
 /* TEMPERATURE  */
 .Temperature {
@@ -123,7 +127,6 @@ img {
   margin: 0 auto;
   text-align: center;
   text-transform: capitalize;
-  /* margin-bottom: 0.5em; */
 }
 .rain-text {
   display: flex;
@@ -176,6 +179,7 @@ img {
   font-size: .8em;
   background: transparent;
   border: 1px solid black;
+  text-transform: capitalize;
 }
 .config-header{
 grid-column: 1/4;
@@ -188,10 +192,23 @@ margin: .5em;
   grid-gap: .25em;
 
 }
+.config-label{
+  grid-column: 1/2;
+}
 .config-field{
   grid-column: 2/4;
 }
 .config-checked{
 height: 25px;
 width: 25px;
+}
+.config-button{
+  grid-column: 3/4;
+  font-size: .8em;
+  border: 1px solid black;
+  background: transparent;
+}
+.config-button:hover{
+  background: var(--hover-colour);
+  color: var(--secondary-colour);
 }
