@@ -11,6 +11,13 @@ const Node = {
   }
 }
 
+const Device = {
+  async getDevices(){
+    const res = await fetch(`${BASE_URL}/devices`);
+    return res.json();
+  }
+}
+
 const Sensor = {
   async getLastReading(sensorId) {
     const res = await fetch(`${BASE_URL}/sensor/${sensorId}/reading`);
@@ -20,6 +27,14 @@ const Sensor = {
     const res = await fetch(`${BASE_URL}/sensors/type/${type}`)
     return res.json()
   },
+  async getSensors(){
+    const res = await fetch(`${BASE_URL}/sensors`);
+    return res.json();
+  },
+async getSensorsTypes(){
+  const  res = await fetch(`${BASE_URL}/sensors/types`)
+  return res.json();
+},
   // temperature  
   async getHighsAndLows(sensorId) {
     const res = await fetch(`${BASE_URL}/sensor/${sensorId}/highslows`);
@@ -33,4 +48,4 @@ const Sensor = {
 
 
 
-export { Sensor, Node };
+export { Sensor, Node, Device };

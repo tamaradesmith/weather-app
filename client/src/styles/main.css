@@ -3,7 +3,8 @@
 :root {
   --primary-colour: #050505;
   --secondary-colour: #c9daea;
-  --hover-colour: #050505
+  --hover-colour: #050505;
+   --input-colour: #acc4da;
 }
 body {
   font-size: 2em;
@@ -22,6 +23,11 @@ header {
 }
 img {
   max-width: 100%;
+}
+input{
+  font-size: .8em;
+  border: 1px solid black;
+  background: var(--input-colour);
 }
 .App {
   width: 800px;
@@ -169,7 +175,7 @@ img {
 }
 /* configure */
 .config{
-  padding: .25em;
+  padding: 0 .25em;
 }
 .config-icon{
   width: 30px;
@@ -177,7 +183,7 @@ img {
 }
 .config-select{
   font-size: .8em;
-  background: transparent;
+  background: var(--input-colour);
   border: 1px solid black;
   text-transform: capitalize;
 }
@@ -186,11 +192,20 @@ grid-column: 1/4;
 text-align: center;
 margin: .5em;
 }
+.config-sensor-header{
+grid-column: 1/7;
+text-align: center;
+margin: .5em;
+}
 .config-form{
   display: grid;
   grid-template-columns: auto auto auto;
   grid-gap: .25em;
-
+}
+.config-form-sensor{
+  display: grid;
+  grid-template-columns: 150px 50px 175px 50px 100px auto;
+  grid-gap: .25em;
 }
 .config-label{
   grid-column: 1/2;
@@ -206,9 +221,45 @@ width: 25px;
   grid-column: 3/4;
   font-size: .8em;
   border: 1px solid black;
-  background: transparent;
+  background: var(--input-colour);
 }
 .config-button:hover{
-  background: var(--hover-colour);
-  color: var(--secondary-colour);
+  background: var(--input-colour);
+}
+.config-min{
+grid-column: 2/3;
+}
+.config-max{
+grid-column: 4/5;
+}
+.config-unit{
+  grid-column: 6/7;
+  width: 50px;
+}
+.config-label-max{
+  grid-column: 3/4;
+  margin-left: .5em;
+
+}
+.config-label-unit{
+  grid-column: 5/6;
+  margin-left: .5em;
+}
+.config-field-sensor{
+  grid-column: 2/7;
+}
+.config-submit-sensor-button{
+  grid-column: 5/7;
+  font-size: .8em;
+  border: 1px solid black;
+  background: transparent;
+}
+.config-sensor-button{
+  grid-column: 3/5;
+  font-size: .8em;
+  border: 1px solid black;
+  background: transparent;
+}
+.config-sensor-button:hover, .config-submit-sensor-button:hover{
+  background: var(--input-colour);
 }

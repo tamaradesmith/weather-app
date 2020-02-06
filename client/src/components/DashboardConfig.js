@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import NodeConfig from './partials/NodeConfig'
 import DeviceConfig from './partials/DeviceConfig'
+import SensorConfig from './partials/SensorConfig'
 
 function DashboardConfig(props) {
   const [form, setForm] = useState(null);
@@ -13,10 +14,14 @@ function DashboardConfig(props) {
         setForm(<NodeConfig />)
         setHidden(true)
         break;
-case 'device':
+      case 'device':
         setForm(<DeviceConfig />)
         setHidden(true)
-  break
+        break
+      case 'sensor':
+        setForm(<SensorConfig />)
+        setHidden(true)
+        break
       default:
         console.log("hi Kittens")
         break;
@@ -38,7 +43,7 @@ case 'device':
       <div className="inputs">
         {form}
       </div>
-      <DeviceConfig />
+      {/* <SensorConfig /> */}
     </main>
   )
 }
