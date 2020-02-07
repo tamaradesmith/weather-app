@@ -1,14 +1,15 @@
 import React, { useState, useEffect } from "react";
-import NodeConfig from './partials/NodeConfig'
-import DeviceConfig from './partials/DeviceConfig'
-import SensorConfig from './partials/SensorConfig'
+import NodeConfig from './partials/NodeConfig';
+import DeviceConfig from './partials/DeviceConfig';
+import SensorConfig from './partials/SensorConfig';
+import ControllerConfig from './partials/ControllerConfig';
+
 
 function DashboardConfig(props) {
   const [form, setForm] = useState(null);
   const [hidden, setHidden] = useState(false)
 
   function handleChange(value) {
-    console.log("TCL: handleChange -> value", value)
     switch (value) {
       case 'node':
         setForm(<NodeConfig />)
@@ -22,8 +23,11 @@ function DashboardConfig(props) {
         setForm(<SensorConfig />)
         setHidden(true)
         break
+      case 'controller':
+        setForm(<ControllerConfig />)
+        setHidden(true)
+        break
       default:
-        console.log("hi Kittens")
         break;
     }
   }
@@ -43,7 +47,7 @@ function DashboardConfig(props) {
       <div className="inputs">
         {form}
       </div>
-      {/* <SensorConfig /> */}
+      <NodeConfig />
     </main>
   )
 }

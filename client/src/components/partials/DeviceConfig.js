@@ -46,7 +46,11 @@ function DeviceConfig(props) {
       <input type="text" name="type" id="type" placeholder="Enter device type" className="config-field"></input>
       <label htmlFor="active">Active</label>
       <input type="checkbox" name="active" id="active" className="config-field config-checked" defaultChecked />
-      <button type="submit" className="config-button" > Create Device</button>
+
+
+      <button id="cancel" className="config-button config-cancel" > Cancel</button>
+
+      <button type="submit" className="config-button config-submit" > Create Device</button>
 
     </form>
   )

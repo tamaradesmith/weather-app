@@ -1,98 +1,82 @@
 import React, { useState } from 'react';
-import { Device, Sensor } from '../../js/requests'
+import { Device, Controller } from '../../js/requests'
 
-function SensorConfig(props) {
+function ControllerConfig(props) {
 
   const [devices, setDevices] = useState(null);
-  const [existingSensors, setExistingSensors] = useState(null);
-  const [sensorTypes, setSensorTypes] = useState(null);
+  const [existingController, setExistingController] = useState(null);
+  const [controllerTypes, setControllerTypes] = useState(null);
 
   async function getDevices() {
     const devices = await Device.getDevices();
     setDevices(devices)
   }
 
-  async function getExistingSensorsTypes() {
-    const sensors = await Sensor.getSensorsTypes();
-    setSensorTypes(sensors);
+  async function getExistingControllersTypes() {
+    const controller = await Controller.getControllerTypes();
+    setControllerTypes(controller);
   }
-  async function getExistingSensors() {
-    const sensors = await Sensor.getSensors();
-    setExistingSensors(sensors);
-  }
+
 
   function handleSubmit(event) {
     event.preventDefault();
     const { target } = event;
     const formData = new FormData(target);
-    const newSensor = {
+    const newController = {
       device_id: formData.get('device'),
       name: formData.get('name'),
       type: formData.get('type'),
       propose: formData.get('propose'),
-      minValue: formData.get('minValue'),
-      maxValue: formData.get('maxValue'),
-      unit: formData.get('unit'),
       active: (formData.get(`active`) === "on") ? true : false,
     }
-    console.log("TCL: handleSubmit -> newSensor", newSensor)
+    console.log("TCL: handleSubmit -> newController", newController)
   }
 
   if (devices === null) {
     getDevices();
     return "Loading"
   }
-  if (sensorTypes === null) {
-    getExistingSensorsTypes();
-    return "Loading..."
-  }
-  if (existingSensors === null) {
-    getExistingSensors();
+  if (controllerTypes === null) {
+    getExistingControllersTypes();
     return "Loading..."
   }
 
+
   return (
-    <form className="SensorConfig config-form-sensor" onSubmit={handleSubmit}>
-      <h4 className="config-sensor-header">Sensor Configure</h4>
-      <label htmlFor="device" className="config-label">Device: </label>
+    <form className="ControllerConfig config-form" onSubmit={handleSubmit}>
+      <h4 className="config-sensor-header">Controller Configure</h4>
+    <label htmlFor="device" className="config-label">Device: </label>
       <select name="device" className="config-field-sensor config-select">
-      <option ></option>
+      <option > </option>
         {devices.map((device, index) => (
           <option key={index} value={device.id}>{device.name}</option>
         ))}
       </select>
       <label htmlFor="name" className="config-label">Name:</label>
       <input type="text" name="name" id="name" className="config-field-sensor" ></input>
-
+      
       <label htmlFor="type" className="config-label">Type:</label>
       <select name="type" className="config-field-sensor config-select">
         <option ></option>
-        {sensorTypes.map((type, index) => (
+        {controllerTypes.map((type, index) => (
           <option key={index} value={type} >{type}</option>
         ))}
+        <option value="other"> Other</option>
       </select>
 
       <label htmlFor="propose" className="config-label">Propose:</label>
       <input type="text" name="propose" id="propose" className="config-field-sensor"></input>
 
-      <label htmlFor="minValue" className="config-label">Min Value:</label>
-      <input type="number" name="minValue" id="minValue" className="config-min"></input>
-
-      <label htmlFor="maxValue" className="config-label-max">Max Value:</label>
-      <input type="number" name="maxValue" id="maxValue" min="0" className="config-max"></input>
-
-      <label htmlFor="unit" className="config-label-unit">Unit:</label>
-      <input type="text" name="unit" id="unit" min="0" className="config-unit"></input>
 
       <label htmlFor="active" className="config-label">Active</label>
       <input type="checkbox" name="active" id="active" className="config-field-sensor config-checked" defaultChecked />
 
       <button id="cancel" className="config-sensor-button" > Cancel</button>
 
-      <button type="submit" className="config-submit-sensor-button" > Create Sensor</button>
+      <button type="submit" className="config-submit-sensor-button" > Create Sensor</button> 
 
     </form>
   )
 }
 
-export default SensorConfig
+export default ControllerConfig

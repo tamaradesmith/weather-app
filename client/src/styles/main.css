@@ -204,7 +204,7 @@ margin: .5em;
 }
 .config-form-sensor{
   display: grid;
-  grid-template-columns: 150px 50px 175px 50px 100px auto;
+  grid-template-columns: 150px 75px 175px 75px 100px auto;
   grid-gap: .25em;
 }
 .config-label{
@@ -218,13 +218,19 @@ height: 25px;
 width: 25px;
 }
 .config-button{
-  grid-column: 3/4;
+
   font-size: .8em;
   border: 1px solid black;
   background: var(--input-colour);
 }
 .config-button:hover{
   background: var(--input-colour);
+}
+.config-cancel{
+  grid-column: 2/3;
+}
+.config-submit{
+  grid-column: 3/4;
 }
 .config-min{
 grid-column: 2/3;

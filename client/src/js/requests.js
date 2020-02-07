@@ -8,6 +8,18 @@ const Node = {
   async getNodes(){
     const res = await fetch(`${BASE_URL}/nodes`);
     return res.json();
+  },
+  async createNode(node){
+    const res = await fetch(`${BASE_URL}/node/create`, {
+      method: 'POST',
+      credentials:'include',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(node)
+
+    })
+    return res.json()
   }
 }
 
@@ -46,6 +58,11 @@ async getSensorsTypes(){
   },
 }
 
+const Controller = {
+  async getControllerTypes() {
+    const res = await fetch(`${BASE_URL}/controllers/types`)
+    return res.json();
+  },
+}
 
-
-export { Sensor, Node, Device };
+export { Sensor, Node, Device, Controller };
