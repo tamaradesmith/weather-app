@@ -7,7 +7,7 @@ function NavBar() {
 
     <header>
       <NavLink to="/DashboardConfig"><img className="config-icon" src={configIcon} alt={"config"} /> </NavLink>
-      <NavLink to="/DashboardTemperature"> Tempature</NavLink>
+      <NavLink to="/DashboardTemperature"> Temperature</NavLink>
       <NavLink to="/DashboardHumidily">Humidily</NavLink>
       <NavLink to="/DashboardWind"> Wind</NavLink>
       <NavLink to="/DashboardIndoors"> Indoors</NavLink>

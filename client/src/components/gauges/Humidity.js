@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState} from "react";
 import { Sensor } from "../../js/requests";
 import humidityIcon from '../../images/humidityIcon.png'
 

@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Node } from "../../js/requests"
+import { Node } from "../../js/requests";
 
 function NodeConfig(props) {
 
@@ -7,52 +7,57 @@ function NodeConfig(props) {
 
   async function getNodesLoactions() {
     const locations = await Node.getNodesLocation();
-    setExistingLocations(locations)
-  }
+    setExistingLocations(locations);
+  };
 
   function handleSubmit(event) {
     event.preventDefault();
-    const { target } = event;
-    const formData = new FormData(target)
-    const newNode = {
-      name: formData.get("name"),
-      description: formData.get("description"),
-      type: formData.get('type'),
-      location: (formData.get('location') != "other") ? formData.get('location') : formData.get("locationOther"),
-      ipAddress: formData.get('ipAddress'),
-      active: (formData.get(`active`) === "on") ? true : false
-    };
-    checkFields(newNode);
-  }
+    const node = document.querySelector('#nodeForm')
+      const formData = new FormData(node);
+      const newNode = {
+        name: formData.get("name"),
+        description: formData.get("description"),
+        type: formData.get('type'),
+        location: (formData.get('location') !== "other") ? formData.get('location') : formData.get("locationOther"),
+        ipaddress: formData.get('ipAddress'),
+        active: (formData.get(`active`) === "on") ? true : false
+      };
+      checkFields(newNode, node);
+  };
 
   function handleOther(event) {
     const { target } = event;
     if (target.value === "other") {
       document.querySelector("#location").classList.add("hidden");
       document.querySelector("#locationOther").classList.remove("hidden");
-    }
-  }
+    };
+  };
 
-  function checkFields(node) {
-    let flag = true
-    Object.keys(node).map(field => {
+  function checkFields(node, target) {
+    let flag = true;
+    Object.keys(node).forEach(field => {
       if (node[field] === "" || node[field] === null) {
         const inputfield = document.getElementById(`${field}`)
-        if (inputfield != null) {
-          inputfield.style.border = '2px solid red'
+        if (inputfield !== null) {
+          inputfield.style.border = '2px solid red';
           flag = false;
-        }
-      }
+        };
+      };
     });
     if (flag === true) {
-      createNode(node)
-    }
-  }
-
-  function createNode(node){
-    console.log("TCL: createNode -> node", node)
-    Node.createNode(node);
-  }
+      Object.keys(node).forEach(field => {
+        const inputfield = document.getElementById(`${field}`)
+        if (inputfield !== null) {
+          inputfield.style.border = '1px solid black';
+        }
+      });
+      props.create('node', node);
+      target.reset();
+    };
+  };
+function handleCancel(event){
+  console.log(event.target)
+}
 
   if (existingLocations.length === 0) {
     getNodesLoactions();
@@ -60,7 +65,7 @@ function NodeConfig(props) {
   }
 
   return (
-    <form className="NodeConfig config-form" onSubmit={handleSubmit}>
+    <form id="nodeForm" className="NodeConfig config-form" >
       <h4 className="config-header">Node Configure</h4>
 
       <label htmlFor="name"> Name: </label>
@@ -71,6 +76,7 @@ function NodeConfig(props) {
 
       <label htmlFor="location">Node location</label>
       <select name="location" id="location" className="config-field config-select" onChange={handleOther}>
+        <option value=""></option>
         {existingLocations.map((location, index) => (
           <option key={index} value={location}> {location} </option>
         ))}
@@ -87,8 +93,9 @@ function NodeConfig(props) {
       <label htmlFor="active">Active</label>
       <input type="checkbox" name="active" id="active" className="config-field config-checked" defaultChecked />
 
-      <button id="cancel" className="config-button config-cancel" > Cancel</button>
-      <button type="submit" className="config-button config-submit" > Create Node</button>
+      <button type="cancel" id="cancel" className="config-button config-cancel" onClick={handleCancel}> Cancel</button>
+
+      <button type="submit" className="config-button config-submit" onClick={handleSubmit} > Create Node</button>
     </form>
   )
 }

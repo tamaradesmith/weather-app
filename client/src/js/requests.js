@@ -1,5 +1,22 @@
 const BASE_URL = 'http://localhost:4000';
 
+const Crud ={
+  async create(type, node) {
+    const res = await fetch(`${BASE_URL}/type/${type}/create`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(node),
+    });
+    return res;
+  },
+  async getExisting(type){
+    const res = await fetch(`${BASE_URL}/type/${type}/existing`);
+    return res.json();
+  }
+}
+
 const Node = {
   async getNodesLocation() {
     const res = await fetch(`${BASE_URL}/nodes/locations`);
@@ -9,18 +26,7 @@ const Node = {
     const res = await fetch(`${BASE_URL}/nodes`);
     return res.json();
   },
-  async createNode(node){
-    const res = await fetch(`${BASE_URL}/node/create`, {
-      method: 'POST',
-      credentials:'include',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify(node)
 
-    })
-    return res.json()
-  }
 }
 
 const Device = {
@@ -65,4 +71,4 @@ const Controller = {
   },
 }
 
-export { Sensor, Node, Device, Controller };
+export { Sensor, Node, Device, Controller, Crud };

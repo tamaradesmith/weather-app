@@ -4,7 +4,7 @@ import { Device, Controller } from '../../js/requests'
 function ControllerConfig(props) {
 
   const [devices, setDevices] = useState(null);
-  const [existingController, setExistingController] = useState(null);
+  // const [existingController, setExistingController] = useState(null);
   const [controllerTypes, setControllerTypes] = useState(null);
 
   async function getDevices() {

@@ -4,7 +4,7 @@ import { Node } from "../../js/requests"
 function DeviceConfig(props) {
 
   const [nodes, setNodes] = useState(null);
-  const [DeviceInfo, setDeviceInfo] = useState([])
+  // const [DeviceInfo, setDeviceInfo] = useState([])
 
   async function getNodes() {
     const nodes = await Node.getNodes();
