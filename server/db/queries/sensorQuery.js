@@ -1,5 +1,5 @@
 const knex = require('../../client');
-const axios = require('axios');
+// const axios = require('axios');
 
 module.exports = {
   async  saveSensorReading(params) {
@@ -20,10 +20,20 @@ module.exports = {
     const reading = await knex('readings').select('value').where({ sensor_id: sensorId }).orderBy('time', "desc").limit(1)
     return reading[0];
   },
-  // get Sensor by Type 
+  // get Sensors
+  async getSensors(){
+    const sensors = await knex('sensors').select('*').where({active: true});
+    return sensors;
+  },
+  // get Sensors by Type 
   async getSensorsByType(type){
     const sensors = await knex('sensors').select("*").where({type: type, active: true});
     return sensors;
+  },
+  // get all different type of sensors
+  async getTypeOfSensors(){
+    const types = await knex.distinct().from('sensors').pluck("type");
+    return types
   },
   //  Get Temperature Sensor- Inside and outside only
   async getTemperatureSensors() {

@@ -5,7 +5,10 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
 // query
-const SensorQuery = require('../db/queries/sensorQuesry');
+const NodeQuery = require('../db/queries/nodeQuery.js');
+const DeviceQuery = require('../db/queries/deviceQuery');
+const SensorQuery = require('../db/queries/sensorQuery');
+const ControllerQuery = require('../db/queries/controllerQuery');
 
 // Save Reading to DB
 
@@ -22,8 +25,57 @@ router.post('/sensors/readings', (req, res) => {
   res.send(postParams.sensor);
 })
 
-// sensor requests
+// CREATE
+router.post('/type/:type/create', async (req, res) => {
+  const type = req.params.type;
+  const body = req.body;
+  const nodeStatus = await NodeQuery.create(type, body)
+  res.send(nodeStatus);
+})
 
+//  Get Existing
+
+router.get('/type/:type/existing', async (req, res) =>{
+  const type = req.params.type;
+  const list = await NodeQuery.getExisting(type);
+  res.send(list);
+})
+
+// Node Routes
+// get Nodes
+
+router.get('/nodes', async (req, res) => {
+  const nodes = await NodeQuery.getNodes();
+  res.send(nodes)
+})
+
+// get locations 
+router.get("/nodes/locations", async (req, res) => {
+  const locations = await NodeQuery.getNodesLocations();
+  res.send(locations);
+})
+
+
+// DEVICE ROUTES
+
+// get Device
+
+router.get('/devices', async (req, res) => {
+  const devices = await DeviceQuery.getDevices();
+  res.send(devices)
+})
+
+// SENSOR ROUTES
+
+router.get('/sensors', async (req, res) => {
+  const sensors = await SensorQuery.getSensors();
+  res.send(sensors);
+})
+
+router.get('/sensors/types', async (req, res) => {
+  const types = await SensorQuery.getTypeOfSensors();
+  res.send(types);
+})
 router.get('/sensors/type/:type', async (req, res) => {
   const type = req.params.type
   const sensors = (type != "temperature") ? await SensorQuery.getSensorsByType(type) : await SensorQuery.getTemperatureSensors();
@@ -46,11 +98,17 @@ router.get('/sensor/:id/highslows', async (req, res) => {
   res.send(highslows);
 });
 // get last 24 readings
-router.get('/sensor/:id/24', async (req, res) =>{
+router.get('/sensor/:id/24', async (req, res) => {
   const sensorId = req.params.id;
-  const  readings = await SensorQuery.getLast24ReadingsBySensor(sensorId);
-  // console.log("TCL: readings", readings)
+  const readings = await SensorQuery.getLast24ReadingsBySensor(sensorId);
   res.send(readings)
+})
+
+// CONTROLLER ROUTES
+
+router.get('/controllers/types', async (req, res) => {
+  const types = await ControllerQuery.getTypeofControllers();
+  res.send(types)
 })
 
 
