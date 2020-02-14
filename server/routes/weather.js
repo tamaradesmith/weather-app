@@ -13,7 +13,6 @@ const ControllerQuery = require('../db/queries/controllerQuery');
 // Save Reading to DB
 
 router.post('/sensors/readings', (req, res) => {
-  console.log("hi Hudson and Aurora")
   const postParams = {
     node: req.body.node,
     device: req.body.device,
@@ -33,12 +32,30 @@ router.post('/type/:type/create', async (req, res) => {
   res.send(nodeStatus);
 })
 
+// UPDATE
+
+router.post(`/type/:type/:id/update`, async (req, res) =>{
+  const type = req.params.type;
+  const id = req.params.id
+  const info = req.body;
+  console.log("TCL: info", info)
+  const updateItem = await NodeQuery.update(type, info, id);
+  res.send(updateItem);
+})
+
 //  Get Existing
 
 router.get('/type/:type/existing', async (req, res) =>{
   const type = req.params.type;
   const list = await NodeQuery.getExisting(type);
   res.send(list);
+})
+
+router.get('/type/:type/:id', async(req, res) =>{
+  const type = req.params.type;
+  const id = req.params.id;
+  const item = await NodeQuery.getItemInfo(type, id);
+  res.send(item);
 })
 
 // Node Routes
@@ -81,6 +98,11 @@ router.get('/sensors/type/:type', async (req, res) => {
   const sensors = (type != "temperature") ? await SensorQuery.getSensorsByType(type) : await SensorQuery.getTemperatureSensors();
   res.send(sensors);
 })
+ router.get('/sensors/locations', async (req, res) =>{
+   const locations = await SensorQuery.getSensorsLocations();
+   console.log("TCL: locations", locations)
+   res.send(locations)
+ })
 
 // get last reading
 router.get('/sensor/:id/reading', async (req, res) => {

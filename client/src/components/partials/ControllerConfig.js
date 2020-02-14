@@ -4,7 +4,6 @@ import { Device, Controller } from '../../js/requests'
 function ControllerConfig(props) {
 
   const [devices, setDevices] = useState(null);
-  // const [existingController, setExistingController] = useState(null);
   const [controllerTypes, setControllerTypes] = useState(null);
 
   async function getDevices() {
@@ -20,8 +19,9 @@ function ControllerConfig(props) {
 
   function handleSubmit(event) {
     event.preventDefault();
-    const { target } = event;
-    const formData = new FormData(target);
+    const controller = document.querySelector("#controllerForm");
+    const inputs = controller.querySelectorAll('select, input');
+    const formData = new FormData(controller);
     const newController = {
       device_id: formData.get('device'),
       name: formData.get('name'),
@@ -29,7 +29,28 @@ function ControllerConfig(props) {
       propose: formData.get('propose'),
       active: (formData.get(`active`) === "on") ? true : false,
     }
-    console.log("TCL: handleSubmit -> newController", newController)
+  checkFields(newController, controller, inputs);
+  };
+
+  function handleCancel(event){
+    event.preventDefault();
+    props.cancel();
+  };
+
+  function checkFields(controller, target, inputs){
+    let flag = true;
+    inputs.forEach(input =>{
+      if (input.value === ""){
+        input.classList.add('warning');
+        flag = false
+      } else {
+        input.classList.remove('warning');
+      }
+    })
+    if(flag === true){
+      props.create('controller', controller);
+      target.reset();
+    }
   }
 
   if (devices === null) {
@@ -43,7 +64,7 @@ function ControllerConfig(props) {
 
 
   return (
-    <form className="ControllerConfig config-form" onSubmit={handleSubmit}>
+    <form id="controllerForm" className="ControllerConfig config-form" >
       <h4 className="config-sensor-header">Controller Configure</h4>
     <label htmlFor="device" className="config-label">Device: </label>
       <select name="device" className="config-field-sensor config-select">
@@ -71,9 +92,9 @@ function ControllerConfig(props) {
       <label htmlFor="active" className="config-label">Active</label>
       <input type="checkbox" name="active" id="active" className="config-field-sensor config-checked" defaultChecked />
 
-      <button id="cancel" className="config-sensor-button" > Cancel</button>
+      <button id="cancel" className="config-sensor-button" onClick={handleCancel} > Cancel</button>
 
-      <button type="submit" className="config-submit-sensor-button" > Create Sensor</button> 
+      <button type="submit" className="config-submit-sensor-button" onClick={handleSubmit} > Create Sensor</button> 
 
     </form>
   )

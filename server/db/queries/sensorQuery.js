@@ -35,6 +35,11 @@ module.exports = {
     const types = await knex.distinct().from('sensors').pluck("type");
     return types
   },
+  // get Sensors locations
+  async getSensorsLocations(){
+    const locations = await knex.distinct().from('sensors').pluck("location").where({active: true});
+    return locations;
+  },
   //  Get Temperature Sensor- Inside and outside only
   async getTemperatureSensors() {
     const sensors = await knex("sensors").select("*").where({ location: 'inside' }).orWhere({ location: 'outside' }).andWhere({ type: "temperature", active: true })

@@ -4,7 +4,9 @@
   --primary-colour: #050505;
   --secondary-colour: #c9daea;
   --hover-colour: #050505;
-   --input-colour: #acc4da;
+  --input-colour: #acc4da;
+  --input-colour-hoover: #9fbdda;
+
 }
 body {
   font-size: 2em;
@@ -35,6 +37,9 @@ input{
   border: 1px solid var(--primary-colour);
   background: var(--secondary-colour);
 }
+.capitlize{
+  text-transform: capitalize;
+}
 .dashboard {
   display: flex;
   flex-direction: row;
@@ -50,6 +55,7 @@ input{
 .hidden{
   display: none;
 }
+
 /* TEMPERATURE  */
 .Temperature {
   display: flex;
@@ -229,7 +235,7 @@ width: 25px;
   background: var(--input-colour);
 }
 .config-button:hover{
-  background: var(--input-colour);
+  background: var(--input-colour-hoover);
 }
 .config-cancel{
   grid-column: 2/3;
@@ -277,6 +283,7 @@ grid-column: 4/5;
   display: grid;
   grid-template-columns: 250px auto 100px;
   grid-gap: .25px;
+  margin: .25em 0;
 }
 .edit-list-header{
   font-weight: 700;
@@ -286,7 +293,26 @@ grid-column: 4/5;
   height: 325px;
   overflow: hidden
 }
+.edit-list-button{
+  height: 30px;
+}
 .list-scoll{
-  max-height: 325px;
-  overflow-y: scroll
+ height: 325px;
+  overflow-y: auto;
+}
+.config-edit{
+  display: grid;
+  grid-template-columns: 200px auto;
+  margin-bottom: .25em;
+}
+.config-buttons{
+  display: flex;
+  justify-content: flex-end;
+}
+/* Warning */
+.warning{
+  border: 2px solid red;
+}
+.button-edit{
+  margin-left: .25em;
 }

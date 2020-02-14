@@ -6,23 +6,27 @@ function NodeConfig(props) {
   const [existingLocations, setExistingLocations] = useState([]);
 
   async function getNodesLoactions() {
-    const locations = await Node.getNodesLocation();
+    let locations = await Node.getNodesLocation();
+    if (locations.length === 0) {
+      locations = ['inside', 'outside'];
+    }
     setExistingLocations(locations);
   };
 
   function handleSubmit(event) {
     event.preventDefault();
-    const node = document.querySelector('#nodeForm')
-      const formData = new FormData(node);
-      const newNode = {
-        name: formData.get("name"),
-        description: formData.get("description"),
-        type: formData.get('type'),
-        location: (formData.get('location') !== "other") ? formData.get('location') : formData.get("locationOther"),
-        ipaddress: formData.get('ipAddress'),
-        active: (formData.get(`active`) === "on") ? true : false
-      };
-      checkFields(newNode, node);
+    const node = document.querySelector('#nodeForm');
+    const inputs = node.querySelectorAll('input, select');
+    const formData = new FormData(node);
+    const newNode = {
+      name: formData.get("name"),
+      description: formData.get("description"),
+      type: formData.get('type'),
+      location: (formData.get('location') !== "other") ? formData.get('location') : formData.get("locationOther"),
+      ipaddress: formData.get('ipAddress'),
+      active: (formData.get(`active`) === "on") ? true : false
+    };
+    checkFields(newNode, node, inputs);
   };
 
   function handleOther(event) {
@@ -33,31 +37,29 @@ function NodeConfig(props) {
     };
   };
 
-  function checkFields(node, target) {
+  function checkFields(node, target, inputs) {
     let flag = true;
-    Object.keys(node).forEach(field => {
-      if (node[field] === "" || node[field] === null) {
-        const inputfield = document.getElementById(`${field}`)
-        if (inputfield !== null) {
-          inputfield.style.border = '2px solid red';
+    inputs.forEach(input => {
+      if (input.value === "" || input.value === null) {
+        const classes = `${input.classList.value}`;
+        if (!classes.includes('hidden')) {
+          input.classList.add('warning');
           flag = false;
-        };
+        }
       };
     });
     if (flag === true) {
-      Object.keys(node).forEach(field => {
-        const inputfield = document.getElementById(`${field}`)
-        if (inputfield !== null) {
-          inputfield.style.border = '1px solid black';
-        }
+      inputs.forEach(input => {
+        input.classList.remove('warning');
       });
       props.create('node', node);
       target.reset();
     };
   };
-function handleCancel(event){
-  console.log(event.target)
-}
+  function handleCancel(event) {
+    event.preventDefault();
+    props.cancel();
+  }
 
   if (existingLocations.length === 0) {
     getNodesLoactions();
@@ -82,13 +84,14 @@ function handleCancel(event){
         ))}
         <option value="other">Other</option>
       </select>
+      {/* text input for other */}
       <input type="text" id="locationOther" name="locationOther" className="config-field hidden" placeholder="Enter Node location"></input>
 
       <label htmlFor="type">Node type</label>
       <input type="text" name="type" id="type" placeholder="Enter node type" className="config-field"></input>
 
       <label htmlFor="ipAddress">Node  IP Address</label>
-      <input type="text" name="ipAddress" id="ipAddress" placeholder="Enter node IP Address" className="config-field"></input>
+      <input type="text" name="ipAddress" id="ipaddress" placeholder="Enter node IP Address" className="config-field"></input>
 
       <label htmlFor="active">Active</label>
       <input type="checkbox" name="active" id="active" className="config-field config-checked" defaultChecked />

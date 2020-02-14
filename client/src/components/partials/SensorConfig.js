@@ -6,6 +6,7 @@ function SensorConfig(props) {
   const [devices, setDevices] = useState(null);
   const [existingSensors, setExistingSensors] = useState(null);
   const [sensorTypes, setSensorTypes] = useState(null);
+  const [sensorLocations, setSensorLocations] = useState(null);
 
   async function getDevices() {
     const devices = await Device.getDevices();
@@ -21,46 +22,79 @@ function SensorConfig(props) {
     setExistingSensors(sensors);
   }
 
+  async function getExistingSensorsLocation(){
+    const sensors = await Sensor.getSensorsLocations()
+    setSensorLocations(sensors);
+  }
   function handleSubmit(event) {
     event.preventDefault();
-    const { target } = event;
-    const formData = new FormData(target);
+    const sensor = document.querySelector("#sensorForm");
+    const inputs = sensor.querySelectorAll('input, select');
+    const formData = new FormData(sensor);
     const newSensor = {
       device_id: formData.get('device'),
       name: formData.get('name'),
       type: formData.get('type'),
+      location: formData.get('location'),
       propose: formData.get('propose'),
       minValue: formData.get('minValue'),
       maxValue: formData.get('maxValue'),
       unit: formData.get('unit'),
       active: (formData.get(`active`) === "on") ? true : false,
     }
-    console.log("TCL: handleSubmit -> newSensor", newSensor)
+    checkFields(newSensor, sensor, inputs)
+  }
+
+  function handleCancel(event) {
+    event.preventDefault();
+    props.cancel();
+  }
+
+  function checkFields(sensor, target, inputs) {
+    let flag = true
+    inputs.forEach(input => {
+      if (input.value === "") {
+        input.classList.add('warning');
+        flag = false;
+      } else {
+        input.classList.remove('warning');
+      };
+    });
+    if (flag === true) {
+      props.create("sensor", sensor);
+      target.reset();
+    }
   }
 
   if (devices === null) {
     getDevices();
-    return "Loading"
+    return "Loading ..."
   }
   if (sensorTypes === null) {
     getExistingSensorsTypes();
-    return "Loading..."
+    return "Loading ..."
   }
   if (existingSensors === null) {
     getExistingSensors();
-    return "Loading..."
+    return "Loading ..."
+  }
+  if (sensorLocations === null){
+    getExistingSensorsLocation()
+    return "Loading ..."
   }
 
   return (
-    <form className="SensorConfig config-form-sensor" onSubmit={handleSubmit}>
+    <form id="sensorForm" className="SensorConfig config-form-sensor">
       <h4 className="config-sensor-header">Sensor Configure</h4>
+
       <label htmlFor="device" className="config-label">Device: </label>
       <select name="device" className="config-field-sensor config-select">
-      <option ></option>
+        <option ></option>
         {devices.map((device, index) => (
           <option key={index} value={device.id}>{device.name}</option>
         ))}
       </select>
+
       <label htmlFor="name" className="config-label">Name:</label>
       <input type="text" name="name" id="name" className="config-field-sensor" ></input>
 
@@ -69,6 +103,14 @@ function SensorConfig(props) {
         <option ></option>
         {sensorTypes.map((type, index) => (
           <option key={index} value={type} >{type}</option>
+        ))}
+      </select>
+
+      <label htmlFor="location" className="config-label">Location:</label>
+      <select name="location" className="config-field-sensor config-select">
+        <option value=""></option>
+        {sensorLocations.map((location, index) => (
+          <option key={index} value={location} >{location}</option>
         ))}
       </select>
 
@@ -87,9 +129,9 @@ function SensorConfig(props) {
       <label htmlFor="active" className="config-label">Active</label>
       <input type="checkbox" name="active" id="active" className="config-field-sensor config-checked" defaultChecked />
 
-      <button id="cancel" className="config-sensor-button" > Cancel</button>
+      <button id="cancel" className="config-sensor-button" onClick={handleCancel} > Cancel</button>
 
-      <button type="submit" className="config-submit-sensor-button" > Create Sensor</button>
+      <button type="submit" className="config-submit-sensor-button" onClick={handleSubmit} > Create Sensor</button>
 
     </form>
   )

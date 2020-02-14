@@ -1,6 +1,8 @@
+import { unstable_batchedUpdates } from "react-dom";
+
 const BASE_URL = 'http://localhost:4000';
 
-const Crud ={
+const Crud = {
   async create(type, node) {
     const res = await fetch(`${BASE_URL}/type/${type}/create`, {
       method: 'POST',
@@ -11,9 +13,23 @@ const Crud ={
     });
     return res;
   },
-  async getExisting(type){
+  async getExisting(type) {
     const res = await fetch(`${BASE_URL}/type/${type}/existing`);
     return res.json();
+  },
+  async getItemInfo(type, id){
+    const res = await fetch(`${BASE_URL}/type/${type}/${id}`);
+    return res.json();
+  },
+  async update(type, info, id){
+    const res = await fetch(`${BASE_URL}/type/${type}/${id}/update`, {
+      method: `POST`,
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(info),
+    });
+    return res;
   }
 }
 
@@ -22,7 +38,7 @@ const Node = {
     const res = await fetch(`${BASE_URL}/nodes/locations`);
     return res.json();
   },
-  async getNodes(){
+  async getNodes() {
     const res = await fetch(`${BASE_URL}/nodes`);
     return res.json();
   },
@@ -30,7 +46,7 @@ const Node = {
 }
 
 const Device = {
-  async getDevices(){
+  async getDevices() {
     const res = await fetch(`${BASE_URL}/devices`);
     return res.json();
   }
@@ -45,14 +61,18 @@ const Sensor = {
     const res = await fetch(`${BASE_URL}/sensors/type/${type}`)
     return res.json()
   },
-  async getSensors(){
+  async getSensors() {
     const res = await fetch(`${BASE_URL}/sensors`);
     return res.json();
   },
-async getSensorsTypes(){
-  const  res = await fetch(`${BASE_URL}/sensors/types`)
-  return res.json();
-},
+  async getSensorsTypes() {
+    const res = await fetch(`${BASE_URL}/sensors/types`)
+    return res.json();
+  },
+  async getSensorsLocations(){
+    const res = await fetch(`${BASE_URL}/sensors/locations`);
+    return res.json();
+  },
   // temperature  
   async getHighsAndLows(sensorId) {
     const res = await fetch(`${BASE_URL}/sensor/${sensorId}/highslows`);
