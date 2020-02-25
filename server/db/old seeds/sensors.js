@@ -22,3 +22,15 @@ exports.seed = function (knex) {
         })
     });
 };
+
+// MAIN CAbin
+// [{ value: 18, time: 2020-01-20T15: 00: 30.000Z, sensor_id: 15 },
+//   { value: 21, time: 2020 - 01 - 20T20: 00: 30.000Z, sensor_id: 15 },
+//   { value: 22, time: 2020 - 01 - 21T00: 00: 30.000Z, sensor_id: 15 },
+//   { value: 20, time: 2020 - 01 - 21T04: 00: 30.000Z, sensor_id: 15 },
+//   { value: 18, time: 2020 - 01 - 21T08: 00: 30.000Z, sensor_id: 15 },
+//   { value: 16, time: 2020 - 01 - 21T15: 00: 30.000Z, sensor_id: 15 },
+//   { value: 20, time: 2020 - 01 - 21T20: 00: 30.000Z, sensor_id: 15 },
+//   { value: 22, time: 2020 - 01 - 22T00: 00: 30.000Z, sensor_id: 15 },
+//   { value: 21, time: 2020 - 01 - 22T04: 00: 30.000Z, sensor_id: 15 },
+//   { value: 17, time: 2020 - 01 - 22T08: 00: 30.000Z, sensor_id: 15 }]

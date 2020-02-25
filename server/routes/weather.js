@@ -10,6 +10,10 @@ const DeviceQuery = require('../db/queries/deviceQuery');
 const SensorQuery = require('../db/queries/sensorQuery');
 const ControllerQuery = require('../db/queries/controllerQuery');
 
+// Helpers
+
+const ConfigHelpers = require('./configHelpers')
+
 // Save Reading to DB
 
 router.post('/sensors/readings', (req, res) => {
@@ -23,6 +27,18 @@ router.post('/sensors/readings', (req, res) => {
   SensorQuery.saveSensorReading(postParams);
   res.send(postParams.sensor);
 })
+
+
+// get Config Devices and Sensors and controllers
+router.get('/node/:id/devices', async (req, res) => {
+  const id = req.params.id;
+  // const devicesXML = await NodeQuery.getDevicesOnNode(id); 
+  const devicesXML = ""
+  const devices = await ConfigHelpers.getNodeDependent(devicesXML)
+  // console.log("TCL: devices", devices)
+  res.send(devices)
+})
+
 
 // CREATE
 router.post('/type/:type/create', async (req, res) => {
@@ -66,12 +82,20 @@ router.get('/nodes', async (req, res) => {
   res.send(nodes)
 })
 
-// get locations 
-router.get("/nodes/locations", async (req, res) => {
-  const locations = await NodeQuery.getNodesLocations();
-  res.send(locations);
-})
 
+
+// Search for nodes
+
+router.get('/nodes/search', async (req, res) =>{
+  const nodes = await NodeQuery.searchForNodes();
+  res.send(nodes)
+});
+
+router.post('/nodes/check', async (req, res) => {
+  const node = req.body;
+  const existing = await  NodeQuery.nodeExist(node);
+  res.send(existing);
+})
 
 // DEVICE ROUTES
 
@@ -100,7 +124,6 @@ router.get('/sensors/type/:type', async (req, res) => {
 })
  router.get('/sensors/locations', async (req, res) =>{
    const locations = await SensorQuery.getSensorsLocations();
-   console.log("TCL: locations", locations)
    res.send(locations)
  })
 

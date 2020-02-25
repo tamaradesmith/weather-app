@@ -7,5 +7,7 @@
 		"path": "server"
 	}
 ],
-  "settings": {}
+	"settings": {
+		"liveServer.settings.multiRootWorkspaceName": "client"
+	}
 }

@@ -6,6 +6,7 @@ import DeviceConfig from './partials/DeviceConfig';
 import SensorConfig from './partials/SensorConfig';
 import ControllerConfig from './partials/ControllerConfig';
 import EditConfig from './partials/EditConfig';
+import NodeShow from './partials/NodeShow';
 
 function DashboardConfig(props) {
   const [form, setForm] = useState(null);
@@ -18,7 +19,7 @@ function DashboardConfig(props) {
   function handleChange(value) {
     switch (value) {
       case 'node':
-        setForm(<NodeConfig create={create} cancel={cancel} />);
+        setForm(<NodeConfig create={create} cancel={cancel} redirect={redirectTo} />);
         setHidden(true);
         break;
       case 'device':
@@ -80,7 +81,10 @@ function DashboardConfig(props) {
   function cancel() {
     resetView();
   }
+function redirectTo(id, item){
+  setForm(<NodeShow id={id} item={item} />);
 
+}
   return (
     <main className="ConfigNodes config">
       <div className={hidden ? 'hidden' : null}>
@@ -123,7 +127,7 @@ function DashboardConfig(props) {
           </div>
         </div>
       </div>
-
+      {/* <NodeShow id="16" item="nodes" /> */}
       <div className="inputs">
         {form}
       </div>

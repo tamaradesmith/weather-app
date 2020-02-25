@@ -4,6 +4,8 @@ exports.up = function(knex) {
     t.bigIncrements('id');
     t.string('name');
     t.text('description');
+    t.text('site');
+    t.text('location');
     t.string('type');
     t.string('ipaddress');
     t.boolean("active").defaultTo('true')

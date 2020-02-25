@@ -42,7 +42,7 @@ module.exports = {
   },
   //  Get Temperature Sensor- Inside and outside only
   async getTemperatureSensors() {
-    const sensors = await knex("sensors").select("*").where({ location: 'inside' }).orWhere({ location: 'outside' }).andWhere({ type: "temperature", active: true })
+    const sensors = await knex("sensors").select("*").where({ type: "temperature", active: true,  location: 'outside' }).orWhere({ location: 'inside', type: "temperature", active: true })
     return sensors
   },
   // get High and Low 24 hours

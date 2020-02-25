@@ -3,15 +3,27 @@ import { Node } from "../../js/requests";
 
 function NodeConfig(props) {
 
-  const [existingLocations, setExistingLocations] = useState([]);
+  const [foundNodes, setFoundNodes] = useState(null);
+  const [nodeId, setNodeId] = useState(null);
 
-  async function getNodesLoactions() {
-    let locations = await Node.getNodesLocation();
-    if (locations.length === 0) {
-      locations = ['inside', 'outside'];
-    }
-    setExistingLocations(locations);
-  };
+  async function foundLocalNodes() {
+    const nodes = await Node.searchForNodes();
+    setFoundNodes(nodes);
+  }
+
+  function handlePickNode(event) {
+    const { target } = event;
+    foundNodes.forEach((node, index) => {
+      if (target.value === node.name) {
+        document.querySelector("#ipaddress").value = foundNodes[index].ip;
+        document.querySelector("#location").value = foundNodes[index].location;
+        document.querySelector("#description").value = foundNodes[index].description;
+        document.querySelector("#type").value = foundNodes[index].type;
+      }
+    })
+    document.querySelector("#form").classList.remove("hidden");
+    document.querySelector("#form").classList.add("config-form");
+  }
 
   function handleSubmit(event) {
     event.preventDefault();
@@ -29,14 +41,6 @@ function NodeConfig(props) {
     checkFields(newNode, node, inputs);
   };
 
-  function handleOther(event) {
-    const { target } = event;
-    if (target.value === "other") {
-      document.querySelector("#location").classList.add("hidden");
-      document.querySelector("#locationOther").classList.remove("hidden");
-    };
-  };
-
   function checkFields(node, target, inputs) {
     let flag = true;
     inputs.forEach(input => {
@@ -52,54 +56,78 @@ function NodeConfig(props) {
       inputs.forEach(input => {
         input.classList.remove('warning');
       });
-      props.create('node', node);
-      target.reset();
+      checkIfNodeExist(node);
     };
   };
+  async function checkIfNodeExist(node) {
+    const result = await Node.CheckIfNodeExist(node);
+    setNodeId(result.id);
+    if (result.value === 'false') {
+      console.log("node saved");
+    } else {
+      document.querySelector("#message").classList.remove('hidden');
+    }
+
+  }
+  function handleNodeShow() {
+    props.redirect(nodeId, 'nodes');
+  }
+
   function handleCancel(event) {
     event.preventDefault();
     props.cancel();
   }
-
-  if (existingLocations.length === 0) {
-    getNodesLoactions();
-    return "loading..."
+  if (foundNodes === null) {
+    foundLocalNodes();
+    return "Searching..."
   }
 
+
   return (
-    <form id="nodeForm" className="NodeConfig config-form" >
-      <h4 className="config-header">Node Configure</h4>
+    <div className="NodeConfig" >
 
-      <label htmlFor="name"> Name: </label>
-      <input type="text" name="name" id='name' placeholder="Enter node name" className="config-field"></input>
+      <form id="nodeForm" className="NodeConfig config-form" >
+        <h4 className="config-header">Node Configure</h4>
 
-      <label htmlFor="description">Node description</label>
-      <input type="text" name="description" id="description" placeholder="Enter node description" className="config-field"></input>
+        <label htmlFor="name"> Name: </label>
+        <select name="name" id='name' className="config-field config-select" onChange={handlePickNode}>
+          <option value=""></option>
+          {foundNodes.map((node, index) => (
+            <option key={index} name={node.name} value={node.name}>{node.name}</option>
+          ))}
+        </select>
 
-      <label htmlFor="location">Node location</label>
-      <select name="location" id="location" className="config-field config-select" onChange={handleOther}>
-        <option value=""></option>
-        {existingLocations.map((location, index) => (
-          <option key={index} value={location}> {location} </option>
-        ))}
-        <option value="other">Other</option>
-      </select>
-      {/* text input for other */}
-      <input type="text" id="locationOther" name="locationOther" className="config-field hidden" placeholder="Enter Node location"></input>
 
-      <label htmlFor="type">Node type</label>
-      <input type="text" name="type" id="type" placeholder="Enter node type" className="config-field"></input>
+        <div id="form" className="hidden form-column">
 
-      <label htmlFor="ipAddress">Node  IP Address</label>
-      <input type="text" name="ipAddress" id="ipaddress" placeholder="Enter node IP Address" className="config-field"></input>
 
-      <label htmlFor="active">Active</label>
-      <input type="checkbox" name="active" id="active" className="config-field config-checked" defaultChecked />
+          <label htmlFor="description">Description</label>
+          <input type="text" name="description" id="description" placeholder="Enter node description" className="config-field" readOnly></input>
 
-      <button type="cancel" id="cancel" className="config-button config-cancel" onClick={handleCancel}> Cancel</button>
+          <label htmlFor="location">Location</label>
+          <input name="location" id="location" className="config-field" readOnly >
+          </input>
 
-      <button type="submit" className="config-button config-submit" onClick={handleSubmit} > Create Node</button>
-    </form>
+          <label htmlFor="type">Type</label>
+          <input type="text" name="type" id="type" placeholder="Enter node type" className="config-field" readOnly></input>
+
+          <label htmlFor="ipAddress">IP Address</label>
+          <input type="text" name="ipAddress" id="ipaddress" className="config-field" readOnly></input>
+
+          <label htmlFor="active">Active</label>
+          <input type="checkbox" name="active" id="active" className="config-field config-checked" defaultChecked />
+
+          <button type="cancel" id="cancel" className="config-button config-cancel" onClick={handleCancel}> Cancel</button>
+
+          <button type="submit" className="config-button config-submit" onClick={handleSubmit} > Create Node</button>
+        </div>
+      </form>
+      <div id='message' className="hidden">
+        <p>Node already Exist, redirct to node page?</p>
+        <button id="yes" className="config-button" onClick={handleNodeShow} >Yes</button>
+        <button id="no" className="config-button" onClick={handleCancel} >No</button>
+      </div>
+    </div>
   )
 }
 export default NodeConfig;

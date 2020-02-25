@@ -4,6 +4,7 @@ import { Node } from "../../js/requests"
 function DeviceConfig(props) {
 
   const [nodes, setNodes] = useState(null);
+  const [deviceList, setDeviceList] = useState([]);
 
   async function getNodes() {
     const nodes = await Node.getNodes();
@@ -29,6 +30,24 @@ function DeviceConfig(props) {
     event.preventDefault();
     props.cancel();
   }
+  async function handleSelectNode(event) {
+    const { target } = event;
+    const deviceInfo = await Node.getDevices(target.value)
+    setDeviceList(deviceInfo);
+    document.querySelector("#device-name").classList.add("config-form");
+    document.querySelector("#device-name").classList.remove("hidden");
+  };
+
+  function handleSelectDevice(event) {
+    const { target } = event;
+    deviceList.forEach((device, index) => {
+      if (target.value === device.name) {
+        document.querySelector("#type").value = deviceList[index].type;
+      };
+    });
+    document.querySelector("#device-info").classList.remove("hidden");
+    document.querySelector("#device-info").classList.add("config-form");
+  }
 
   function checkFields(device, target, inputs) {
     let flag = true;
@@ -40,8 +59,8 @@ function DeviceConfig(props) {
         input.classList.remove('warning');
       };
     });
-    if (flag === true){
- 
+    if (flag === true) {
+
       props.create('device', device);
       target.reset();
     }
@@ -57,29 +76,37 @@ function DeviceConfig(props) {
       <h4 className="config-header">Device Configure</h4>
 
       <label htmlFor="node" className="config-label" >Node</label>
-      <select name="node" className="config-field config-select">
+      <select name="node" className="config-field config-select" onChange={handleSelectNode}>
         <option value=''></option>
         {nodes.map((node, index) => (
           <option key={index} value={node.id}>{node.name}</option>
         ))}
       </select>
 
-      <label htmlFor="name" className="config-label" >Device Name: </label>
-      <input type="text" name="name" id="name" placeholder="Enter device name" className="config-field"></input>
+      <div id="device-name" className="config-div hidden">
+        <label htmlFor="name" className="config-label " >Device: </label>
+        <select name="name" id="name" className="config-field config-select " onChange={handleSelectDevice}>
+          <option value=""></option>
+          {deviceList.map((device, index) => (
+            <option key={index} value={device.name}>{device.name}</option>
+          ))}
+        </select>
+      </div>
+      <div id="device-info" className=" config-div hidden">
 
-      <label htmlFor="description" className="config-label" >Device description: </label>
-      <input type="text" name="description" id="description" placeholder="Enter device description" className="config-field"></input>
+        <label htmlFor="type" className="config-label" >Type: </label>
+        <input type="text" name="type" id="type" placeholder="Enter device type" className="config-field"></input>
 
-      <label htmlFor="type" className="config-label" >Device Type: </label>
-      <input type="text" name="type" id="type" placeholder="Enter device type" className="config-field"></input>
+        <label htmlFor="description" className="config-label" >Description: </label>
+        <input type="text" name="description" id="description" placeholder="Enter device description" className="config-field"></input>
 
-      <label htmlFor="active">Active</label>
-      <input type="checkbox" name="active" id="active" className="config-field config-checked" defaultChecked />
+        <label htmlFor="active">Active</label>
+        <input type="checkbox" name="active" id="active" className="config-field config-checked" defaultChecked />
 
-      <button id="cancel" className="config-button config-cancel" onClick={handleCancel}>Cancel</button>
+        <button id="cancel" className="config-button config-cancel" onClick={handleCancel}>Cancel</button>
 
-      <button type="submit" className="config-button config-submit" onClick={handleSubmit} >Create Device</button>
-
+        <button type="submit" className="config-button config-submit" onClick={handleSubmit} >Create Device</button>
+      </div>
     </form>
   )
 }

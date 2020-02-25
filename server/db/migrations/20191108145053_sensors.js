@@ -7,10 +7,11 @@ exports.up = function(knex) {
     t.float('maxValue');
     t.float('minValue');
     t.string('unit');
-    t.text('propose');
+    t.text('description');
     t.string('location');
     t.integer('device_id');
     t.foreign('device_id').references('devices.id');
+    t.boolean("active").defaultTo('true');
     t.timestamp('createdAt').defaultTo(knex.fn.now());
   })
 };

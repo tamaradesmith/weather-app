@@ -211,7 +211,7 @@ margin: .5em;
 }
 .config-form{
   display: grid;
-  grid-template-columns: auto auto auto;
+  grid-template-columns: 200px auto auto;
   grid-gap: .25em;
 }
 .config-form-sensor{
@@ -224,6 +224,9 @@ margin: .5em;
 }
 .config-field{
   grid-column: 2/4;
+}
+.config-div{
+  grid-column: 1/5;
 }
 .config-checked{
 height: 25px;
@@ -308,6 +311,16 @@ grid-column: 4/5;
 .config-buttons{
   display: flex;
   justify-content: flex-end;
+}
+.form-column{
+  grid-column: 1/4;
+}
+/* SHOW */
+
+.show-row{
+  grid-template-columns: 200px auto;
+  grid-gap: .25em;
+  margin: .25em 0;
 }
 /* Warning */
 .warning{

@@ -1,5 +1,3 @@
-import { unstable_batchedUpdates } from "react-dom";
-
 const BASE_URL = 'http://localhost:4000';
 
 const Crud = {
@@ -17,11 +15,11 @@ const Crud = {
     const res = await fetch(`${BASE_URL}/type/${type}/existing`);
     return res.json();
   },
-  async getItemInfo(type, id){
+  async getItemInfo(type, id) {
     const res = await fetch(`${BASE_URL}/type/${type}/${id}`);
     return res.json();
   },
-  async update(type, info, id){
+  async update(type, info, id) {
     const res = await fetch(`${BASE_URL}/type/${type}/${id}/update`, {
       method: `POST`,
       headers: {
@@ -34,15 +32,28 @@ const Crud = {
 }
 
 const Node = {
-  async getNodesLocation() {
-    const res = await fetch(`${BASE_URL}/nodes/locations`);
+  async searchForNodes() {
+    const res = await fetch(`${BASE_URL}/nodes/search`);
     return res.json();
   },
   async getNodes() {
     const res = await fetch(`${BASE_URL}/nodes`);
     return res.json();
   },
-
+  async CheckIfNodeExist(node) {
+    const res = await fetch(`${BASE_URL}/nodes/check`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(node)
+    });
+    return res.json();
+  },
+  async getDevices(id) {
+    const res = await fetch(`${BASE_URL}/node/${id}/devices`);
+    return res.json();
+  },
 }
 
 const Device = {
@@ -69,7 +80,7 @@ const Sensor = {
     const res = await fetch(`${BASE_URL}/sensors/types`)
     return res.json();
   },
-  async getSensorsLocations(){
+  async getSensorsLocations() {
     const res = await fetch(`${BASE_URL}/sensors/locations`);
     return res.json();
   },
