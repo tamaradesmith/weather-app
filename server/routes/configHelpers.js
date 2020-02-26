@@ -1,30 +1,72 @@
 const parseString = require('xml2js').parseString;
+const typeSensor = [{ tempature: "c" }, { pressure: "pa" },]
 
-module.exports = { 
-  getNodeDependent(XMLFile){
+module.exports = {
+
+  setupNodeDependent(XMLFile, node) {
     let devicesXml;
-    const devicesList=[];
-   parseString(file, ((err, result) =>{
-     devicesXml = result.application.device
+    const devicesList = [];
+    parseString(file, ((err, result) => {
+      devicesXml = result.application.device
     }));
-    
- const list =  devicesXml.map(device => {
-      const deviceObject = this.getDevice(device);
+    const list = devicesXml.map(device => {
+      const deviceObject = this.getDevice(device, node);
       devicesList.push(deviceObject)
     });
     return devicesList;
   },
-  getDevice(device){
-    const deviceObject = { name: device.name[0], type: device.type[0] }
-    // if (device.sensors[0].length > 0){
-    this.getSenors(device.sensors[0]);
-    // };
+  getDevice(device, node) {
+    let sensors = [];
+    let controllers = [];
+    let properties = [];
+    if (device.sensors[0].sensor.length > 0 && device.sensors[0].sensor[0] !== "") {
+      sensors = this.getSenors(device.sensors[0], node);
+    };
+    if (device.controllers.length > 0 && device.controllers[0] !== "") {
+      controllers = this.getControllers(device.controllers[0], node)
+    }
+    if (device.properties.length > 0 && device.properties[0] !== "") {
+      properties = this.getProperties(properties.controllers[0], node)
+    }
+    const deviceObject = { name: device.name[0], type: device.type[0], description: node.description, sensors: sensors, controllers: controllers, properties: properties }
     return deviceObject;
   },
-  getSenors(sensorList){
-    console.log("TCL: getSenors -> sensorList", sensorList.sensor[0])
-
-
+  getSenors(sensorList, node) {
+    return sensorList.sensor.map(sensor => {
+      const sensorInfo = { location: node.location };
+      const keys = Object.keys(sensor);
+      keys.forEach(key => {
+        if (key !== "value") {
+          sensorInfo[key] = sensor[key][0].toLowerCase()
+        }
+        if (key === "type" && sensor[key][0].toLowerCase() === 'temperature') {
+          sensorInfo.unit = 'c';
+        }
+      })
+      return sensorInfo;
+    })
+  },
+  getControllers(controllerList, node) {
+    return controllerList.controller.map(controller => {
+      const controllerInfo = { location: node.location };
+      const keys = Object.keys(controller);
+      keys.forEach(key => {
+        if (key !== "value" && key !== 'onstring' && key !== 'offstring') {
+          controllerInfo[key] = controller[key][0];
+        }
+      })
+      return controllerInfo;
+    });
+  },
+  getProperties(propertiesList, node) {
+    return propertiesList.properties.map(properties => {
+      const propertiesInfo = { location: node.location };
+      const keys = Object.keys(properties);
+      keys.forEach(key => {
+        propertiesInfo[key] = properties[key][0];
+      });
+      return propertiesInfo;
+    });
   }
 }
 
@@ -58,10 +100,8 @@ const file = `<?xml version = "1.0" encoding="UTF - 8"?>
         <value>-1000000.000000</value>
       </sensor>
     </sensors>
-    <controllers>
-    </controllers>
-    <properties>
-    </properties>
+    <controllers></controllers>
+    <properties></properties>
   </device>
   <device><name>TEST_SI1145</name><type>SI1145</type><sensors><sensor>
     <name>Visible</name><type>Range</type><min>0.000000</min><max>1000.000000</max><value>-100000.000000</value></sensor>
@@ -84,4 +124,3 @@ const file = `<?xml version = "1.0" encoding="UTF - 8"?>
     <max>200000000.000000</max><value>-100000.000000</value></sensor><sensor><name>Tvoc</name><type>PPM</type><min>0.000000</min>
       <max>200000000.000000</max><value>-100000.000000</value>
     </sensor></sensors><controllers></controllers><properties></properties></device></application >`
-    

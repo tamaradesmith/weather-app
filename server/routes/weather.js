@@ -32,11 +32,13 @@ router.post('/sensors/readings', (req, res) => {
 // get Config Devices and Sensors and controllers
 router.get('/node/:id/devices', async (req, res) => {
   const id = req.params.id;
-  // const devicesXML = await NodeQuery.getDevicesOnNode(id); 
+  // const devicesXML = await NodeQuery.getDeviceListOnNode(id);
+  const node = await NodeQuery.getNodeById(id);
   const devicesXML = ""
-  const devices = await ConfigHelpers.getNodeDependent(devicesXML)
-  // console.log("TCL: devices", devices)
-  res.send(devices)
+  // const devices = await ConfigHelpers.setupNodeDependent(devicesXML, node)
+  // const saveDevice = await NodeQuery.saveDevice(devices, id);
+  const NodeDependent = await NodeQuery.getAllNodeDependent(id);
+  res.send(NodeDependent)
 })
 
 

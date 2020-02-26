@@ -88,7 +88,6 @@ function NodeConfig(props) {
 
       <form id="nodeForm" className="NodeConfig config-form" >
         <h4 className="config-header">Node Configure</h4>
-
         <label htmlFor="name"> Name: </label>
         <select name="name" id='name' className="config-field config-select" onChange={handlePickNode}>
           <option value=""></option>
@@ -97,9 +96,7 @@ function NodeConfig(props) {
           ))}
         </select>
 
-
         <div id="form" className="hidden form-column">
-
 
           <label htmlFor="description">Description</label>
           <input type="text" name="description" id="description" placeholder="Enter node description" className="config-field" readOnly></input>

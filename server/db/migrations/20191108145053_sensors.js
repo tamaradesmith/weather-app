@@ -4,8 +4,8 @@ exports.up = function(knex) {
     t.bigIncrements('id');
     t.string('name');
     t.string('type');
-    t.float('maxValue');
-    t.float('minValue');
+    t.float('max');
+    t.float('min');
     t.string('unit');
     t.text('description');
     t.string('location');

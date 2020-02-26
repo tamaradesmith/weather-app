@@ -52,6 +52,11 @@ input{
   text-transform: capitalize;
   margin-bottom: 0.3em;
 }
+.header{
+  text-transform: capitalize;
+  font-size:1.2em;
+  font-weight: 700;
+}
 .hidden{
   display: none;
 }
@@ -180,6 +185,12 @@ input{
   height: 100%;
 }
 /* configure */
+.config-list{
+  display: grid;
+  grid-template-columns: 150px 275px 175px 150px;
+  grid-gap: .25em;
+  margin: .25em 0;
+}
 .config{
   padding: 0 .25em;
 }
@@ -187,6 +198,16 @@ input{
   width: 30px;
   height: 30px;
 }
+.config-button{
+  font-size: .8em;
+  border: 1px solid black;
+  background: var(--input-colour);
+}
+.config-button:hover{
+  background: var(--input-colour-hoover);
+}
+
+/* Config old */
 .config-select{
   font-size: .8em;
   background: var(--input-colour);
@@ -232,14 +253,7 @@ margin: .5em;
 height: 25px;
 width: 25px;
 }
-.config-button{
-  font-size: .8em;
-  border: 1px solid black;
-  background: var(--input-colour);
-}
-.config-button:hover{
-  background: var(--input-colour-hoover);
-}
+
 .config-cancel{
   grid-column: 2/3;
 }

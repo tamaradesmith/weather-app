@@ -5,35 +5,38 @@ function DeviceConfig(props) {
 
   const [nodes, setNodes] = useState(null);
   const [deviceList, setDeviceList] = useState([]);
-
+  const fields = ["name", 'decription', 'type'];
+  
   async function getNodes() {
     const nodes = await Node.getNodes();
     setNodes(nodes);
   };
 
-  function handleSubmit(event) {
-    event.preventDefault();
-    const device = document.querySelector('#deviceForm');
-    const inputs = device.querySelectorAll('input, select');
-    const formData = new FormData(device);
-    const newDevice = {
-      node_id: formData.get('node'),
-      name: formData.get("name"),
-      description: formData.get("description"),
-      type: formData.get("type"),
-      active: (formData.get(`active`) === "on") ? true : false,
-    };
-    checkFields(newDevice, device, inputs);
-  }
+  // function handleSubmit(event) {
+  //   event.preventDefault();
+  //   const device = document.querySelector('#deviceForm');
+  //   const inputs = device.querySelectorAll('input, select');
+  //   const formData = new FormData(device);
+  //   const newDevice = {
+  //     node_id: formData.get('node'),
+  //     name: formData.get("name"),
+  //     description: formData.get("description"),
+  //     type: formData.get("type"),
+  //     active: (formData.get(`active`) === "on") ? true : false,
+  //   };
+  //   checkFields(newDevice, device, inputs);
+  // }
 
-  function handleCancel(event) {
-    event.preventDefault();
-    props.cancel();
-  }
+  // function handleCancel(event) {
+  //   event.preventDefault();
+  //   props.cancel();
+  // }
+
   async function handleSelectNode(event) {
     const { target } = event;
     const deviceInfo = await Node.getDevices(target.value)
     setDeviceList(deviceInfo);
+    // console.log("TCL: handleSelectNode -> DeviceList", deviceInfo);
     document.querySelector("#device-name").classList.add("config-form");
     document.querySelector("#device-name").classList.remove("hidden");
   };
@@ -49,22 +52,21 @@ function DeviceConfig(props) {
     document.querySelector("#device-info").classList.add("config-form");
   }
 
-  function checkFields(device, target, inputs) {
-    let flag = true;
-    inputs.forEach(input => {
-      if (input.value === "") {
-        input.classList.add('warning');
-        flag = false
-      } else {
-        input.classList.remove('warning');
-      };
-    });
-    if (flag === true) {
-
-      props.create('device', device);
-      target.reset();
-    }
-  }
+  // function checkFields(device, target, inputs) {
+  //   let flag = true;
+  //   inputs.forEach(input => {
+  //     if (input.value === "") {
+  //       input.classList.add('warning');
+  //       flag = false
+  //     } else {
+  //       input.classList.remove('warning');
+  //     };
+  //   });
+  //   if (flag === true) {
+  //     props.create('device', device);
+  //     target.reset();
+  //   }
+  // }
 
   if (nodes === null) {
     getNodes();
@@ -102,10 +104,10 @@ function DeviceConfig(props) {
 
         <label htmlFor="active">Active</label>
         <input type="checkbox" name="active" id="active" className="config-field config-checked" defaultChecked />
-
+        {/* 
         <button id="cancel" className="config-button config-cancel" onClick={handleCancel}>Cancel</button>
 
-        <button type="submit" className="config-button config-submit" onClick={handleSubmit} >Create Device</button>
+        <button type="submit" className="config-button config-submit" onClick={handleSubmit} >Create Device</button> */}
       </div>
     </form>
   )
