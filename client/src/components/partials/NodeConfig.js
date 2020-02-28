@@ -1,10 +1,11 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Node } from "../../js/requests";
 
 function NodeConfig(props) {
 
   const [foundNodes, setFoundNodes] = useState(null);
   const [nodeId, setNodeId] = useState(null);
+
 
   async function foundLocalNodes() {
     const nodes = await Node.searchForNodes();
@@ -23,6 +24,7 @@ function NodeConfig(props) {
     })
     document.querySelector("#form").classList.remove("hidden");
     document.querySelector("#form").classList.add("config-form");
+    document.querySelector("#createNode").disabled = false;
   }
 
   function handleSubmit(event) {
@@ -75,17 +77,20 @@ function NodeConfig(props) {
 
   function handleCancel(event) {
     event.preventDefault();
-    props.cancel();
+    props.history.push(`/DashboardConfig`);
   }
-  if (foundNodes === null) {
+
+  useEffect(() => {
     foundLocalNodes();
+  }, [foundNodes === null])
+
+  if (foundNodes === null) {
     return "Searching..."
   }
 
 
   return (
-    <div className="NodeConfig" >
-
+    <div className="NodeConfig view" >
       <form id="nodeForm" className="NodeConfig config-form" >
         <h4 className="config-header">Node Configure</h4>
         <label htmlFor="name"> Name: </label>
@@ -99,7 +104,7 @@ function NodeConfig(props) {
         <div id="form" className="hidden form-column">
 
           <label htmlFor="description">Description</label>
-          <input type="text" name="description" id="description" placeholder="Enter node description" className="config-field" readOnly></input>
+          <input type="text" name="description" id="description" className="config-field" readOnly></input>
 
           <label htmlFor="location">Location</label>
           <input name="location" id="location" className="config-field" readOnly >
@@ -114,12 +119,17 @@ function NodeConfig(props) {
           <label htmlFor="active">Active</label>
           <input type="checkbox" name="active" id="active" className="config-field config-checked" defaultChecked />
 
-          <button type="cancel" id="cancel" className="config-button config-cancel" onClick={handleCancel}> Cancel</button>
-
-          <button type="submit" className="config-button config-submit" onClick={handleSubmit} > Create Node</button>
         </div>
       </form>
+
+      <div>
+        <button type="cancel" id="cancel" className="config-button config-cancel" onClick={handleCancel}> Cancel</button>
+
+        <button type="submit" id="createNode" className="config-button config-submit" onClick={handleSubmit} disabled> Create Node</button>
+      </div>
+
       <div id='message' className="hidden">
+
         <p>Node already Exist, redirct to node page?</p>
         <button id="yes" className="config-button" onClick={handleNodeShow} >Yes</button>
         <button id="no" className="config-button" onClick={handleCancel} >No</button>

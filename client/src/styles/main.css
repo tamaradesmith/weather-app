@@ -6,7 +6,6 @@
   --hover-colour: #050505;
   --input-colour: #acc4da;
   --input-colour-hoover: #9fbdda;
-
 }
 body {
   font-size: 2em;
@@ -26,8 +25,8 @@ header {
 img {
   max-width: 100%;
 }
-input{
-  font-size: .8em;
+input {
+  font-size: 0.8em;
   border: 1px solid black;
   background: var(--input-colour);
 }
@@ -37,7 +36,7 @@ input{
   border: 1px solid var(--primary-colour);
   background: var(--secondary-colour);
 }
-.capitlize{
+.capitlize {
   text-transform: capitalize;
 }
 .dashboard {
@@ -52,15 +51,17 @@ input{
   text-transform: capitalize;
   margin-bottom: 0.3em;
 }
-.header{
+.header {
   text-transform: capitalize;
-  font-size:1.2em;
+  font-size: 1.2em;
   font-weight: 700;
 }
-.hidden{
+.hidden {
   display: none;
 }
-
+.view{
+  padding: .25em;
+}
 /* TEMPERATURE  */
 .Temperature {
   display: flex;
@@ -124,8 +125,8 @@ input{
   width: 100%;
   height: 100%;
 }
-.humidity-text{
-  margin-top: .5em;
+.humidity-text {
+  margin-top: 0.5em;
 }
 .Pressure {
   display: flex;
@@ -184,162 +185,172 @@ input{
   width: 100%;
   height: 100%;
 }
-/* configure */
-.config-list{
+/* config */
+.config-list {
   display: grid;
   grid-template-columns: 150px 275px 175px 150px;
-  grid-gap: .25em;
-  margin: .25em 0;
+  grid-gap: 0.25em;
+  margin: 0.25em 0;
 }
-.config{
-  padding: 0 .25em;
+.config {
+  padding: 0 0.25em;
 }
-.config-icon{
+.config-icon {
   width: 30px;
   height: 30px;
 }
-.config-button{
-  font-size: .8em;
+.config-button {
+  font-size: 0.8em;
   border: 1px solid black;
   background: var(--input-colour);
 }
-.config-button:hover{
+.config-button:hover {
   background: var(--input-colour-hoover);
+}
+.config-link {
+  color: var(--primary-colour);
+  text-decoration: none;
+  padding: 0.25em 0.5em;
+  font-size: 0.9em;
+}
+.link-div {
+  margin: .75em 0 ;
 }
 
 /* Config old */
-.config-select{
-  font-size: .8em;
+.config-select {
+  font-size: 0.8em;
   background: var(--input-colour);
   border: 1px solid black;
   text-transform: capitalize;
 }
-.config-crud{
+.config-crud {
   display: grid;
   flex-direction: column;
   grid-template-columns: 200px 200px;
-  grid-gap: .25em;
+  grid-gap: 0.25em;
 }
-.config-header{
-grid-column: 1/4;
-text-align: center;
-margin-bottom: .15em ;
+.config-header {
+  grid-column: 1/4;
+  text-align: center;
+  margin-bottom: 0.15em;
 }
-.config-sensor-header{
-grid-column: 1/7;
-text-align: center;
-margin: .5em;
+.config-sensor-header {
+  grid-column: 1/7;
+  text-align: center;
+  margin: 0.5em;
 }
-.config-form{
+.config-form {
   display: grid;
   grid-template-columns: 200px auto auto;
-  grid-gap: .25em;
+  grid-gap: 0.25em;
 }
-.config-form-sensor{
+.config-form-sensor {
   display: grid;
   grid-template-columns: 150px 75px 175px 75px 100px auto;
-  grid-gap: .25em;
+  grid-gap: 0.25em;
 }
-.config-label{
+.config-label {
   grid-column: 1/2;
 }
-.config-field{
+.config-field {
   grid-column: 2/4;
 }
-.config-div{
+.config-div {
   grid-column: 1/5;
 }
-.config-checked{
-height: 25px;
-width: 25px;
+.config-checked {
+  height: 25px;
+  width: 25px;
 }
 
-.config-cancel{
+.config-cancel {
   grid-column: 2/3;
 }
-.config-submit{
+.config-submit {
   grid-column: 3/4;
 }
-.config-min{
-grid-column: 2/3;
+.config-min {
+  grid-column: 2/3;
 }
-.config-max{
-grid-column: 4/5;
+.config-max {
+  grid-column: 4/5;
 }
-.config-unit{
+.config-unit {
   grid-column: 6/7;
   width: 50px;
 }
-.config-label-max{
+.config-label-max {
   grid-column: 3/4;
-  margin-left: .5em;
+  margin-left: 0.5em;
 }
-.config-label-unit{
+.config-label-unit {
   grid-column: 5/6;
-  margin-left: .5em;
+  margin-left: 0.5em;
 }
-.config-field-sensor{
+.config-field-sensor {
   grid-column: 2/7;
 }
-.config-submit-sensor-button{
+.config-submit-sensor-button {
   grid-column: 5/7;
-  font-size: .8em;
+  font-size: 0.8em;
   border: 1px solid black;
   background: transparent;
 }
-.config-sensor-button{
+.config-sensor-button {
   grid-column: 3/5;
-  font-size: .8em;
+  font-size: 0.8em;
   border: 1px solid black;
   background: transparent;
 }
-.config-sensor-button:hover, .config-submit-sensor-button:hover{
+.config-sensor-button:hover,
+.config-submit-sensor-button:hover {
   background: var(--input-colour);
 }
-.edit-list{
+.edit-list {
   display: grid;
   grid-template-columns: 250px auto 100px;
-  grid-gap: .25px;
-  margin: .25em 0;
+  grid-gap: 0.25px;
+  margin: 0.25em 0;
 }
-.edit-list-header{
+.edit-list-header {
   font-weight: 700;
-  font-size: .9em;
+  font-size: 0.9em;
 }
-.edit-div{
+.edit-div {
   height: 325px;
-  overflow: hidden
+  overflow: hidden;
 }
-.edit-list-button{
+.edit-list-button {
   height: 30px;
 }
-.list-scoll{
- height: 325px;
+.list-scoll {
+  height: 325px;
   overflow-y: auto;
 }
-.config-edit{
+.config-edit {
   display: grid;
   grid-template-columns: 200px auto;
-  margin-bottom: .25em;
+  margin-bottom: 0.25em;
 }
-.config-buttons{
+.config-buttons {
   display: flex;
   justify-content: flex-end;
 }
-.form-column{
+.form-column {
   grid-column: 1/4;
 }
 /* SHOW */
 
-.show-row{
+.show-row {
   grid-template-columns: 200px auto;
-  grid-gap: .25em;
-  margin: .25em 0;
+  grid-gap: 0.25em;
+  margin: 0.25em 0;
 }
 /* Warning */
-.warning{
+.warning {
   border: 2px solid red;
 }
-.button-edit{
-  margin-left: .25em;
+.button-edit {
+  margin-left: 0.25em;
 }

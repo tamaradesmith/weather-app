@@ -1,26 +1,23 @@
 const BASE_URL = 'http://localhost:4000';
 
 const Crud = {
-  async create(type, node) {
-    const res = await fetch(`${BASE_URL}/type/${type}/create`, {
+  async create(type, info) {
+    const res = await fetch(`${BASE_URL}/${type}/create`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
       },
-      body: JSON.stringify(node),
+      body: JSON.stringify(info),
     });
-    return res;
+    return await res.json();
   },
   async getExisting(type) {
-    const res = await fetch(`${BASE_URL}/type/${type}/existing`);
+    const res = await fetch(`${BASE_URL}/${type}/existing`);
     return res.json();
   },
-  async getItemInfo(type, id) {
-    const res = await fetch(`${BASE_URL}/type/${type}/${id}`);
-    return res.json();
-  },
+
   async update(type, info, id) {
-    const res = await fetch(`${BASE_URL}/type/${type}/${id}/update`, {
+    const res = await fetch(`${BASE_URL}/${type}/${id}/update`, {
       method: `POST`,
       headers: {
         'Content-Type': 'application/json'
@@ -40,6 +37,10 @@ const Node = {
     const res = await fetch(`${BASE_URL}/nodes`);
     return res.json();
   },
+  async getNode(NodeId) {
+    const res = await fetch(`${BASE_URL}/node/${NodeId}`);
+    return res.json();
+  },
   async CheckIfNodeExist(node) {
     const res = await fetch(`${BASE_URL}/nodes/check`, {
       method: 'POST',
@@ -50,17 +51,21 @@ const Node = {
     });
     return res.json();
   },
-  async getDevices(id) {
-    const res = await fetch(`${BASE_URL}/node/${id}/devices`);
-    return res.json();
-  },
+  // async getDevices(Nodeid) {
+  //   const res = await fetch(`${BASE_URL}/node/${Nodeid}/devices`);
+  //   return res.json();
+  // },
 }
 
 const Device = {
   async getDevices() {
     const res = await fetch(`${BASE_URL}/devices`);
     return res.json();
-  }
+  },
+  async getDevicesOnNodeById(nodeId) {
+    const res = await fetch(`${BASE_URL}/node/${nodeId}/devices`);
+    return res.json();
+  },
 }
 
 const Sensor = {

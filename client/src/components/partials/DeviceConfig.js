@@ -1,115 +1,110 @@
-import React, { useState } from "react";
-import { Node } from "../../js/requests"
+import React, { useState, useEffect } from "react";
+import { Node, Device, Crud } from "../../js/requests"
+import SensorConfig from './SensorConfig'
 
 function DeviceConfig(props) {
 
-  const [nodes, setNodes] = useState(null);
+  const [node, setNode] = useState('');
   const [deviceList, setDeviceList] = useState([]);
-  const fields = ["name", 'decription', 'type'];
-  
-  async function getNodes() {
-    const nodes = await Node.getNodes();
-    setNodes(nodes);
-  };
+  const [count, setCount] = useState(0);
+  // const fields = ["name", 'decription', 'type'];
+  const [device, setDevice] = useState([]);
 
-  // function handleSubmit(event) {
-  //   event.preventDefault();
-  //   const device = document.querySelector('#deviceForm');
-  //   const inputs = device.querySelectorAll('input, select');
-  //   const formData = new FormData(device);
-  //   const newDevice = {
-  //     node_id: formData.get('node'),
-  //     name: formData.get("name"),
-  //     description: formData.get("description"),
-  //     type: formData.get("type"),
-  //     active: (formData.get(`active`) === "on") ? true : false,
-  //   };
-  //   checkFields(newDevice, device, inputs);
-  // }
 
-  // function handleCancel(event) {
-  //   event.preventDefault();
-  //   props.cancel();
-  // }
-
-  async function handleSelectNode(event) {
-    const { target } = event;
-    const deviceInfo = await Node.getDevices(target.value)
+  async function getNode() {
+    const nodeId = 1
+    const node = await Node.getNode(nodeId);
+    const deviceInfo = await Device.getDevicesOnNodeById(nodeId)
     setDeviceList(deviceInfo);
-    // console.log("TCL: handleSelectNode -> DeviceList", deviceInfo);
-    document.querySelector("#device-name").classList.add("config-form");
-    document.querySelector("#device-name").classList.remove("hidden");
+    setNode(node);
   };
 
-  function handleSelectDevice(event) {
-    const { target } = event;
-    deviceList.forEach((device, index) => {
-      if (target.value === device.name) {
-        document.querySelector("#type").value = deviceList[index].type;
-      };
-    });
-    document.querySelector("#device-info").classList.remove("hidden");
-    document.querySelector("#device-info").classList.add("config-form");
+  function handleCancel(event) {
+    event.preventDefault();
+    props.history.push(`/DashboardConfig`);
   }
 
-  // function checkFields(device, target, inputs) {
-  //   let flag = true;
-  //   inputs.forEach(input => {
-  //     if (input.value === "") {
-  //       input.classList.add('warning');
-  //       flag = false
-  //     } else {
-  //       input.classList.remove('warning');
-  //     };
-  //   });
-  //   if (flag === true) {
-  //     props.create('device', device);
-  //     target.reset();
-  //   }
-  // }
+  function handleNext(event) {
+    event.preventDefault();
+    checkDevice();
+  };
 
-  if (nodes === null) {
-    getNodes();
-    return "loading..."
+  function checkDevice() {
+    const device = document.querySelector('#deviceForm');
+    const inputs = device.querySelectorAll('input');
+    const formData = new FormData(device);
+    const newDevice = {
+      node_id: node.id,
+      name: formData.get("name"),
+      type: formData.get("type"),
+      description: formData.get("description"),
+      active: (formData.get(`active`) === "on") ? true : false,
+    };
+    checkFields(newDevice, device, inputs)
+  }
+
+  function checkFields(device, target, inputs) {
+    let flag = true;
+    inputs.forEach(input => {
+      if (input.value === "") {
+        input.classList.add('warning');
+        flag = false
+      } else {
+        input.classList.remove('warning');
+      };
+    });
+    if (flag === true) {
+      createDevice("device", device);
+    }
+  }
+
+  async function createDevice(type, info) {
+    const device = await Crud.create(type, info);
+    setDevice(device);
+    setCount(count + 1);
+    document.querySelector('#description').value = '';
+    document.querySelector("#deviceForm").classList.add("hidden");
+    
+
+  }
+
+  useEffect(() => {
+    getNode();
+  }, [node.length === 0])
+
+  if (deviceList.length === 0) {
+    return "loading"
   }
 
   return (
-    <form id="deviceForm" className="DeviceConfig config-form" >
-      <h4 className="config-header">Device Configure</h4>
+    <div>
+    
+      <form id="deviceForm" className="DeviceConfig config-form">
+        <h3 className="config-header">Device Configure</h3>
 
-      <label htmlFor="node" className="config-label" >Node</label>
-      <select name="node" className="config-field config-select" onChange={handleSelectNode}>
-        <option value=''></option>
-        {nodes.map((node, index) => (
-          <option key={index} value={node.id}>{node.name}</option>
-        ))}
-      </select>
+        <p>Node:</p>
+        <p> {node.name}</p>
 
-      <div id="device-name" className="config-div hidden">
-        <label htmlFor="name" className="config-label " >Device: </label>
-        <select name="name" id="name" className="config-field config-select " onChange={handleSelectDevice}>
-          <option value=""></option>
-          {deviceList.map((device, index) => (
-            <option key={index} value={device.name}>{device.name}</option>
-          ))}
-        </select>
-      </div>
-      <div id="device-info" className=" config-div hidden">
+        <label htmlFor="name" className="config-label"> Device: </label>
+        <input type="text" name="name" id="name" value={deviceList[count]['name']} className="config-field" readOnly></input>
 
         <label htmlFor="type" className="config-label" >Type: </label>
-        <input type="text" name="type" id="type" placeholder="Enter device type" className="config-field"></input>
+        <input type="text" name="type" id="type" value={deviceList[count]['type']} className="config-field" readOnly></input>
 
         <label htmlFor="description" className="config-label" >Description: </label>
         <input type="text" name="description" id="description" placeholder="Enter device description" className="config-field"></input>
 
         <label htmlFor="active">Active</label>
         <input type="checkbox" name="active" id="active" className="config-field config-checked" defaultChecked />
-        {/* 
+
         <button id="cancel" className="config-button config-cancel" onClick={handleCancel}>Cancel</button>
 
-        <button type="submit" className="config-button config-submit" onClick={handleSubmit} >Create Device</button> */}
-      </div>
-    </form>
+        <button id="next" className="config-button config-submit" onClick={handleNext} >Next</button>
+        <button type="submit" id="create" className="config-button config-submit" onClick={handleNext} disabled>Save</button>
+      </form>
+
+
+    </div>
   )
 }
 

@@ -3,6 +3,19 @@ const typeSensor = [{ tempature: "c" }, { pressure: "pa" },]
 
 module.exports = {
 
+  getDevices(XMLFile) {
+    let devicesXml;
+    XMLFile = file
+    const devicesList = [];
+    parseString(file, ((err, result) => {
+      devicesXml = result.application.device
+    }));
+    devicesXml.map(device => {
+      devicesList.push({ name: device.name[0], type: device.type[0]})
+    })
+    return devicesList;
+  },
+
   setupNodeDependent(XMLFile, node) {
     let devicesXml;
     const devicesList = [];
@@ -15,6 +28,7 @@ module.exports = {
     });
     return devicesList;
   },
+
   getDevice(device, node) {
     let sensors = [];
     let controllers = [];

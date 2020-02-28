@@ -28,6 +28,9 @@ module.exports = {
         nodes.push(node);
       };
     });
+    if (nodes.length === 0){
+      nodes.push({name: "no nodes found"})
+    }
     return nodes;
   },
   async search(index) {
@@ -64,10 +67,10 @@ module.exports = {
 
   // CRUD
   async create(type, info) {
-    const nodeinfo = knex(`${type}s`).insert([
+    const nodeinfo =await knex(`${type}s`).insert([
       info
-    ]).returning('id'); // took out name.
-    return nodeinfo;
+    ]).returning("*");
+    return nodeinfo[0];
   },
   async update(type, info, id) {
     const item = await knex(`${type}`).where({ id: id }).update(info).returning('name');

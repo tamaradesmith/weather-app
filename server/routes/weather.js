@@ -29,52 +29,46 @@ router.post('/sensors/readings', (req, res) => {
 })
 
 
-// get Config Devices and Sensors and controllers
+// get Config Devices 
 router.get('/node/:id/devices', async (req, res) => {
   const id = req.params.id;
   // const devicesXML = await NodeQuery.getDeviceListOnNode(id);
   const node = await NodeQuery.getNodeById(id);
   const devicesXML = ""
-  // const devices = await ConfigHelpers.setupNodeDependent(devicesXML, node)
-  // const saveDevice = await NodeQuery.saveDevice(devices, id);
-  const NodeDependent = await NodeQuery.getAllNodeDependent(id);
-  res.send(NodeDependent)
+  const devices = await ConfigHelpers.getDevices(devicesXML)
+  // const saveDevice = await NodeQuery.saveDevice(devices, id);// saving Devices
+  // const NodeDependent = await NodeQuery.getAllNodeDependent(id);
+  res.send(devices);
 })
 
 
 // CREATE
-router.post('/type/:type/create', async (req, res) => {
+router.post('/:type/create', async (req, res) => {
   const type = req.params.type;
   const body = req.body;
-  const nodeStatus = await NodeQuery.create(type, body)
+  const nodeStatus = await NodeQuery.create(type, body);
+  console.log("TCL: nodeStatus", nodeStatus);
   res.send(nodeStatus);
 })
 
-// UPDATE
+// // UPDATE
 
-router.post(`/type/:type/:id/update`, async (req, res) =>{
+router.post(`/:type/:id/update`, async (req, res) =>{
   const type = req.params.type;
   const id = req.params.id
   const info = req.body;
-  console.log("TCL: info", info)
   const updateItem = await NodeQuery.update(type, info, id);
   res.send(updateItem);
 })
 
 //  Get Existing
 
-router.get('/type/:type/existing', async (req, res) =>{
+router.get('/:type/existing', async (req, res) =>{
   const type = req.params.type;
   const list = await NodeQuery.getExisting(type);
   res.send(list);
 })
 
-router.get('/type/:type/:id', async(req, res) =>{
-  const type = req.params.type;
-  const id = req.params.id;
-  const item = await NodeQuery.getItemInfo(type, id);
-  res.send(item);
-})
 
 // Node Routes
 // get Nodes
@@ -97,6 +91,12 @@ router.post('/nodes/check', async (req, res) => {
   const node = req.body;
   const existing = await  NodeQuery.nodeExist(node);
   res.send(existing);
+})
+
+router.get('/node/:id', async (req, res)=>{
+  const id = req.params.id
+  const node = await NodeQuery.getNodeById(id)
+  res.send(node)
 })
 
 // DEVICE ROUTES
