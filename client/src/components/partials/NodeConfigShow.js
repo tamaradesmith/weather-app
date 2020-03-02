@@ -1,12 +1,23 @@
 import React from 'react';
 
 function NodeConfigShow(props) {
- 
+
   const { nodes } = props;
+
+  function handleClick(event) {
+    props.findLocalNodes();
+  }
+
+  function handleDeviceClick(){
+    props.getDeviceInfo()
+  }
 
   return (
     <div className="NodeConfigShow">
-
+      <div className="link-div">
+        <button className="config-button config-link" onClick={handleClick} >Add New Node</button>
+        <button className="config-button config-link" onClick={handleDeviceClick}>Add New device</button>
+      </div>
       <div className="config-list header">
         <h3>Name</h3>
         <h3>Description</h3>

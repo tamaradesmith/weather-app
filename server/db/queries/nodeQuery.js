@@ -1,8 +1,6 @@
 const knex = require("../../client");
 const DeviceQuery = require('./deviceQuery')
-const BASE_IP = '192.168.0.';
 const axios = require('axios');
-const fields = ['description', 'location', 'type'];
 
 module.exports = {
   async searchForNodes() {

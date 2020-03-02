@@ -2,15 +2,16 @@ import React, { useState, useEffect } from "react";
 import { Node } from "../../js/requests";
 
 function NodeConfig(props) {
-
-  const [foundNodes, setFoundNodes] = useState(null);
+const { foundNodes } = props
+console.log("NodeConfig -> foundNodes", foundNodes)
+  // const [foundNodes, setFoundNodes] = useState(foundNodes);
   const [nodeId, setNodeId] = useState(null);
 
 
-  async function foundLocalNodes() {
-    const nodes = await Node.searchForNodes();
-    setFoundNodes(nodes);
-  }
+  // async function findLocalNodes() {
+  //   const nodes = await Node.searchForNodes();
+  //   setFoundNodes(nodes);
+  // }
 
   function handlePickNode(event) {
     const { target } = event;
@@ -61,6 +62,7 @@ function NodeConfig(props) {
       checkIfNodeExist(node);
     };
   };
+
   async function checkIfNodeExist(node) {
     const result = await Node.CheckIfNodeExist(node);
     setNodeId(result.id);
@@ -80,9 +82,9 @@ function NodeConfig(props) {
     props.history.push(`/DashboardConfig`);
   }
 
-  useEffect(() => {
-    foundLocalNodes();
-  }, [foundNodes === null])
+  // useEffect(() => {
+  //   findLocalNodes();
+  // }, [foundNodes === null])
 
   if (foundNodes === null) {
     return "Searching..."
@@ -91,6 +93,7 @@ function NodeConfig(props) {
 
   return (
     <div className="NodeConfig view" >
+
       <form id="nodeForm" className="NodeConfig config-form" >
         <h4 className="config-header">Node Configure</h4>
         <label htmlFor="name"> Name: </label>

@@ -13,7 +13,7 @@ const ControllerQuery = require('../db/queries/controllerQuery');
 // Helpers
 
 const ConfigHelpers = require('./configHelpers')
-
+const NodeHelpers = require('./nodeHelper')
 // Save Reading to DB
 
 router.post('/sensors/readings', (req, res) => {
@@ -83,7 +83,7 @@ router.get('/nodes', async (req, res) => {
 // Search for nodes
 
 router.get('/nodes/search', async (req, res) =>{
-  const nodes = await NodeQuery.searchForNodes();
+  const nodes = await NodeHelpers.searchForNodes();
   res.send(nodes)
 });
 
