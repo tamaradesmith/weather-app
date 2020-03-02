@@ -3,100 +3,100 @@ import { Device, Sensor } from '../../js/requests'
 
 function SensorConfig(props) {
 
-  const [devices, setDevices] = useState(null);
-  const [existingSensors, setExistingSensors] = useState(null);
-  const [sensorTypes, setSensorTypes] = useState(null);
-  const [sensorLocations, setSensorLocations] = useState(null);
+  const { device, node, sensorList, sensorCount } = props
+  console.log("SensorConfig -> device", device)
+  console.log("SensorConfig -> sensorList", sensorList)
 
-  async function getDevices() {
-    const devices = await Device.getDevices();
-    setDevices(devices)
-  }
+  // const [devices, setDevices] = useState(null);
+  // const [existingSensors, setExistingSensors] = useState(null);
+  // const [sensorTypes, setSensorTypes] = useState(null);
+  // const [sensorLocations, setSensorLocations] = useState(null);
 
-  async function getExistingSensorsTypes() {
-    const sensors = await Sensor.getSensorsTypes();
-    setSensorTypes(sensors);
-  }
-  async function getExistingSensors() {
-    const sensors = await Sensor.getSensors();
-    setExistingSensors(sensors);
-  }
+  // async function getDevices() {
+  //   const devices = await Device.getDevices();
+  //   setDevices(devices)
+  // }
 
-  async function getExistingSensorsLocation(){
-    const sensors = await Sensor.getSensorsLocations()
-    setSensorLocations(sensors);
-  }
-  function handleSubmit(event) {
-    event.preventDefault();
-    const sensor = document.querySelector("#sensorForm");
-    const inputs = sensor.querySelectorAll('input, select');
-    const formData = new FormData(sensor);
-    const newSensor = {
-      device_id: formData.get('device'),
-      name: formData.get('name'),
-      type: formData.get('type'),
-      location: formData.get('location'),
-      propose: formData.get('propose'),
-      minValue: formData.get('minValue'),
-      maxValue: formData.get('maxValue'),
-      unit: formData.get('unit'),
-      active: (formData.get(`active`) === "on") ? true : false,
-    }
-    checkFields(newSensor, sensor, inputs)
-  }
+  // async function getExistingSensorsTypes() {
+  //   const sensors = await Sensor.getSensorsTypes();
+  //   setSensorTypes(sensors);
+  // }
+  // async function getExistingSensors() {
+  //   const sensors = await Sensor.getSensors();
+  //   setExistingSensors(sensors);
+  // }
 
-  function handleCancel(event) {
-    event.preventDefault();
-    props.cancel();
-  }
+  // async function getExistingSensorsLocation() {
+  //   const sensors = await Sensor.getSensorsLocations()
+  //   setSensorLocations(sensors);
+  // }
+  // function handleSubmit(event) {
+  //   event.preventDefault();
+  //   const sensor = document.querySelector("#sensorForm");
+  //   const inputs = sensor.querySelectorAll('input, select');
+  //   const formData = new FormData(sensor);
+  //   const newSensor = {
+  //     device_id: formData.get('device'),
+  //     name: formData.get('name'),
+  //     type: formData.get('type'),
+  //     location: formData.get('location'),
+  //     propose: formData.get('propose'),
+  //     minValue: formData.get('minValue'),
+  //     maxValue: formData.get('maxValue'),
+  //     unit: formData.get('unit'),
+  //     active: (formData.get(`active`) === "on") ? true : false,
+  //   }
+  //   checkFields(newSensor, sensor, inputs)
+  // }
 
-  function checkFields(sensor, target, inputs) {
-    let flag = true
-    inputs.forEach(input => {
-      if (input.value === "") {
-        input.classList.add('warning');
-        flag = false;
-      } else {
-        input.classList.remove('warning');
-      };
-    });
-    if (flag === true) {
-      props.create("sensor", sensor);
-      target.reset();
-    }
-  }
+  // function handleCancel(event) {
+  //   event.preventDefault();
+  //   props.cancel();
+  // }
 
-  if (devices === null) {
-    getDevices();
-    return "Loading ..."
-  }
-  if (sensorTypes === null) {
-    getExistingSensorsTypes();
-    return "Loading ..."
-  }
-  if (existingSensors === null) {
-    getExistingSensors();
-    return "Loading ..."
-  }
-  if (sensorLocations === null){
-    getExistingSensorsLocation()
-    return "Loading ..."
-  }
+  // function checkFields(sensor, target, inputs) {
+  //   let flag = true
+  //   inputs.forEach(input => {
+  //     if (input.value === "") {
+  //       input.classList.add('warning');
+  //       flag = false;
+  //     } else {
+  //       input.classList.remove('warning');
+  //     };
+  //   });
+  //   if (flag === true) {
+  //     props.create("sensor", sensor);
+  //     target.reset();
+  //   }
+  // }
+
+  // if (devices === null) {
+  //   getDevices();
+  //   return "Loading ..."
+  // }
+  // if (sensorTypes === null) {
+  //   getExistingSensorsTypes();
+  //   return "Loading ..."
+  // }
+  // if (existingSensors === null) {
+  //   getExistingSensors();
+  //   return "Loading ..."
+  // }
+  // if (sensorLocations === null) {
+  //   getExistingSensorsLocation()
+  //   return "Loading ..."
+  // }
 
   return (
     <form id="sensorForm" className="SensorConfig config-form-sensor">
       <h4 className="config-sensor-header">Sensor Configure</h4>
 
-      <label htmlFor="device" className="config-label">Device: </label>
-      <select name="device" className="config-field-sensor config-select">
-        <option ></option>
-        {devices.map((device, index) => (
-          <option key={index} value={device.id}>{device.name}</option>
-        ))}
-      </select>
+      <p>Node: </p><p> {node.name} </p>
+      <p>Device: </p><p> {device.name} </p>
 
-      <label htmlFor="name" className="config-label">Name:</label>
-      <input type="text" name="name" id="name" className="config-field-sensor" ></input>
+      
+      <label htmlFor="name" className="config-label">Sensor:</label>
+      <input type="text" name="name" id="name" className="config-field-sensor" value={sensorList[sensorCount].name} ></input>
 
       <label htmlFor="type" className="config-label">Type:</label>
       <select name="type" className="config-field-sensor config-select">

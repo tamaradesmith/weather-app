@@ -13,7 +13,6 @@ module.exports = {
       return new Promise(async (res, rej) => {
         try {
           const response = await this.search(number);
-          console.log("TCL: searchForNodes -> response", response, number)
           res(response);
         } catch (error) {
           rej(error);

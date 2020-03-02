@@ -3,7 +3,7 @@ import { Node } from "../../js/requests";
 
 function NodeConfig(props) {
 const { foundNodes } = props
-console.log("NodeConfig -> foundNodes", foundNodes)
+
   // const [foundNodes, setFoundNodes] = useState(foundNodes);
   const [nodeId, setNodeId] = useState(null);
 

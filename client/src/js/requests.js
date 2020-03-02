@@ -9,8 +9,9 @@ const Crud = {
       },
       body: JSON.stringify(info),
     });
-    return await res.json();
+    return res.json();
   },
+
   async getExisting(type) {
     const res = await fetch(`${BASE_URL}/${type}/existing`);
     return res.json();
@@ -65,6 +66,16 @@ const Device = {
   async getDevicesOnNodeById(nodeId) {
     const res = await fetch(`${BASE_URL}/node/${nodeId}/devices`);
     return res.json();
+  },
+  async create(info){
+    const res = await fetch(`${BASE_URL}/device/create`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(info),
+    });
+    return res.json()
   },
 }
 

@@ -236,7 +236,7 @@ input {
   margin-bottom: 0.15em;
 }
 .config-sensor-header {
-  grid-column: 1/7;
+  grid-column: 1/5;
   text-align: center;
   margin: 0.5em;
 }
@@ -247,7 +247,7 @@ input {
 }
 .config-form-sensor {
   display: grid;
-  grid-template-columns: 150px 75px 175px 75px 100px auto;
+  grid-template-columns: 150px  150px 150px auto ;
   grid-gap: 0.25em;
 }
 .config-label {

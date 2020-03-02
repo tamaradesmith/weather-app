@@ -11,50 +11,26 @@ module.exports = {
       devicesXml = result.application.device
     }));
     devicesXml.map(device => {
-      devicesList.push({ name: device.name[0], type: device.type[0]})
+      const sensors = this.getSensors(device.sensors[0].sensor);
+      devicesList.push({ name: device.name[0], type: device.type[0], sensors: sensors, controllers: device.controllers[0], properties: device.properties[0] })
     })
     return devicesList;
   },
 
-  setupNodeDependent(XMLFile, node) {
-    let devicesXml;
-    const devicesList = [];
-    parseString(file, ((err, result) => {
-      devicesXml = result.application.device
-    }));
-    const list = devicesXml.map(device => {
-      const deviceObject = this.getDevice(device, node);
-      devicesList.push(deviceObject)
-    });
-    return devicesList;
-  },
+  getSensors(sensorList) {
+    console.log("getSensors -> sensorList", sensorList[0])
 
-  getDevice(device, node) {
-    let sensors = [];
-    let controllers = [];
-    let properties = [];
-    if (device.sensors[0].sensor.length > 0 && device.sensors[0].sensor[0] !== "") {
-      sensors = this.getSenors(device.sensors[0], node);
-    };
-    if (device.controllers.length > 0 && device.controllers[0] !== "") {
-      controllers = this.getControllers(device.controllers[0], node)
-    }
-    if (device.properties.length > 0 && device.properties[0] !== "") {
-      properties = this.getProperties(properties.controllers[0], node)
-    }
-    const deviceObject = { name: device.name[0], type: device.type[0], description: node.description, sensors: sensors, controllers: controllers, properties: properties }
-    return deviceObject;
-  },
-  getSenors(sensorList, node) {
-    return sensorList.sensor.map(sensor => {
-      const sensorInfo = { location: node.location };
+    return sensorList.map(sensor => {
       const keys = Object.keys(sensor);
+      const sensorInfo = {}
       keys.forEach(key => {
         if (key !== "value") {
           sensorInfo[key] = sensor[key][0].toLowerCase()
         }
         if (key === "type" && sensor[key][0].toLowerCase() === 'temperature') {
           sensorInfo.unit = 'c';
+        } else {
+          sensorInfo.unit = "";
         }
       })
       return sensorInfo;
@@ -81,7 +57,23 @@ module.exports = {
       });
       return propertiesInfo;
     });
-  }
+  },
+  // getDevice(device, node) {
+  //   let sensors = [];
+  //   let controllers = [];
+  //   let properties = [];
+  //   if (device.sensors[0].sensor.length > 0 && device.sensors[0].sensor[0] !== "") {
+  //     sensors = this.getSenors(device.sensors[0], node);
+  //   };
+  //   if (device.controllers.length > 0 && device.controllers[0] !== "") {
+  //     controllers = this.getControllers(device.controllers[0], node)
+  //   }
+  //   if (device.properties.length > 0 && device.properties[0] !== "") {
+  //     properties = this.getProperties(properties.controllers[0], node)
+  //   }
+  //   const deviceObject = { name: device.name[0], type: device.type[0], description: node.description, sensors: sensors, controllers: controllers, properties: properties }
+  //   return deviceObject;
+  // },
 }
 
 

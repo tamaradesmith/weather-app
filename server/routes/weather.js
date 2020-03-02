@@ -43,17 +43,18 @@ router.get('/node/:id/devices', async (req, res) => {
 
 
 // CREATE
-router.post('/:type/create', async (req, res) => {
-  const type = req.params.type;
-  const body = req.body;
-  const nodeStatus = await NodeQuery.create(type, body);
-  console.log("TCL: nodeStatus", nodeStatus);
-  res.send(nodeStatus);
-})
+// router.post('/:type/create', async (req, res) => {
+//   console.log("type", type)
+//   const type = req.params.type;
+//   const body = req.body;
+//   const status = await NodeQuery.create(type, body);
+//   console.log("TCL: nodeStatus", status);
+//   res.send(nodeStatus);
+// })
 
 // // UPDATE
 
-router.post(`/:type/:id/update`, async (req, res) =>{
+router.post(`/:type/:id/update`, async (req, res) => {
   const type = req.params.type;
   const id = req.params.id
   const info = req.body;
@@ -63,7 +64,7 @@ router.post(`/:type/:id/update`, async (req, res) =>{
 
 //  Get Existing
 
-router.get('/:type/existing', async (req, res) =>{
+router.get('/:type/existing', async (req, res) => {
   const type = req.params.type;
   const list = await NodeQuery.getExisting(type);
   res.send(list);
@@ -82,25 +83,33 @@ router.get('/nodes', async (req, res) => {
 
 // Search for nodes
 
-router.get('/nodes/search', async (req, res) =>{
+router.get('/nodes/search', async (req, res) => {
   const nodes = await NodeHelpers.searchForNodes();
   res.send(nodes)
 });
 
 router.post('/nodes/check', async (req, res) => {
   const node = req.body;
-  const existing = await  NodeQuery.nodeExist(node);
+  const existing = await NodeQuery.nodeExist(node);
   res.send(existing);
 })
 
-router.get('/node/:id', async (req, res)=>{
+router.get('/node/:id', async (req, res) => {
   const id = req.params.id
   const node = await NodeQuery.getNodeById(id)
   res.send(node)
 })
 
 // DEVICE ROUTES
+// create Device
 
+router.post('/device/create', async (req, res) => {
+  const info = req.body;
+  console.log("router.post -> info", info)
+  const device = await DeviceQuery.create(info);
+  console.log("router.post -> device", device)
+  res.send(device)
+})
 // get Device
 
 router.get('/devices', async (req, res) => {
@@ -124,10 +133,10 @@ router.get('/sensors/type/:type', async (req, res) => {
   const sensors = (type != "temperature") ? await SensorQuery.getSensorsByType(type) : await SensorQuery.getTemperatureSensors();
   res.send(sensors);
 })
- router.get('/sensors/locations', async (req, res) =>{
-   const locations = await SensorQuery.getSensorsLocations();
-   res.send(locations)
- })
+router.get('/sensors/locations', async (req, res) => {
+  const locations = await SensorQuery.getSensorsLocations();
+  res.send(locations)
+})
 
 // get last reading
 router.get('/sensor/:id/reading', async (req, res) => {

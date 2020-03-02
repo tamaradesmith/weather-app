@@ -27,5 +27,9 @@ module.exports = {
     })
     )
     return devices
+  },
+  async create(info){
+    const device = await knex("devices").insert([info]).returning('*');
+    return device[0];
   }
 }
