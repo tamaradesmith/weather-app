@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Node, Device } from '../js/requests';
+import { Node, Device, Sensor } from '../js/requests';
 
 import NodeConfigShow from './partials/NodeConfigShow'
 import NodeConfig from "./partials/NodeConfig";
@@ -26,7 +26,7 @@ function DashboardConfig(props) {
   }
 
   async function getDevicesOnNode() {
-    setCurrentView(<DeviceConfig nodeId={nodeId} createDevice={createDevice} />)
+    setCurrentView(<DeviceConfig nodeId={nodeId} createDevice={createDevice} createSensor={createSensor} />)
   }
 
   // async function createNode() {
@@ -35,6 +35,11 @@ function DashboardConfig(props) {
 
   async function createDevice(info) {
     const result = await Device.create(info);
+    return result
+  }
+  async function createSensor(info) {
+    console.log("createSensor -> info", info)
+    const result = await Sensor.create(info);
     return result
   }
 

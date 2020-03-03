@@ -4,13 +4,12 @@ import SensorConfig from './SensorConfig'
 
 function DeviceConfig(props) {
 
-  // const fields = ["name", 'decription', 'type'];
   const { nodeId } = props;
 
   const [node, setNode] = useState('');
-  const [deviceList, setDeviceList] = useState([]);
+  const [deviceList, setDeviceList] = useState(null);
   const [count, setCount] = useState(0);
-  const [device, setDevice] = useState([]);
+  const [device, setDevice] = useState('');
   const [sensor, setSensor] = useState([]);
   const [senosrView, setSensorView] = useState([])
   const [sensorCount, setSensorCount] = useState(0);
@@ -32,15 +31,22 @@ function DeviceConfig(props) {
     getDeviceInfo();
   };
 
+  async function sensorNext(sensor){
+   const newSensor = props.createSensor(sensor);
+   (sensorCount + 1  < deviceList[count].sensors.length) ?  setSensorCount(sensorCount + 1) : nextDevice();
+   return sensorCount;
+  }
+
+
   function getDeviceInfo() {
     const deviceForm = document.querySelector('#deviceForm');
     const inputs = deviceForm.querySelectorAll('input');
-    const device = deviceList[count];
+    const deviceInfo = deviceList[count];
     const formData = new FormData(deviceForm);
     const newDevice = {
       node_id: node.id,
-      name: device.name,
-      type: device.type,
+      name: deviceInfo.name,
+      type: deviceInfo.type,
       description: formData.get("description"),
       active: (formData.get(`active`) === "on") ? true : false,
     };
@@ -62,17 +68,38 @@ function DeviceConfig(props) {
       setDevice(deviceDb);
       document.querySelector('#description').value = '';
       document.querySelector('#deviceDiv').classList.add("hidden")
-      setSensorView(<SensorConfig device={deviceDb} node={node} sensorList={deviceList[count].sensors} sensorCount={sensorCount} />)
-      // setCount(count + 1);
+      renderSensor(deviceDb);
     }
   }
+ 
+  function nextDevice(){
+    document.querySelector('#deviceDiv').classList.remove("hidden")
 
+    setSensorView([]);
+    setSensorCount(0);
+    setCount(count + 1);
+
+    console.log(count)
+  }
+  function renderSensor(device){
+    setSensorView(<SensorConfig device={device} node={node} sensorList={deviceList[count].sensors} sensorCount={sensorCount} handleNext={sensorNext} cancel={handleCancel} />)
+  }
 
   useEffect(() => {
     getNode();
   }, [])
 
-  if (deviceList.length === 0) {
+  useEffect(()=>{
+    if ( sensorCount !== 0){
+      setSensorView(<SensorConfig device={device} node={node} sensorList={deviceList[count].sensors} sensorCount={sensorCount} handleNext={sensorNext} cancel={handleCancel} />)
+    }
+    },[sensorCount])
+
+    // useEffect(()=>{
+
+    // },[count])
+
+  if (deviceList === null) {
     return "loading"
   }
 

@@ -80,6 +80,16 @@ const Device = {
 }
 
 const Sensor = {
+  async create(info){
+    const res = await fetch(`${BASE_URL}/sensor/create`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(info),
+    })
+    return res.json()
+  },
   async getLastReading(sensorId) {
     const res = await fetch(`${BASE_URL}/sensor/${sensorId}/reading`);
     return res.json();
