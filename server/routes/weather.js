@@ -30,7 +30,7 @@ router.post('/sensors/readings', (req, res) => {
 
 
 // get Config Devices 
-router.get('/node/:id/devices', async (req, res) => {
+router.get('/node/:id/devices/config', async (req, res) => {
   const id = req.params.id;
   // const devicesXML = await NodeQuery.getDeviceListOnNode(id);
   const node = await NodeQuery.getNodeById(id);
@@ -100,16 +100,18 @@ router.get('/node/:id', async (req, res) => {
   res.send(node)
 })
 
+router.get('node/:id/devices')
+
 // DEVICE ROUTES
+
 // create Device
 
 router.post('/device/create', async (req, res) => {
   const info = req.body;
-  console.log("router.post -> info", info)
   const device = await DeviceQuery.create(info);
-  console.log("router.post -> device", device)
   res.send(device)
 })
+
 // get Device
 
 router.get('/devices', async (req, res) => {
@@ -118,6 +120,14 @@ router.get('/devices', async (req, res) => {
 })
 
 // SENSOR ROUTES
+
+// create Sensors
+
+router.post('/sensor/create', async (req, res) => {
+  const info = req.body;
+  const sensor = await SensorQuery.create(info);
+  res.send(sensor)
+})
 
 router.get('/sensors', async (req, res) => {
   const sensors = await SensorQuery.getSensors();
@@ -161,6 +171,14 @@ router.get('/sensor/:id/24', async (req, res) => {
 })
 
 // CONTROLLER ROUTES
+
+router.post('/controller/create', async (req, res)=>{
+  const info = req.body;
+  console.log("info", info)
+  const controller = await ControllerQuery.create(info);
+  console.log("controller", controller)
+  res.send(controller)
+})
 
 router.get('/controllers/types', async (req, res) => {
   const types = await ControllerQuery.getTypeofControllers();

@@ -1,5 +1,5 @@
 const parseString = require('xml2js').parseString;
-const typeSensor = [{ tempature: "c" }, { pressure: "pa" },]
+// const typeSensor = [{ tempature: "c" }, { pressure: "pa" },]
 
 module.exports = {
 
@@ -12,14 +12,13 @@ module.exports = {
     }));
     devicesXml.map(device => {
       const sensors = this.getSensors(device.sensors[0].sensor);
-      devicesList.push({ name: device.name[0], type: device.type[0], sensors: sensors, controllers: device.controllers[0], properties: device.properties[0] })
+      const controllers = (device.controllers[0].controller !== undefined) ? this.getControllers(device.controllers[0].controller) : [];
+      devicesList.push({ name: device.name[0], type: device.type[0], sensors: sensors, controllers: controllers, properties: device.properties[0] })
     })
     return devicesList;
   },
 
   getSensors(sensorList) {
-    console.log("getSensors -> sensorList", sensorList[0])
-
     return sensorList.map(sensor => {
       const keys = Object.keys(sensor);
       const sensorInfo = {}
@@ -36,9 +35,10 @@ module.exports = {
       return sensorInfo;
     })
   },
-  getControllers(controllerList, node) {
-    return controllerList.controller.map(controller => {
-      const controllerInfo = { location: node.location };
+  getControllers(controllerList) {
+    console.log("getControllers -> controllerList", controllerList)
+    return controllerList.map(controller => {
+      const controllerInfo = {};
       const keys = Object.keys(controller);
       keys.forEach(key => {
         if (key !== "value" && key !== 'onstring' && key !== 'offstring') {
@@ -58,27 +58,11 @@ module.exports = {
       return propertiesInfo;
     });
   },
-  // getDevice(device, node) {
-  //   let sensors = [];
-  //   let controllers = [];
-  //   let properties = [];
-  //   if (device.sensors[0].sensor.length > 0 && device.sensors[0].sensor[0] !== "") {
-  //     sensors = this.getSenors(device.sensors[0], node);
-  //   };
-  //   if (device.controllers.length > 0 && device.controllers[0] !== "") {
-  //     controllers = this.getControllers(device.controllers[0], node)
-  //   }
-  //   if (device.properties.length > 0 && device.properties[0] !== "") {
-  //     properties = this.getProperties(properties.controllers[0], node)
-  //   }
-  //   const deviceObject = { name: device.name[0], type: device.type[0], description: node.description, sensors: sensors, controllers: controllers, properties: properties }
-  //   return deviceObject;
-  // },
 }
 
 
 const file = `<?xml version = "1.0" encoding="UTF - 8"?>
-  < application >
+< application >
   <name>Devices</name>
   <device>
     <name>Test_BMP280</name>
@@ -109,13 +93,53 @@ const file = `<?xml version = "1.0" encoding="UTF - 8"?>
     <controllers></controllers>
     <properties></properties>
   </device>
-  <device><name>TEST_SI1145</name><type>SI1145</type><sensors><sensor>
-    <name>Visible</name><type>Range</type><min>0.000000</min><max>1000.000000</max><value>-100000.000000</value></sensor>
-    <sensor><name>IR</name><type>Range</type><min>0.000000</min><max>1000.000000</max><value>-100000.000000</value></sensor>
-    <sensor><name>UVIndex</name><type>Range</type><min>-100.000000</min><max>200.000000</max><value>-100000.000000</value></sensor>
-    <sensor><name>Proximity</name><type>Range</type><min>-100.000000</min><max>200.000000</max><value>-100000.000000</value></sensor>\
-    </sensors><controllers><controller><name>IrLed</name><type>Boolean</type><onstring>ON</onstring><offstring>OFF</offstring>
-      <value>ON</value></controller></controllers><properties></properties></device> <device><name>Outside_Ambient</name>
+  <device>
+    <name>TEST_SI1145</name>
+    <type>SI1145</type>
+    <sensors>
+      <sensor>
+        <name>Visible</name>
+        <type>Range</type>
+        <min>0.000000</min>
+        <max>1000.000000</max>
+        <value>-100000.000000</value>
+      </sensor>
+      <sensor>
+        <name>IR</name>
+        <type>Range</type>
+        <min>0.000000</min>
+        <max>1000.000000</max>
+        <value>-100000.000000</value>
+      </sensor>
+      <sensor>
+        <name>UVIndex</name>
+        <type>Range</type>
+        <min>-100.000000</min>
+        <max>200.000000</max>
+        <value>-100000.000000</value>
+      </sensor>
+      <sensor>
+        <name>Proximity</name>
+        <type>Range</type>
+        <min>-100.000000</min>
+        <max>200.000000</max>
+        <value>-100000.000000</value>
+      </sensor>
+      </sensors>
+      <controllers>
+        <controller>
+          <name>IrLed</name>
+          <type>Boolean</type>
+          <onstring>ON</onstring>
+          <offstring>OFF</offstring>
+          <value>ON</value>
+        </controller>
+        </controllers>
+        <properties></properties>
+      </device>
+     
+
+      <device><name>Outside_Ambient</name>
         <type>BMP280</type><sensors><sensor><name>Temperature</name><type>Temperature</type><min>-40.000000</min><max>125.000000</max>
           <value>-100000.000000</value></sensor></sensors><controllers></controllers><properties></properties></device> <device><name>Panel_1</name>
             <type>BMP280</type><sensors><sensor><name>Temperature</name><type>Temperature</type><min>-40.000000</min><max>125.000000</max>

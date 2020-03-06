@@ -52,6 +52,10 @@ const Node = {
     });
     return res.json();
   },
+//   async getNodeAndDepentenceById(nodeId){
+// const  res = fetch(`${BASE_URL}/node/${n`);
+// return res.json();
+  // },
   // async getDevices(Nodeid) {
   //   const res = await fetch(`${BASE_URL}/node/${Nodeid}/devices`);
   //   return res.json();
@@ -63,11 +67,15 @@ const Device = {
     const res = await fetch(`${BASE_URL}/devices`);
     return res.json();
   },
-  async getDevicesOnNodeById(nodeId) {
-    const res = await fetch(`${BASE_URL}/node/${nodeId}/devices`);
+  async getDevicesFromNodeById(nodeId) {
+    const res = await fetch(`${BASE_URL}/node/${nodeId}/devices/config`);
     return res.json();
   },
-  async create(info){
+  async getDeivcesByNodeId(nodeId){
+const res= await fetch(`${BASE_URL}/node/${nodeId}/device`);
+return res.json();
+  },
+  async create(info) {
     const res = await fetch(`${BASE_URL}/device/create`, {
       method: 'POST',
       headers: {
@@ -80,7 +88,7 @@ const Device = {
 }
 
 const Sensor = {
-  async create(info){
+  async create(info) {
     const res = await fetch(`${BASE_URL}/sensor/create`, {
       method: 'POST',
       headers: {
@@ -122,10 +130,20 @@ const Sensor = {
 }
 
 const Controller = {
-  async getControllerTypes() {
-    const res = await fetch(`${BASE_URL}/controllers/types`)
-    return res.json();
+  async create(info) {
+    const res = await fetch(`${BASE_URL}/controller/create`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(info),
+    })
+    return res.json()
   },
+  // async getControllerTypes() {
+  //   const res = await fetch(`${BASE_URL}/controllers/types`)
+  //   return res.json();
+  // },
 }
 
 export { Sensor, Node, Device, Controller, Crud };

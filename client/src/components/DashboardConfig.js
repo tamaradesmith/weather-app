@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Node, Device, Sensor } from '../js/requests';
+import { Node, Device, Sensor, Controller } from '../js/requests';
 
 import NodeConfigShow from './partials/NodeConfigShow'
 import NodeConfig from "./partials/NodeConfig";
@@ -12,11 +12,12 @@ function DashboardConfig(props) {
   // node States
   const [foundNodes, setFoundNodes] = useState([]); // nodes on network
   const [nodeId, setNodeId] = useState(1);
-
+  const [nodes, setNodes] = useState([])
 
   async function getAllNodes() {
-    const nodes = await Node.getNodes()
-    setCurrentView(<NodeConfigShow nodes={nodes} findLocalNodes={findLocalNodes} getDeviceInfo={getDevicesOnNode} />)
+    const getNodes = await Node.getNodes()
+    setNodes(getNodes)
+    setCurrentView(<NodeConfigShow nodes={getNodes} findLocalNodes={findLocalNodes} getDeviceInfo={getDevicesOnNode} />)
   }
 
   async function findLocalNodes() {
@@ -26,9 +27,12 @@ function DashboardConfig(props) {
   }
 
   async function getDevicesOnNode() {
-    setCurrentView(<DeviceConfig nodeId={nodeId} createDevice={createDevice} createSensor={createSensor} />)
+    setCurrentView(<DeviceConfig nodeId={nodeId} createDevice={createDevice} createSensor={createSensor} createController={createController} redirect={redirectToShow} />)
   }
 
+  function redirectToShow(id){
+     props.history.push(`/node/${id}`)
+  }
   // async function createNode() {
 
   // }
@@ -38,8 +42,12 @@ function DashboardConfig(props) {
     return result
   }
   async function createSensor(info) {
-    console.log("createSensor -> info", info)
     const result = await Sensor.create(info);
+    return result
+  }
+
+  async function createController(info) {
+    const result = await Controller.create(info);
     return result
   }
 

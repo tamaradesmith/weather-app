@@ -1,4 +1,6 @@
 import React from 'react';
+import { Link } from "react-router-dom";
+
 
 function NodeConfigShow(props) {
 
@@ -27,7 +29,7 @@ function NodeConfigShow(props) {
       {
         nodes.map((node, index) => (
           <div key={index} className="config-list">
-            <p>{node.name}</p>
+            <Link to={`/node/${node.id}`}>{node.name}</Link>
             <p>{node.description}</p>
             <p>{node.location} </p>
             <button className="config-button">Update</button>

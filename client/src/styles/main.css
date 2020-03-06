@@ -6,6 +6,7 @@
   --hover-colour: #050505;
   --input-colour: #acc4da;
   --input-colour-hoover: #9fbdda;
+  --active-colour: #75abdd;
 }
 body {
   font-size: 2em;
@@ -59,8 +60,8 @@ input {
 .hidden {
   display: none;
 }
-.view{
-  padding: .25em;
+.view {
+  padding: 0.25em;
 }
 /* TEMPERATURE  */
 .Temperature {
@@ -186,6 +187,11 @@ input {
   height: 100%;
 }
 /* config */
+.config-body {
+  display: flex;
+  flex-direction: column;
+  min-height: 100%;
+}
 .config-list {
   display: grid;
   grid-template-columns: 150px 275px 175px 150px;
@@ -194,6 +200,7 @@ input {
 }
 .config {
   padding: 0 0.25em;
+  min-height: 90%;
 }
 .config-icon {
   width: 30px;
@@ -214,22 +221,35 @@ input {
   font-size: 0.9em;
 }
 .link-div {
-  margin: .75em 0 ;
+  margin: 0.75em 0;
 }
+.config-deivce-bottom {
+  display: grid;
+  grid-template-columns: auto 150px 150px;
+  grid-gap: 0.25em;
+  justify-self: flex-end;
+}
+/* .config-cancel {
+  grid-column: 2/3;
+}
+.con
+.config-create {
+  grid-column: 4/5;
+} */
 
 /* Config old */
-.config-select {
+/* .config-select {
   font-size: 0.8em;
   background: var(--input-colour);
   border: 1px solid black;
   text-transform: capitalize;
-}
-.config-crud {
+} */
+/* .config-crud {
   display: grid;
   flex-direction: column;
   grid-template-columns: 200px 200px;
   grid-gap: 0.25em;
-}
+} */
 .config-header {
   grid-column: 1/4;
   text-align: center;
@@ -241,12 +261,12 @@ input {
 }
 .config-form {
   display: grid;
-  grid-template-columns: 200px auto auto;
+  grid-template-columns: 175px auto auto;
   grid-gap: 0.25em;
 }
 .config-form-sensor {
   display: grid;
-  grid-template-columns: 150px 140px 170px 140px auto auto;
+  grid-template-columns: 175px 100px 170px 100px auto auto;
   grid-gap: 0.25em;
 }
 .config-label {
@@ -339,12 +359,29 @@ input {
 .form-column {
   grid-column: 1/4;
 }
-/* SHOW */
 
-.show-row {
-  grid-template-columns: 200px auto;
+/* SHOW */
+.show-header{
+  text-align: center;
+  font-weight: 600;
+  font-size: 1.25em;
+  grid-column: 1/4;
+}
+.show-grid {
+  display: grid;
+  grid-template-columns: 200px  200px auto;
   grid-gap: 0.25em;
   margin: 0.25em 0;
+}
+.tab-buttons{
+  display: flex;
+}
+.tab-button{
+  margin: .25em;
+  padding: .1em .5em;
+}
+.active-tab{
+  background: var(--active-colour);
 }
 /* Warning */
 .warning {

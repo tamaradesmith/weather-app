@@ -10,6 +10,7 @@ import DashboardOutdoors from './components/DashboardOutdoors';
 import DashboardConfig from './components/DashboardConfig'
 import NodeConfig from './components/partials/NodeConfig';
 import DeviceConfig from './components/partials/DeviceConfig';
+import NodeShow from './components/partials/NodeShow'
 
 function App() {
   return (
@@ -26,6 +27,7 @@ function App() {
           <Route path="/DashboardConfig" exact component = {DashboardConfig} />
           <Route path="/DashboardConfig/node/new" component = {NodeConfig} />
           <Route path="/DashboardConfig/node/:id/devices/new" component={DeviceConfig} />
+          <Route path="/node/:id" component={NodeShow} />
         </Switch>
       </Router>
     </div>

@@ -1,48 +1,80 @@
-import React, { useState } from "react";
-import { Crud } from "../../js/requests";
+import React, { useState, useEffect, useReducer } from "react";
+import { Node, Device,  Controller } from "../../js/requests";
+
+
+import NodeDetails from './NodeDetails'
+import SensorDetails from './SensorDetails';
+import ControllerDetails from './ControllerDetails'
+import DeviceDetails from './DeviceDetails'
 
 function NodeShow(props) {
-  const [item, setItem] = useState(null);
+  console.log("NodeShow -> props", props.match.params.id)
+  const [node, setNode] = useState(null);
+  const [devices, setDevices] = useState(null)
+
   const [labels, setLabel] = useState([]);
-  const omitList = ['id', 'createdAt', 'active'];
+  // const [view, setView] = useState('')
+  const initialState = { view: '' }
+
+  const [state, dispatch] = useReducer(reducer, initialState)
+  // const omitList = ['id', 'createdAt', 'active'];
 
 
-  async function getItemInfo() {
-    const info = await Crud.getItemInfo(props.item, props.id)
-    console.log("TCL: getItemInfo -> info", info)
-    const labelList = Object.keys(info);
-    const list = []
-    labelList.forEach(label => {
-      if (!omitList.includes(label)) {
-        list.push(label)
-      }
-    });
-    setItem(info);
-    setLabel(list)
+  function reducer(state, action) {
+    switch (action.view) {
+      case 'general':
+        return { view: <NodeDetails node={node} /> }
+      case 'devices':
+        return { view: <DeviceDetails devices={devices}  /> }
+      case 'sensors':
+        return { view: <SensorDetails /> }
+      case 'controllers':
+        return { view: <ControllerDetails /> }
+      default:
+        throw new Error();
+
+    }
   }
 
-  if (item === null) {
-    getItemInfo();
-    return "Loading..."
+  async function getNodeInfo() {
+    const node = await Node.getNode(props.match.params.id)
+    setLabel(Object.keys(node))
+    setNode(node);
+    dispatch({ view: 'general' })
   }
+
+  async function getDevicesByNodeId() {
+    const allDevices = (node != null) ? await Device.getDeivcesByNodeId(node.id): '';
+    console.log("getDevicesByNodeId -> allDevices", allDevices)
+    setDevices(allDevices)
+  }
+  
+  useEffect(() => {
+    getNodeInfo();
+  }, [])
+
+  useEffect(() => {
+    getDevicesByNodeId()
+  }, [node])
+  
+  if (node === null) {
+    return "loading ..."
+  }
+
   return (
 
-    <div className="NodeShow ">
-      <h3 className="gauge-header" >Node</h3>
-      <div>
-      </div>
-      {labels.map((label, index) => (
-        <div key={index} className="config-crud" >
-          <p className="capitlize">{label}: </p>
-          <p>{item[label]} </p>
-        </div>
-      ))}
-      <div className="config-crud">
+    <main className="NodeShow  view">
+      <h3 className="show-header" >Node: {node.name}</h3>
+      <div className="tab-buttons">
+        <button id="general" className="config-button tab-button active-tab" onClick={() => dispatch({ view: 'general' })}>General</button>
+        <button id="device" className="config-button tab-button" onClick={() => dispatch({ view: 'devices' })}>Devices</button>
 
-        <p> Active:</p>
-        <p>{!item.active ? "false" : "true"}    </p>
+        <button id="sensors" className="config-button tab-button" onClick={() => dispatch({ view: 'sensors' })}>Sensors</button>
+        <button id="controllers" className="config-button tab-button" onClick={() => dispatch({ view: 'controllers' })} >Controllers</button>
       </div>
-    </div>
+      {state.view}
+    </main>
+
   )
 }
 
