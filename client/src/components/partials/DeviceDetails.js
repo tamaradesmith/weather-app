@@ -5,24 +5,36 @@ function DeviceDeatails(props) {
 
   const { devices } = props;
 
+
   return (
     <div>
-      {devices.map((device, index) => (
-        <div key={index} className="show-grid">
-          <p>
-            {device.name}
-          </p>
-          <p>
-            {device.location}
-          </p>
-          <p>
-            {device.type}
-          </p>
+      <div className='show-grid-sensor-inner header'>
+        <h3>Name</h3>
+        <h3>Type</h3>
+        <h3>Description</h3>
+        <h3>Active</h3>
+      </div>
 
+      <div className="show-div">
+        <div className="show-detail-div">
 
+          {devices.map((device, index) => (
+            <div key={index} className="show-grid-sensor-inner">
+              <p>
+                {device.name}
+              </p>
+              <p>
+                {device.type}
+              </p>
+              <p>
+                {device.description}
+              </p>
+              <input type="checkbox" id="device-active" defaultChecked={device.active === true ? true : false} className="show-check" />
+
+            </div>
+          ))}
         </div>
-      ))}
-      <p>DeviceDeatails</p>
+      </div>
     </div>
   )
 }

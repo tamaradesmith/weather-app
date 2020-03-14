@@ -100,8 +100,22 @@ router.get('/node/:id', async (req, res) => {
   res.send(node)
 })
 
-router.get('node/:id/devices')
+router.get('/node/:id/devices', async (req, res)=>{
+  const nodeId = req.params.id;
+  const devices = await DeviceQuery.getDevicseByNodeId(nodeId);
+  const devicesWithSensors = await SensorQuery.getAllSensorOnNodeByDevices(devices);
+  const devicesWithController = await ControllerQuery.getAllControllersOnNodeByDevices(devicesWithSensors);
+  console.log("devicesWithController", devicesWithController)
+  
+  res.send(devicesWithController)
+})
 
+router.get('/node/:id/devices/sensors', async (req, res) =>{
+const nodeId =req.params.id;
+const devices = await DeviceQuery.getDevicseByNodeId(nodeId);
+const sensors = await SensorQuery.getAllSensorOnNodeByDevices(devices);
+res.send(sensors);
+})
 // DEVICE ROUTES
 
 // create Device

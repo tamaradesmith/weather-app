@@ -52,14 +52,6 @@ const Node = {
     });
     return res.json();
   },
-//   async getNodeAndDepentenceById(nodeId){
-// const  res = fetch(`${BASE_URL}/node/${n`);
-// return res.json();
-  // },
-  // async getDevices(Nodeid) {
-  //   const res = await fetch(`${BASE_URL}/node/${Nodeid}/devices`);
-  //   return res.json();
-  // },
 }
 
 const Device = {
@@ -71,9 +63,9 @@ const Device = {
     const res = await fetch(`${BASE_URL}/node/${nodeId}/devices/config`);
     return res.json();
   },
-  async getDeivcesByNodeId(nodeId){
-const res= await fetch(`${BASE_URL}/node/${nodeId}/device`);
-return res.json();
+  async getDeivcesByNodeId(nodeId) {
+    const res = await fetch(`${BASE_URL}/node/${nodeId}/devices`);
+    return res.json();
   },
   async create(info) {
     const res = await fetch(`${BASE_URL}/device/create`, {
@@ -116,6 +108,10 @@ const Sensor = {
   },
   async getSensorsLocations() {
     const res = await fetch(`${BASE_URL}/sensors/locations`);
+    return res.json();
+  },
+  async getSensorGroupedbyDeviceByNodeId(nodeId){
+    const res = await fetch(`${BASE_URL}/node/${nodeId}/devices/sensors`);
     return res.json();
   },
   // temperature  

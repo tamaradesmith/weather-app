@@ -12,7 +12,7 @@ const { node} = props
       <p className="config-field">{node.description}</p>
 
       <p className="config-label"> Site: </p>
-      <p className="config-field">New Westmister</p>
+      <p className="config-field">{node.site}</p>
 
       <p className="config-label"> Location: </p>
       <p className="config-field">{node.location}</p>
