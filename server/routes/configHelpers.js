@@ -1,5 +1,5 @@
 const parseString = require('xml2js').parseString;
-// const typeSensor = [{ tempature: "c" }, { pressure: "pa" },]
+const typeSensor = { temperature: "\xB0c", pressure: "kPa", distance: 'm', speed: "m/sec", direction: "\xB0"};
 
 module.exports = {
 
@@ -26,17 +26,17 @@ module.exports = {
         if (key !== "value") {
           sensorInfo[key] = sensor[key][0].toLowerCase()
         }
-        if (key === "type" && sensor[key][0].toLowerCase() === 'temperature') {
-          sensorInfo.unit = 'c';
-        } else {
-          sensorInfo.unit = "";
+        if (typeSensor[sensorInfo[key]] != undefined && key === 'type' ) {
+          sensorInfo.unit = typeSensor[sensorInfo[key]];
+        } else if ((key === 'type')) {
+          sensorInfo.unit = " ";
         }
       })
+      console.log("getSensors -> sensorInfo", sensorInfo)
       return sensorInfo;
     })
   },
   getControllers(controllerList) {
-    console.log("getControllers -> controllerList", controllerList)
     return controllerList.map(controller => {
       const controllerInfo = {};
       const keys = Object.keys(controller);
