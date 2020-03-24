@@ -1,7 +1,6 @@
 // Update with your config settings.
 
   module.exports = {
-
     development: {
       client: 'pg',
       connection: {
@@ -9,7 +8,6 @@
         username: 'tamara',
         password: 'tamara'
       },
-
       migrations: {
         directory: 'db/migrations',
       },
@@ -17,5 +15,4 @@
         directory: 'db/seeds'
       },
     },
-
   };

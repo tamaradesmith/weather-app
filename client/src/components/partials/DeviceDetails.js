@@ -5,6 +5,9 @@ function DeviceDeatails(props) {
 
   const { devices } = props;
 
+  function handleChange(event){
+    props.activeUpdate("device", event.target.id, event.target.checked)
+  }
 
   return (
     <div>
@@ -29,7 +32,7 @@ function DeviceDeatails(props) {
               <p>
                 {device.description}
               </p>
-              <input type="checkbox" id="device-active" defaultChecked={device.active === true ? true : false} className="show-check" />
+              <input type="checkbox" id={device.id} defaultChecked={device.active === true ? true : false} className="show-check" onChange={handleChange} />
 
             </div>
           ))}

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Node, Device, Sensor, Controller } from '../js/requests';
+import { Node, Device, Sensor, Controller, User } from '../js/requests';
 
 import NodeConfigShow from './partials/NodeConfigShow'
 import NodeConfig from "./partials/NodeConfig";
@@ -30,8 +30,8 @@ function DashboardConfig(props) {
     setCurrentView(<DeviceConfig nodeId={nodeId} createDevice={createDevice} createSensor={createSensor} createController={createController} redirect={redirectToShow} />)
   }
 
-  function redirectToShow(id){
-     props.history.push(`/node/${id}`)
+  function redirectToShow(id) {
+    props.history.push(`/node/${id}`)
   }
   // async function createNode() {
 
@@ -51,12 +51,18 @@ function DashboardConfig(props) {
     return result
   }
 
+  function user() {
+    console.log("meow")
+     User.user()
+  }
+
   useEffect(() => {
     getAllNodes()
   }, [])
 
   return (
     <main className="ConfigNodes config">
+      <button onClick={user}> click </button>
 
       {currentView}
 

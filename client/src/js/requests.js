@@ -123,7 +123,7 @@ const Sensor = {
     const res = await fetch(`${BASE_URL}/sensor/${sensorId}/24`)
     return res.json();
   },
-}
+};
 
 const Controller = {
   async create(info) {
@@ -142,4 +142,12 @@ const Controller = {
   // },
 }
 
-export { Sensor, Node, Device, Controller, Crud };
+const User = {
+  async user(){
+    const res = await fetch(`${BASE_URL}/user`)
+    console.log("user -> res", res.text())
+    
+  }
+}
+
+export { Sensor, Node, Device, Controller, Crud, User };

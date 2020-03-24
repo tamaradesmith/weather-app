@@ -2,8 +2,11 @@ import React from 'react'
 
 
 function NodeDetail(props) {
-const { node} = props
+const { node } = props
 
+function handleChange(event){
+  props.activeUpdate('node', event.target.id, event.target.checked)
+}
 
   return (
 
@@ -21,7 +24,7 @@ const { node} = props
       <p className="config-field">{node.type}</p>
 
       <p className="config-label"> Active:</p>
-      <p className="config-field">{!node.active ? "false" : "true"}    </p>
+      <input type="checkbox" id={node.id} defaultChecked={node.active === true ? true : false} className="show-node-check" onChange={handleChange} />
     </div>
   )
 }

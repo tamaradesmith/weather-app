@@ -2,6 +2,11 @@ import React from 'react';
 
 function SensorDetails(props) {
   const { devices } = props;
+  
+  function handleChange(event){
+    const target = event.target
+    props.activeUpdate("sensor", target.id, target.checked)
+  }
 
   return (
     <div>
@@ -24,7 +29,7 @@ function SensorDetails(props) {
                 <p> {sensor.name} </p>
                 <p> {sensor.type} </p>
                 <p> {sensor.description} </p>
-                <input type="checkbox" id="sensor-active" defaultChecked={sensor.active === true ? true : false} className="show-check" />
+                <input type="checkbox" id={sensor.id} defaultChecked={sensor.active === true ? true : false} className="show-check" onChange={handleChange} />
               </div>
 
             ))}

@@ -11,12 +11,14 @@ const auth = require('./routes/auth');
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
-// app.use(express.static(path.join(__dirname, 'public')));
-app.use(cookieParser());
+
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json())
-app.use(cors());
 app.use(logger('dev'));
+app.use(cookieParser('keyboard_cat'));
+// app.use(cookieParser(process.env.COOKIE_SECRET));
+// app.use(express.static(path.join(__dirname, 'public')));
+app.use(cors());
 
 app.use('/auth', auth)
 app.use('/', weather);
