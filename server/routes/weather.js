@@ -14,6 +14,8 @@ const ControllerQuery = require('../db/queries/controllerQuery');
 
 const ConfigHelpers = require('./configHelpers')
 const NodeHelpers = require('./nodeHelper')
+
+
 // Save Reading to DB
 
 router.post('/sensors/readings', (req, res) => {
@@ -100,22 +102,28 @@ router.get('/node/:id', async (req, res) => {
   res.send(node)
 })
 
-router.get('/node/:id/devices', async (req, res)=>{
+router.get('/node/:id/devices', async (req, res) => {
   const nodeId = req.params.id;
   const devices = await DeviceQuery.getDevicseByNodeId(nodeId);
   const devicesWithSensors = await SensorQuery.getAllSensorOnNodeByDevices(devices);
   const devicesWithController = await ControllerQuery.getAllControllersOnNodeByDevices(devicesWithSensors);
-  console.log("devicesWithController", devicesWithController)
-  
   res.send(devicesWithController)
 })
 
-router.get('/node/:id/devices/sensors', async (req, res) =>{
-const nodeId =req.params.id;
-const devices = await DeviceQuery.getDevicseByNodeId(nodeId);
-const sensors = await SensorQuery.getAllSensorOnNodeByDevices(devices);
-res.send(sensors);
+router.get('/node/:id/devices/sensors', async (req, res) => {
+  const nodeId = req.params.id;
+  const devices = await DeviceQuery.getDevicseByNodeId(nodeId);
+  const sensors = await SensorQuery.getAllSensorOnNodeByDevices(devices);
+  res.send(sensors);
 })
+
+router.post('/nodes/active', async (req, res) => {
+  const info = req.body;
+  const node = await NodeQuery.updateActive(info.nodes);
+  console.log("node", node)
+  res.send("good")
+})
+
 // DEVICE ROUTES
 
 // create Device
@@ -186,11 +194,9 @@ router.get('/sensor/:id/24', async (req, res) => {
 
 // CONTROLLER ROUTES
 
-router.post('/controller/create', async (req, res)=>{
+router.post('/controller/create', async (req, res) => {
   const info = req.body;
-  console.log("info", info)
   const controller = await ControllerQuery.create(info);
-  console.log("controller", controller)
   res.send(controller)
 })
 

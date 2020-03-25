@@ -12,13 +12,11 @@ module.exports = {
       return new Promise(async (res, rej) => {
         try {
           const response = await this.search(number);
-          console.log("TCL: searchForNodes -> response", response, number)
           res(response);
         } catch (error) {
           rej(error);
         };
       });
-
     }));
     const nodes = [];
     existingNodes.forEach(node => {
@@ -26,8 +24,8 @@ module.exports = {
         nodes.push(node);
       };
     });
-    if (nodes.length === 0){
-      nodes.push({name: "no nodes found"})
+    if (nodes.length === 0) {
+      nodes.push({ name: "no nodes found" })
     }
     return nodes;
   },
@@ -65,7 +63,7 @@ module.exports = {
 
   // CRUD
   async create(type, info) {
-    const nodeinfo =await knex(`${type}s`).insert([
+    const nodeinfo = await knex(`${type}s`).insert([
       info
     ]).returning("*");
     return nodeinfo[0];
@@ -79,20 +77,25 @@ module.exports = {
     await Promise.all(devices.map(async device => {
       const deviceObject = { name: device.name, description: device.description, type: device.type, node_id: nodeId }
       const deviceinfo = await this.create('device', deviceObject);
-      
-      device.sensors.forEach(async sensor=>{
+
+      device.sensors.forEach(async sensor => {
         sensor.device_id = deviceinfo[0]
         const result = await this.create("sensor", sensor);
         return 'finish'
       })
-      
-      device.controllers.forEach( async controller =>{
+
+      device.controllers.forEach(async controller => {
         controller.device_id = deviceinfo[0];
         const result = await this.create('controller', controller)
         return "finish"
       })
       return deviceinfo;
     }))
+  },
+  async updateActive(node) {
+    const result = await knex('nodes').where({ id: node.id }).update({ active: node.active }).returning('id')
+    return result[0];
+
   },
   async getNodeById(id) {
     const node = await knex("nodes").select("*").where({ id: id });
@@ -131,8 +134,8 @@ module.exports = {
       });
     return deviceXML.data;
   },
-  async getAllNodeDependent(id){
-    const node =  await this.getNodeById(id);
+  async getAllNodeDependent(id) {
+    const node = await this.getNodeById(id);
     const devices = await DeviceQuery.getAllDeviceDependentByNodeId(id);
     console.log("TCL: getAllNodeDependent -> devices", devices)
     node.devices = devices;

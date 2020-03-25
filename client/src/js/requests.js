@@ -52,6 +52,17 @@ const Node = {
     });
     return res.json();
   },
+  async updateActiveStates(info) {
+    console.log("updateActiveStates -> info", info)
+    const res = await fetch(`${BASE_URL}/nodes/active`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(info)
+    });
+    return res.json();
+  },
 }
 
 const Device = {
@@ -110,7 +121,7 @@ const Sensor = {
     const res = await fetch(`${BASE_URL}/sensors/locations`);
     return res.json();
   },
-  async getSensorGroupedbyDeviceByNodeId(nodeId){
+  async getSensorGroupedbyDeviceByNodeId(nodeId) {
     const res = await fetch(`${BASE_URL}/node/${nodeId}/devices/sensors`);
     return res.json();
   },
@@ -143,10 +154,10 @@ const Controller = {
 }
 
 const User = {
-  async user(){
+  async user() {
     const res = await fetch(`${BASE_URL}/user`)
     console.log("user -> res", res.text())
-    
+
   }
 }
 

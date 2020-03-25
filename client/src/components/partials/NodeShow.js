@@ -14,6 +14,7 @@ function NodeShow(props) {
   const [updateNode, setUpdateNode] = useState(null)
   const [updateDevice, setUpdateDevice] = useState([]);
   const [updateSensor, setUpdateSensor] = useState([]);
+  const [updateController, setUpdateController] = useState([]);
 
 
   const initialState = { view: '' }
@@ -61,20 +62,21 @@ function NodeShow(props) {
 
   function changeActive(type, id, active) {
     const item = { type, id, active };
-    
     switch (type) {
       case 'node':
         setUpdateNode(item)
         break;
       case 'device':
-        const devices = checkIfExistsInUpdate(item, updateDevice)
-        setUpdateDevice(devices)
-        console.log("changeActive -> updateDevice", updateDevice.length)
-        
+        const devices = checkIfExistsInUpdate(item, updateDevice);
+        setUpdateDevice(devices);
         break;
       case 'sensor':
-         const sensors = checkIfExistsInUpdate(item, updateSensor)
+        const sensors = checkIfExistsInUpdate(item, updateSensor)
         setUpdateSensor(sensors)
+        break;
+      case 'controller':
+        const controllers = checkIfExistsInUpdate(item, updateController)
+        setUpdateController(controllers)
         break;
       default:
         break;
@@ -82,24 +84,20 @@ function NodeShow(props) {
   }
 
   async function handleUpdate() {
-    console.log("meow");
+    const body = {nodes: updateNode, devices: updateDevice, sensors: updateSensor, controllers: updateController}
+    const result = await Node.updateActiveStates(body)
+    // console.log(body);
   };
 
   function checkIfExistsInUpdate(newItem, existing) {
-    console.log("checkIfExistsInUpdate -> existing", existing.length)
     let flag = 0;
-    if (existing.length === 0) {
-      return newItem;
-    } else {
-      existing.forEach(item => {
-        if (item.id === newItem.id) {
-          item.active = newItem.active;
-          flag = 1;
-        }
-      })
-    }
-    // existing.length
-    if (flag === 0){
+    existing.forEach(item => {
+      if (item.id === newItem.id) {
+        item.active = newItem.active;
+        flag = 1;
+      }
+    })
+    if (flag === 0) {
       existing.push(newItem)
     }
     return existing
@@ -112,16 +110,6 @@ function NodeShow(props) {
   useEffect(() => {
     getDevicesByNodeId();
   }, [node])
-
-  useEffect(() => {
-    console.log(" SENSOR USE_EFFECT", updateSensor)
-  }, [updateSensor]);
-
-  useEffect(() => {
-    console.log("DEVICE USE_EFFECT", updateDevice)
-  }, [updateDevice]);
-
-
 
   if (node === null) {
     return "loading ..."
