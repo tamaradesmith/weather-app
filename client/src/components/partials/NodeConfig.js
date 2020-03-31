@@ -93,9 +93,10 @@ const { foundNodes } = props
 
   return (
     <div className="NodeConfig view" >
-
+    
       <form id="nodeForm" className="NodeConfig config-form" >
         <h4 className="config-header">Node Configure</h4>
+{          console.log("NodeConfig -> foundNodes", foundNodes)}
         <label htmlFor="name"> Name: </label>
         <select name="name" id='name' className="config-field config-select" onChange={handlePickNode}>
           <option value=""></option>

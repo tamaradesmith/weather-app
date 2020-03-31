@@ -87,7 +87,8 @@ router.get('/nodes', async (req, res) => {
 
 router.get('/nodes/search', async (req, res) => {
   const nodes = await NodeHelpers.searchForNodes();
-  res.send(nodes)
+  console.log("nodes", nodes);
+  res.send(nodes);
 });
 
 router.post('/nodes/check', async (req, res) => {

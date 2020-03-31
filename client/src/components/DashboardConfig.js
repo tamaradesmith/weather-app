@@ -10,7 +10,7 @@ function DashboardConfig(props) {
   const [currentView, setCurrentView] = useState(null);
 
   // node States
-  const [foundNodes, setFoundNodes] = useState([]); // nodes on network
+  const [foundNodes, setFoundNodes] = useState(null); // nodes on network
   const [nodeId, setNodeId] = useState(1);
   const [nodes, setNodes] = useState([])
 
@@ -22,8 +22,9 @@ function DashboardConfig(props) {
 
   async function findLocalNodes() {
     const nodes = await Node.searchForNodes();
+    console.log("findLocalNodes -> nodes", nodes)
     setFoundNodes(nodes);
-    setCurrentView(<NodeConfig foundNodes={foundNodes} />)
+    setCurrentView(<NodeConfig foundNodes={nodes} />)
   }
 
   async function getDevicesOnNode() {
@@ -62,7 +63,6 @@ function DashboardConfig(props) {
 
   return (
     <main className="ConfigNodes config">
-      <button onClick={user}> click </button>
 
       {currentView}
 
