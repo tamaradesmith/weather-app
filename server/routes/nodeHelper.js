@@ -25,7 +25,7 @@ module.exports = {
       // console.log("searchForNodes Promise.all -> error", error)
     });
     if (count + 9 > 100) {
-      return this.getInfo(nodes);
+      return nodes;
       // return nodes;
     } else {
       return this.searchForNodes(count + 10, nodes)
@@ -39,8 +39,15 @@ module.exports = {
       try {
         const node = await axios.get(`http://${BASE_IP}${index}/rest/node/name`);
         const name = this.getValue(node.data)
+        console.log("search -> name", name)
         clearTimeout(timer);
-        res({ ip: BASE_IP + index, name });
+        const nodeInfo = { ip: BASE_IP + index, name }
+        if (node != null) {
+          const nodeAllInfo = await this.getInfo(nodeInfo);
+          console.log("search -> nodeAllInfo", nodeAllInfo)
+          res(nodeAllInfo);
+        }
+        return {};
       }
       catch (error) {
         clearTimeout(timer);
@@ -48,30 +55,30 @@ module.exports = {
       };
     });
   },
-  async getInfo(nodes) {
-
-//     // if (node !== null) {
-//     //   const name = this.getValue(node.data);
-//     //   const nodeObject = { name: name, ip: `${BASE_IP}${index}` };
-//     nodes.forEach(node => {
-// const result = [];
-//       await Promise.all(fields.map(field => {
-//         return new Promise(async (res, rej) => {
-//           try {
-//             const node = await axios.get(`http://${BASE_IP}${index}/rest/node/${field}`);
-//             const value = await this.getValue(node.data);
-//             nodeObject[field] = value;
-//             res(nodeObject);
-//           } catch (error) {
-//             rej(error);
-//           };
-//         });
-//       }));
-//       return nodeObject;
-//     });
+  async getInfo(nodeInfo) {
+    Promise.all(fields.map(async (field) => {
+      try {
+        return new Promise(async (res, rej) => {
+          try {
+            const node = await axios.get(`http://${nodeInfo.ip}/rest/node/${field}`);
+            const value = await this.getValue(node.data);
+            nodeInfo[field] = value;
+            res(nodeInfo);
+          }
+          catch (error) {
+            rej(error);
+          };
+        });
+      }
+      catch (error_1) {
+        console.log(error_1);
+      }
+    })).catch(error => {
+      console.log(error)
+    });
+    console.log("getInfo -> nodeInfo", nodeInfo)
+    return nodeInfo
   },
-
-
   getValue(data) {
     const start = data.indexOf("<value>");
     const end = data.indexOf("</value>");
