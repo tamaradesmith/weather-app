@@ -26,7 +26,6 @@ module.exports = {
     });
     if (count + 9 > 100) {
       return nodes;
-      // return nodes;
     } else {
       return this.searchForNodes(count + 10, nodes)
     };
@@ -39,12 +38,10 @@ module.exports = {
       try {
         const node = await axios.get(`http://${BASE_IP}${index}/rest/node/name`);
         const name = this.getValue(node.data)
-        console.log("search -> name", name)
         clearTimeout(timer);
         const nodeInfo = { ip: BASE_IP + index, name }
         if (node != null) {
           const nodeAllInfo = await this.getInfo(nodeInfo);
-          console.log("search -> nodeAllInfo", nodeAllInfo)
           res(nodeAllInfo);
         }
         return {};
@@ -76,7 +73,6 @@ module.exports = {
     })).catch(error => {
       console.log(error)
     });
-    console.log("getInfo -> nodeInfo", nodeInfo)
     return nodeInfo
   },
   getValue(data) {

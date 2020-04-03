@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from "react";
 import { Node, Device, Sensor, Controller, User } from '../js/requests';
 
-import NodeConfigShow from './partials/NodeConfigShow'
+import NodeConfigShow from './partials/NodeIndex'
 import NodeConfig from "./partials/NodeConfig";
-import DeviceConfig from './partials/DeviceConfig'
+import DeviceConfig from './partials/DeviceConfig';
+import Spinner from './partials/Spinner';
 
 function DashboardConfig(props) {
 
@@ -21,11 +22,15 @@ function DashboardConfig(props) {
   }
 
   async function findLocalNodes() {
+    setCurrentView(<Spinner />)
     const nodes = await Node.searchForNodes();
-    console.log("findLocalNodes -> nodes", nodes)
     setFoundNodes(nodes);
+    console.log("findLocalNodes -> nodes", foundNodes)
+
     setCurrentView(<NodeConfig foundNodes={nodes} />)
   }
+
+
 
   async function getDevicesOnNode() {
     setCurrentView(<DeviceConfig nodeId={nodeId} createDevice={createDevice} createSensor={createSensor} createController={createController} redirect={redirectToShow} />)
@@ -54,7 +59,7 @@ function DashboardConfig(props) {
 
   function user() {
     console.log("meow")
-     User.user()
+    User.user()
   }
 
   useEffect(() => {
