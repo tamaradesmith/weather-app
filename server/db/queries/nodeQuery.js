@@ -62,10 +62,11 @@ module.exports = {
 
 
   // CRUD
-  async create(type, info) {
-    const nodeinfo = await knex(`${type}s`).insert([
+  async create(info) {
+    const nodeinfo = await knex(`nodes`).insert([
       info
     ]).returning("*");
+    console.log("create -> nodeinfo", nodeinfo)
     return nodeinfo[0];
   },
   async update(type, info, id) {

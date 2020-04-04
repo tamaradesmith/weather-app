@@ -2,7 +2,7 @@ import React from 'react';
 import { Link } from "react-router-dom";
 
 
-function NodeConfigShow(props) {
+function NodeIndex(props) {
 
   const { nodes } = props;
 
@@ -15,7 +15,7 @@ function NodeConfigShow(props) {
   }
 
   return (
-    <div className="NodeConfigShow">
+    <div className="NodeIndex">
       <div className="link-div">
         <button className="config-button config-link" onClick={handleClick} >Add New Node</button>
         <button className="config-button config-link" onClick={handleDeviceClick}>Add New device</button>
@@ -40,4 +40,4 @@ function NodeConfigShow(props) {
   )
 }
 
-export default NodeConfigShow
+export default NodeIndex

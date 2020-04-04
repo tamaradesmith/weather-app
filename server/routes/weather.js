@@ -91,10 +91,17 @@ router.get('/nodes/search', async (req, res) => {
   res.send(nodes);
 });
 
-router.post('/nodes/check', async (req, res) => {
-  const node = req.body;
-  const existing = await NodeQuery.nodeExist(node);
-  res.send(existing);
+router.post('/node/create', async (req, res) => {
+  const nodeInfo = req.body;
+  const existing = await NodeQuery.nodeExist(nodeInfo);
+  console.log("existing", existing)
+  if (existing.value != true){
+    const node = await NodeQuery.create(nodeInfo);
+    node.value = false; 
+    res.send(node)
+  } else {
+    res.send(existing);
+  }
 })
 
 router.get('/node/:id', async (req, res) => {

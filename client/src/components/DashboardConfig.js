@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Node, Device, Sensor, Controller, User } from '../js/requests';
 
-import NodeConfigShow from './partials/NodeIndex'
+import NodeIndex from './partials/NodeIndex'
 import NodeConfig from "./partials/NodeConfig";
 import DeviceConfig from './partials/DeviceConfig';
 import Spinner from './partials/Spinner';
@@ -18,15 +18,13 @@ function DashboardConfig(props) {
   async function getAllNodes() {
     const getNodes = await Node.getNodes()
     setNodes(getNodes)
-    setCurrentView(<NodeConfigShow nodes={getNodes} findLocalNodes={findLocalNodes} getDeviceInfo={getDevicesOnNode} />)
+    setCurrentView(<NodeIndex nodes={getNodes} findLocalNodes={findLocalNodes} getDeviceInfo={getDevicesOnNode} />)
   }
 
   async function findLocalNodes() {
     setCurrentView(<Spinner />)
     const nodes = await Node.searchForNodes();
     setFoundNodes(nodes);
-    console.log("findLocalNodes -> nodes", foundNodes)
-
     setCurrentView(<NodeConfig foundNodes={nodes} />)
   }
 
@@ -38,10 +36,12 @@ function DashboardConfig(props) {
 
   function redirectToShow(id) {
     props.history.push(`/node/${id}`)
-  }
-  // async function createNode() {
+  };
 
-  // }
+  async function createNode(info) {
+   const result = await Node.create(info);
+   return result;
+  }
 
   async function createDevice(info) {
     const result = await Device.create(info);
@@ -69,7 +69,22 @@ function DashboardConfig(props) {
   return (
     <main className="ConfigNodes config">
 
-      {currentView}
+      {/* {currentView} */}
+      <NodeConfig createNode={createNode} foundNodes={[{
+        ip: '192.168.1.66',
+        name: 'j400t',
+        description: 'Q400 Jig',
+        location: 'Tammy',
+        type: 'qWiFi400'
+      },
+      {
+        ip: '192.168.1.70',
+        name: 'village',
+        description: 'Trees In Village',
+        location: "Tammy's Apt",
+        type: 'Core Stub'
+      }]
+} />
 
     </main>
   )

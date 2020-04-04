@@ -1,5 +1,4 @@
 import React, { useState, useEffect, useReducer } from "react";
-import { Redirect } from 'react-router-dom';
 
 import { Node, Device } from "../../js/requests"
 import SensorConfig from './SensorConfig'

@@ -42,13 +42,13 @@ const Node = {
     const res = await fetch(`${BASE_URL}/node/${NodeId}`);
     return res.json();
   },
-  async CheckIfNodeExist(node) {
-    const res = await fetch(`${BASE_URL}/nodes/check`, {
+  async create(info){
+    const res = await fetch(`${BASE_URL}/node/create`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
       },
-      body: JSON.stringify(node)
+      body: JSON.stringify(info)
     });
     return res.json();
   },

@@ -1,6 +1,6 @@
 import React from 'react';
 import paw from '../../images/paw1.png';
-
+import '../../styles/spinner.css';
 
 function Spinner(props) {
 
