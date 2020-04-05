@@ -18,14 +18,14 @@ function DashboardConfig(props) {
   async function getAllNodes() {
     const getNodes = await Node.getNodes()
     setNodes(getNodes)
-    setCurrentView(<NodeIndex nodes={getNodes} findLocalNodes={findLocalNodes} getDeviceInfo={getDevicesOnNode} />)
+    setCurrentView(<NodeIndex nodes={getNodes} findLocalNodes={findLocalNodes} getDeviceInfo={getDevicesOnNode} cancel={handleCancel} />)
   }
 
   async function findLocalNodes() {
     setCurrentView(<Spinner />)
     const nodes = await Node.searchForNodes();
     setFoundNodes(nodes);
-    setCurrentView(<NodeConfig foundNodes={nodes} />)
+    setCurrentView(<NodeConfig createNode={createNode} foundNodes={nodes} redirect={redirectToShow} />)
   }
 
 
@@ -37,6 +37,10 @@ function DashboardConfig(props) {
   function redirectToShow(id) {
     props.history.push(`/node/${id}`)
   };
+
+  function handleCancel(){
+    setCurrentView(<NodeIndex nodes={nodes} findLocalNodes={findLocalNodes} getDeviceInfo={getDevicesOnNode} />)
+  }
 
   async function createNode(info) {
    const result = await Node.create(info);
@@ -69,8 +73,9 @@ function DashboardConfig(props) {
   return (
     <main className="ConfigNodes config">
 
-      {/* {currentView} */}
-      <NodeConfig createNode={createNode} foundNodes={[{
+      {currentView}
+ 
+      {/* <NodeConfig createNode={createNode} cancel={handleCancel} redirect={redirectToShow} foundNodes={[{
         ip: '192.168.1.66',
         name: 'j400t',
         description: 'Q400 Jig',
@@ -84,7 +89,7 @@ function DashboardConfig(props) {
         location: "Tammy's Apt",
         type: 'Core Stub'
       }]
-} />
+} /> */}
 
     </main>
   )

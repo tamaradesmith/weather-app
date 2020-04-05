@@ -406,5 +406,26 @@ input {
 .button-edit {
   margin-left: 0.25em;
 }
-
-
+.message-div{
+  position: absolute;
+  top: 10%;
+  left: 10%;
+  z-index: 10;
+  border: 1px solid black;
+  background: ghostwhite;
+  padding: .5em;
+  display: grid;
+  grid-template-columns: 250px 100px 100px;
+  grid-gap: 10px;
+}
+.message-text{
+  grid-column: 1/4;
+}
+.message-button1{
+  grid-row: 2/3;
+  grid-column: 2/3;
+}
+.message-button2{
+  grid-row: 2/3;
+  grid-column: 3/4;
+}

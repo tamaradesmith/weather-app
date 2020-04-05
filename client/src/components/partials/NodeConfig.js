@@ -3,7 +3,7 @@ import { Node } from "../../js/requests";
 
 function NodeConfig(props) {
 
-  const { foundNodes } = props
+  const { foundNodes, cancel } = props
 
   // const [foundNodes, setFoundNodes] = useState(foundNodes);
   const [nodeId, setNodeId] = useState(null);
@@ -23,7 +23,7 @@ function NodeConfig(props) {
 
   function handleCancel(event) {
     event.preventDefault();
-    props.history.push(`/DashboardConfig`);
+    props.handleCancel();
   }
 
   // Change modes
@@ -44,14 +44,14 @@ function NodeConfig(props) {
   function handleNext(event) {
     event.preventDefault();
     switch (next.next) {
-        case 'node':
-          return getNodeInfo();
-    //   case 'device':
-    //     return getDeviceInfo();
-    //   case 'sensor':
-    //     return getSensorInfo();
-    //   case 'controller':
-    //     return getControllerInfo()
+      case 'node':
+        return getNodeInfo();
+      //   case 'device':
+      //     return getDeviceInfo();
+      //   case 'sensor':
+      //     return getSensorInfo();
+      //   case 'controller':
+      //     return getControllerInfo()
     }
   };
 
@@ -102,24 +102,22 @@ function NodeConfig(props) {
     }
   }
 
-  async function checkIfNodeExist(node) {
-    const result = await Node.CheckIfNodeExist(node);
-    setNodeId(result.id);
-    if (result.value === 'false') {
-      console.log("node saved");
-    } else {
-      document.querySelector("#message").classList.remove('hidden');
-    }
+  // async function checkIfNodeExist(node) {
+  //   const result = await Node.CheckIfNodeExist(node);
+  //   setNodeId(result.id);
+  //   if (result.value === 'false') {
+  //     console.log("node saved");
+  //   } else {
+  //     document.querySelector("#message").classList.remove('hidden');
+  //   }
 
-  }
+  // }
+
   function handleNodeShow() {
+    console.log("handleNo deShow -> nodeId", nodeId)
     props.redirect(nodeId, 'nodes');
   }
 
-  function handleCancel(event) {
-    event.preventDefault();
-    props.history.push(`/DashboardConfig`);
-  }
 
   function getNodeInfo() {
     const nodeForm = document.querySelector('#nodeForm');
@@ -188,9 +186,16 @@ function NodeConfig(props) {
   //   checkFields(newcontroller, inputs, controllerForm)
   // }
 
-  async function createNode(info){
-    const nodeDB= await props.createNode(info);
+  async function createNode(info) {
+    const nodeDB = await props.createNode(info);
     console.log("createNode -> nodeDB", nodeDB)
+    if (nodeDB.value === true) {
+      document.querySelector('#message').classList.remove('hidden');
+      document.querySelector("#message").classList.add("message-div");
+      setNodeId(nodeDB.id)
+    } else {
+
+    }
   };
 
   // useEffect(() => {
@@ -204,7 +209,7 @@ function NodeConfig(props) {
 
   return (
     <div className="NodeConfig config-body" >
-    
+
       <div className="config-main">
 
         <form id="nodeForm" className="NodeConfig config-form" >
@@ -249,12 +254,13 @@ function NodeConfig(props) {
         <button type="submit" id="createNode" className="config-button config-submit" onClick={handleSubmit} disabled> Create Node</button>
       </div>
 
-      <div id='message' className="hidden"> */}
+       */}
+        <div id='message' className="hidden">
 
-        {/* <p>Node already Exist, redirct to node page?</p>
-        <button id="yes" className="config-button" onClick={handleNodeShow} >Yes</button>
-        <button id="no" className="config-button" onClick={handleCancel} >No</button>
-      </div> */}
+          <p className="message-text">Node already Exist, redirct to node page?</p>
+          <button id="yes" className="config-button message-button2" onClick={handleNodeShow} >Yes</button>
+          <button id="no" className="config-button message-button1" onClick={handleCancel} >No</button>
+        </div>
       </div>
 
 
