@@ -1,19 +1,23 @@
 import React, { useState, useEffect, useReducer } from "react";
-import { Node } from "../../js/requests";
+import { Node, Device } from "../../js/requests";
+
+import DeviceConfig from './DeviceConfig';
+import SensorConfig from './SensorConfig'
+import ControllerConfig from "./ControllerConfig";
+import { render } from "react-dom";
 
 function NodeConfig(props) {
 
   const { foundNodes, cancel } = props
 
-  // const [foundNodes, setFoundNodes] = useState(foundNodes);
   const [nodeId, setNodeId] = useState(null);
-  // const { nodeId } = props;
-
   const [node, setNode] = useState('');
   const [deviceList, setDeviceList] = useState(null);
   const [count, setCount] = useState(0);
   const [device, setDevice] = useState('');
-  const [configView, setConfigView] = useState([])
+  const [configView, setConfigView] = useState("")
+
+  const [deviceCount, setDeviceCount] = useState(0)
   const [sensorCount, setSensorCount] = useState(0);
   const [controllerCount, setControllerCount] = useState(0);
 
@@ -23,7 +27,7 @@ function NodeConfig(props) {
 
   function handleCancel(event) {
     event.preventDefault();
-    props.handleCancel();
+    cancel();
   }
 
   // Change modes
@@ -46,19 +50,14 @@ function NodeConfig(props) {
     switch (next.next) {
       case 'node':
         return getNodeInfo();
-      //   case 'device':
-      //     return getDeviceInfo();
-      //   case 'sensor':
-      //     return getSensorInfo();
-      //   case 'controller':
-      //     return getControllerInfo()
+      case 'device':
+        return getDeviceInfo();
+      case 'sensor':
+        return getSensorInfo();
+      case 'controller':
+        return getControllerInfo()
     }
   };
-
-  // async function findLocalNodes() {
-  //   const nodes = await Node.searchForNodes();
-  //   setFoundNodes(nodes);
-  // }
 
   function handlePickNode(event) {
     const { target } = event;
@@ -92,8 +91,8 @@ function NodeConfig(props) {
       switch (next.next) {
         case 'node':
           return createNode(info);
-        // case 'device':
-        //   return createDevice(info);
+        case 'device':
+          return createDevice(info);
         // case 'sensor':
         //   return sensorNext(info);
         // case 'controller':
@@ -102,22 +101,29 @@ function NodeConfig(props) {
     }
   }
 
-  // async function checkIfNodeExist(node) {
-  //   const result = await Node.CheckIfNodeExist(node);
-  //   setNodeId(result.id);
-  //   if (result.value === 'false') {
-  //     console.log("node saved");
-  //   } else {
-  //     document.querySelector("#message").classList.remove('hidden');
-  //   }
-
-  // }
-
   function handleNodeShow() {
-    console.log("handleNo deShow -> nodeId", nodeId)
     props.redirect(nodeId, 'nodes');
   }
 
+  function handleNo() {
+    document.querySelector('#message').classList.add('hidden');
+    document.querySelector("#message").classList.remove("message-div");
+    document.querySelector('#form').classList.add('hidden');
+    document.querySelector("#form").classList.remove("config-form");
+    document.querySelector("#next").disabled = true;
+  }
+
+  async function getNode(nodeId) {
+    const deviceInfo = await Device.getDevicesFromNodeById(nodeId);
+    console.log("getNode -> deviceInfo", deviceInfo)
+    document.querySelector('#nodeForm').classList.add('hidden');
+    document.querySelector("#nodeForm").classList.remove("config-form");
+    setDeviceList(deviceInfo);
+    setNode(node);
+    renderDevice();
+  };
+
+  // get Info from Forms
 
   function getNodeInfo() {
     const nodeForm = document.querySelector('#nodeForm');
@@ -135,72 +141,87 @@ function NodeConfig(props) {
     checkFields(newNode, inputs, nodeForm);
   };
 
-  // get Info from Forms
-  // function getDeviceInfo() {
-  //   const deviceForm = document.querySelector('#deviceForm');
-  //   const inputs = deviceForm.querySelectorAll('input');
-  //   const deviceInfo = deviceList[count];
-  //   const formData = new FormData(deviceForm);
-  //   const newDevice = {
-  //     node_id: node.id,
-  //     name: deviceInfo.name,
-  //     type: deviceInfo.type,
-  //     description: formData.get("description"),
-  //     active: (formData.get(`active`) === "on") ? true : false,
-  //   };
-  //   checkFields(newDevice, inputs, deviceForm)
-  // }
+  function getDeviceInfo() {
+    const deviceForm = document.querySelector('#deviceForm');
+    const inputs = deviceForm.querySelectorAll('input');
+    const deviceInfo = deviceList[count];
+    const formData = new FormData(deviceForm);
+    const newDevice = {
+      node_id: node.id,
+      name: deviceInfo.name,
+      type: deviceInfo.type,
+      description: formData.get("description"),
+      active: (formData.get(`active`) === "on") ? true : false,
+    };
+    checkFields(newDevice, inputs, deviceForm)
+  }
 
-  // function getSensorInfo() {
-  //   const sensorForm = document.querySelector("#sensorForm");
-  //   const inputs = sensorForm.querySelectorAll('input');
-  //   const sensorInfo = deviceList[count].sensors[sensorCount];
-  //   const formData = new FormData(sensorForm);
-  //   const newSensor = {
-  //     device_id: device.id,
-  //     name: sensorInfo.name,
-  //     type: sensorInfo.type,
-  //     location: node.location,
-  //     description: formData.get('description'),
-  //     min: sensorInfo.min,
-  //     max: sensorInfo.max,
-  //     unit: formData.get('unit'),
-  //     active: (formData.get(`active`) === "on") ? true : false,
-  //   }
-  //   checkFields(newSensor, inputs, sensorForm)
-  // }
+  function getSensorInfo() {
+    const sensorForm = document.querySelector("#sensorForm");
+    const inputs = sensorForm.querySelectorAll('input');
+    const sensorInfo = deviceList[count].sensors[sensorCount];
+    const formData = new FormData(sensorForm);
+    const newSensor = {
+      device_id: device.id,
+      name: sensorInfo.name,
+      type: sensorInfo.type,
+      location: node.location,
+      description: formData.get('description'),
+      min: sensorInfo.min,
+      max: sensorInfo.max,
+      unit: formData.get('unit'),
+      active: (formData.get(`active`) === "on") ? true : false,
+    }
+    checkFields(newSensor, inputs, sensorForm)
+  }
 
-  // function getControllerInfo() {
-  //   const controllerForm = document.querySelector('#controllerForm');
-  //   const inputs = controllerForm.querySelectorAll('input');
-  //   const controllerInfo = deviceList[count].controllers[controllerCount];
-  //   const formData = new FormData(controllerForm);
-  //   const newcontroller = {
-  //     device_id: device.id,
-  //     location: node.location,
-  //     name: controllerInfo.name,
-  //     type: controllerInfo.type,
-  //     description: formData.get("description"),
-  //     active: (formData.get(`active`) === "on") ? true : false,
-  //   };
-  //   checkFields(newcontroller, inputs, controllerForm)
-  // }
+  function getControllerInfo() {
+    const controllerForm = document.querySelector('#controllerForm');
+    const inputs = controllerForm.querySelectorAll('input');
+    const controllerInfo = deviceList[count].controllers[controllerCount];
+    const formData = new FormData(controllerForm);
+    const newcontroller = {
+      device_id: device.id,
+      location: node.location,
+      name: controllerInfo.name,
+      type: controllerInfo.type,
+      description: formData.get("description"),
+      active: (formData.get(`active`) === "on") ? true : false,
+    };
+    checkFields(newcontroller, inputs, controllerForm)
+  }
+
+  // Render Views
+
+  function renderDevice() {
+    console.log('renderDevice')
+    if (node != '') {
+      dispatch({ type: 'device' });
+      setConfigView(<DeviceConfig deviceList={deviceList} node={node} count={deviceCount} />)
+    }
+  };
 
   async function createNode(info) {
     const nodeDB = await props.createNode(info);
-    console.log("createNode -> nodeDB", nodeDB)
     if (nodeDB.value === true) {
       document.querySelector('#message').classList.remove('hidden');
       document.querySelector("#message").classList.add("message-div");
       setNodeId(nodeDB.id)
     } else {
-
+      getNode(nodeDB);
     }
   };
 
-  // useEffect(() => {
-  //   findLocalNodes();
-  // }, [])
+  async function createDevice(info) {
+    const deviceDb = await props.createDevice(info);
+    setDevice(deviceDb);
+    document.querySelector('#deviceDiv').classList.add("hidden")
+    // renderSensor(deviceDb);
+  }
+
+
+
+
 
   if (foundNodes === null) {
     return "Searching..."
@@ -212,7 +233,7 @@ function NodeConfig(props) {
 
       <div className="config-main">
 
-        <form id="nodeForm" className="NodeConfig config-form" >
+        <form id="nodeForm" className="config-form" >
           <h3 className="config-header">Node Configure</h3>
 
           <label htmlFor="name"> Name: </label>
@@ -248,21 +269,16 @@ function NodeConfig(props) {
           </div>
         </form>
 
-        {/* <div>
-        <button type="cancel" id="cancel" className="config-button config-cancel" onClick={handleCancel}> Cancel</button>
+        {configView}
 
-        <button type="submit" id="createNode" className="config-button config-submit" onClick={handleSubmit} disabled> Create Node</button>
-      </div>
 
-       */}
         <div id='message' className="hidden">
 
           <p className="message-text">Node already Exist, redirct to node page?</p>
           <button id="yes" className="config-button message-button2" onClick={handleNodeShow} >Yes</button>
-          <button id="no" className="config-button message-button1" onClick={handleCancel} >No</button>
+          <button id="no" className="config-button message-button1" onClick={handleNo} >No</button>
         </div>
       </div>
-
 
       <div className="config-deivce-bottom">
 

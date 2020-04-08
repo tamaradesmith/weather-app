@@ -11,24 +11,22 @@ function DashboardConfig(props) {
   const [currentView, setCurrentView] = useState(null);
 
   // node States
-  const [foundNodes, setFoundNodes] = useState(null); // nodes on network
-  const [nodeId, setNodeId] = useState(1);
-  const [nodes, setNodes] = useState([])
+  const [foundLocalNodes, setFoundLocalNodes] = useState([]); // nodes on network
+  const [nodeId, setNodeId] = useState(1);  //selected node ID
+  const [nodes, setNodes] = useState([]);   // node in DB;
 
   async function getAllNodes() {
     const getNodes = await Node.getNodes()
     setNodes(getNodes)
-    setCurrentView(<NodeIndex nodes={getNodes} findLocalNodes={findLocalNodes} getDeviceInfo={getDevicesOnNode} cancel={handleCancel} />)
+    setCurrentView(<NodeIndex nodes={getNodes} findLocalNodes={findLocalNodes} getDeviceInfo={getDevicesOnNode} />)
   }
 
   async function findLocalNodes() {
     setCurrentView(<Spinner />)
     const nodes = await Node.searchForNodes();
-    setFoundNodes(nodes);
-    setCurrentView(<NodeConfig createNode={createNode} foundNodes={nodes} redirect={redirectToShow} />)
+    setFoundLocalNodes(nodes);
+    setCurrentView(<NodeConfig createNode={createNode} foundNodes={nodes} redirect={redirectToShow} cancel={handleCancel} />)
   }
-
-
 
   async function getDevicesOnNode() {
     setCurrentView(<DeviceConfig nodeId={nodeId} createDevice={createDevice} createSensor={createSensor} createController={createController} redirect={redirectToShow} />)
@@ -38,13 +36,13 @@ function DashboardConfig(props) {
     props.history.push(`/node/${id}`)
   };
 
-  function handleCancel(){
-    setCurrentView(<NodeIndex nodes={nodes} findLocalNodes={findLocalNodes} getDeviceInfo={getDevicesOnNode} />)
+  function handleCancel() {
+    getAllNodes();
   }
 
   async function createNode(info) {
-   const result = await Node.create(info);
-   return result;
+    const result = await Node.create(info);
+    return result;
   }
 
   async function createDevice(info) {
@@ -70,11 +68,15 @@ function DashboardConfig(props) {
     getAllNodes()
   }, [])
 
+  useEffect(()=>{
+    console.log("dbNodes ",nodes);
+  },[nodes]);
+
   return (
     <main className="ConfigNodes config">
 
       {currentView}
- 
+
       {/* <NodeConfig createNode={createNode} cancel={handleCancel} redirect={redirectToShow} foundNodes={[{
         ip: '192.168.1.66',
         name: 'j400t',

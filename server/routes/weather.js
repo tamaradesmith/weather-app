@@ -34,12 +34,9 @@ router.post('/sensors/readings', (req, res) => {
 // get Config Devices 
 router.get('/node/:id/devices/config', async (req, res) => {
   const id = req.params.id;
-  // const devicesXML = await NodeQuery.getDeviceListOnNode(id);
-  const node = await NodeQuery.getNodeById(id);
-  const devicesXML = ""
-  const devices = await ConfigHelpers.getDevices(devicesXML)
-  // const saveDevice = await NodeQuery.saveDevice(devices, id);// saving Devices
-  // const NodeDependent = await NodeQuery.getAllNodeDependent(id);
+  const devicesXML = await NodeQuery.getDeviceListOnNode(id);
+  // const node = await NodeQuery.getNodeById(id);
+  const devices = ConfigHelpers.getDevices(devicesXML);
   res.send(devices);
 })
 
@@ -87,21 +84,13 @@ router.get('/nodes', async (req, res) => {
 
 router.get('/nodes/search', async (req, res) => {
   const nodes = await NodeHelpers.searchForNodes();
-  console.log("nodes", nodes);
   res.send(nodes);
 });
 
 router.post('/node/create', async (req, res) => {
   const nodeInfo = req.body;
   const existing = await NodeQuery.nodeExist(nodeInfo);
-  console.log("existing", existing)
-  if (existing.value != true){
-    const node = await NodeQuery.create(nodeInfo);
-    node.value = false; 
-    res.send(node)
-  } else {
-    res.send(existing);
-  }
+  res.send(existing);
 })
 
 router.get('/node/:id', async (req, res) => {
@@ -128,7 +117,7 @@ router.get('/node/:id/devices/sensors', async (req, res) => {
 router.post('/nodes/active', async (req, res) => {
   const info = req.body;
   const node = await NodeQuery.updateActive(info.nodes);
-  console.log("node", node)
+  // console.log("node", node)
   res.send("good")
 })
 

@@ -32,7 +32,6 @@ module.exports = {
           sensorInfo.unit = " ";
         }
       })
-      console.log("getSensors -> sensorInfo", sensorInfo)
       return sensorInfo;
     })
   },

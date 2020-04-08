@@ -9,7 +9,7 @@
   --active-colour: #75abdd;
 }
 body {
-  font-size: 2em;
+  font-size: 1.6em;
   color: var(--primary-colour);
   padding: 0.25em;
 }
