@@ -35,7 +35,6 @@ router.post('/sensors/readings', (req, res) => {
 router.get('/node/:id/devices/config', async (req, res) => {
   const id = req.params.id;
   const devicesXML = await NodeQuery.getDeviceListOnNode(id);
-  // const node = await NodeQuery.getNodeById(id);
   const devices = ConfigHelpers.getDevices(devicesXML);
   res.send(devices);
 })
@@ -63,11 +62,11 @@ router.post(`/:type/:id/update`, async (req, res) => {
 
 //  Get Existing
 
-router.get('/:type/existing', async (req, res) => {
-  const type = req.params.type;
-  const list = await NodeQuery.getExisting(type);
-  res.send(list);
-})
+// router.get('/:type/existing', async (req, res) => {
+//   const type = req.params.type;
+//   const list = await NodeQuery.getExisting(type);
+//   res.send(list);
+// })
 
 
 // Node Routes
@@ -144,7 +143,9 @@ router.get('/devices', async (req, res) => {
 
 router.post('/sensor/create', async (req, res) => {
   const info = req.body;
+  console.log("info", info)
   const sensor = await SensorQuery.create(info);
+  console.log("sensor", sensor)
   res.send(sensor)
 })
 

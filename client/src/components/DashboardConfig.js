@@ -18,18 +18,18 @@ function DashboardConfig(props) {
   async function getAllNodes() {
     const getNodes = await Node.getNodes()
     setNodes(getNodes)
-    setCurrentView(<NodeIndex nodes={getNodes} findLocalNodes={findLocalNodes} getDeviceInfo={getDevicesOnNode} />)
+    setCurrentView(<NodeIndex nodes={getNodes} findLocalNodes={findLocalNodes} getDeviceInfo={getDevicesOnNode}  />)
   }
 
   async function findLocalNodes() {
     setCurrentView(<Spinner />)
     const nodes = await Node.searchForNodes();
     setFoundLocalNodes(nodes);
-    setCurrentView(<NodeConfig createNode={createNode} foundNodes={nodes} redirect={redirectToShow} cancel={handleCancel} />)
+    setCurrentView(<NodeConfig createNode={createNode} createDevice={createDevice} createSensor={createSensor} createController={createController} foundNodes={nodes} redirect={redirectToShow} cancel={handleCancel} />)
   }
 
   async function getDevicesOnNode() {
-    setCurrentView(<DeviceConfig nodeId={nodeId} createDevice={createDevice} createSensor={createSensor} createController={createController} redirect={redirectToShow} />)
+    setCurrentView(<DeviceConfig nodeId={nodeId} />)
   }
 
   function redirectToShow(id) {
@@ -51,6 +51,7 @@ function DashboardConfig(props) {
   }
   async function createSensor(info) {
     const result = await Sensor.create(info);
+    console.log("createSensor -> result", result)
     return result
   }
 

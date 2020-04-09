@@ -10,13 +10,13 @@ function NodeConfig(props) {
 
   const { foundNodes, cancel } = props
 
-  const [nodeId, setNodeId] = useState(null);
+  const [nodeId, setNodeId] = useState();
   const [node, setNode] = useState('');
   const [deviceList, setDeviceList] = useState(null);
-  const [count, setCount] = useState(0);
   const [device, setDevice] = useState('');
   const [configView, setConfigView] = useState("")
-
+  
+  const [count, setCount] = useState(0);
   const [deviceCount, setDeviceCount] = useState(0)
   const [sensorCount, setSensorCount] = useState(0);
   const [controllerCount, setControllerCount] = useState(0);
@@ -93,10 +93,10 @@ function NodeConfig(props) {
           return createNode(info);
         case 'device':
           return createDevice(info);
-        // case 'sensor':
-        //   return sensorNext(info);
-        // case 'controller':
-        //   return controllerNext(info);
+        case 'sensor':
+          return sensorNext(info);
+        case 'controller':
+          return controllerNext(info);
       }
     }
   }
@@ -113,14 +113,12 @@ function NodeConfig(props) {
     document.querySelector("#next").disabled = true;
   }
 
-  async function getNode(nodeId) {
-    const deviceInfo = await Device.getDevicesFromNodeById(nodeId);
-    console.log("getNode -> deviceInfo", deviceInfo)
+  async function getNode(id) {
+    const deviceInfo = await Device.getDevicesFromNodeById(id);
     document.querySelector('#nodeForm').classList.add('hidden');
     document.querySelector("#nodeForm").classList.remove("config-form");
     setDeviceList(deviceInfo);
-    setNode(node);
-    renderDevice();
+    renderDevice(deviceInfo);
   };
 
   // get Info from Forms
@@ -147,7 +145,7 @@ function NodeConfig(props) {
     const deviceInfo = deviceList[count];
     const formData = new FormData(deviceForm);
     const newDevice = {
-      node_id: node.id,
+      node_id: nodeId,
       name: deviceInfo.name,
       type: deviceInfo.type,
       description: formData.get("description"),
@@ -193,39 +191,102 @@ function NodeConfig(props) {
 
   // Render Views
 
-  function renderDevice() {
-    console.log('renderDevice')
-    if (node != '') {
+  function renderDevice(list) {
+    if (list.length > 0) {
       dispatch({ type: 'device' });
-      setConfigView(<DeviceConfig deviceList={deviceList} node={node} count={deviceCount} />)
-    }
+      setConfigView(<DeviceConfig deviceList={list} node={node} count={deviceCount} />);
+    };
   };
+
+  function renderSensor(device) {
+    if (deviceList[count].sensors.length === 0) {
+      renderControllers();
+      console.log('to Controller')
+    } else {
+      dispatch({ type: "sensor" })
+      setConfigView(<SensorConfig device={device} node={node} sensorList={deviceList[count].sensors} sensorCount={sensorCount} />);
+    };
+  };
+
+  function renderControllers() {
+    if (deviceList[count].controllers.length === 0) {
+      nextDevice()
+    } else {
+      dispatch({ type: "controller" })
+      setConfigView(<ControllerConfig device={device} node={node} controllerList={deviceList[count].controllers} controllerCount={controllerCount} />);
+    };
+  };
+
+  // Create Functions
 
   async function createNode(info) {
     const nodeDB = await props.createNode(info);
+    setNodeId(nodeDB.id);
+    const nodeInfo = await Node.getNode(nodeDB.id);
+    setNode(nodeInfo);
     if (nodeDB.value === true) {
       document.querySelector('#message').classList.remove('hidden');
       document.querySelector("#message").classList.add("message-div");
-      setNodeId(nodeDB.id)
     } else {
-      getNode(nodeDB);
-    }
+      setTimeout(() => {
+        getNode(nodeDB.id);
+      }, 1000);
+    };
   };
 
   async function createDevice(info) {
     const deviceDb = await props.createDevice(info);
     setDevice(deviceDb);
-    document.querySelector('#deviceDiv').classList.add("hidden")
-    // renderSensor(deviceDb);
+    setDeviceCount(deviceCount + 1);
+    // document.querySelector('#deviceDiv').classList.add("hidden")
+    renderSensor(deviceDb);
+  };
+
+
+  // Next functions
+
+  async function sensorNext(sensor) {
+    const newSensor = await props.createSensor(sensor);
+    // console.log("sensorNext -> newSensor", newSensor)
+    (sensorCount + 1 < deviceList[count].sensors.length) ? setSensorCount(sensorCount + 1) : renderControllers();
+    renderSensor(device)
+    return sensorCount;
+  };
+
+  function nextDevice() {
+    if (count + 1 >= deviceList.length) {
+      props.redirect(node.id);
+    } else {
+      document.querySelector('#deviceDiv').classList.remove("hidden")
+      setConfigView([]);
+      dispatch({ type: "device" })
+      setSensorCount(0);
+      setControllerCount(0);
+      setCount(count + 1);
+    };
+  };
+
+  async function controllerNext(controller) {
+    const newController = await props.createController(controller);
+    (controllerCount + 1 < deviceList[count].controllers.length) ? setControllerCount(controllerCount + 1) : nextDevice()
+    return newController;
   }
 
+  useEffect(() => {
+    console.log("nodeID ", nodeId)
+  }, [nodeId])
 
+  useEffect(() => {
+    console.log("deviceList ", deviceList)
+  }, [deviceList])
 
-
+  useEffect(() => {
+    console.log("Node ", node)
+  }, [node]);
 
   if (foundNodes === null) {
     return "Searching..."
-  }
+  };
 
 
   return (
@@ -271,13 +332,12 @@ function NodeConfig(props) {
 
         {configView}
 
-
         <div id='message' className="hidden">
-
           <p className="message-text">Node already Exist, redirct to node page?</p>
           <button id="yes" className="config-button message-button2" onClick={handleNodeShow} >Yes</button>
           <button id="no" className="config-button message-button1" onClick={handleNo} >No</button>
         </div>
+
       </div>
 
       <div className="config-deivce-bottom">

@@ -129,10 +129,13 @@ module.exports = {
   },
   async getDeviceListOnNode(id) {
     const ip = await knex("nodes").select("ipaddress").where({ id: id });
-    const deviceXML = await axios.get(`http://${ip[0].ipaddress}/devicelist.xml`)
-      .catch(err => {
-        console.log(err.message)
-      });
+    console.log("getDeviceListOnNode -> ip", ip)
+    const deviceXML = await axios.get(`http://${ip[0].ipaddress}/devicelist.xml`
+    )
+    .catch(err => {
+      console.log(err.message)
+    });
+    console.log("getDeviceListOnNode -> deviceXML", deviceXML)
     return deviceXML.data;
   },
   async getAllNodeDependent(id) {
