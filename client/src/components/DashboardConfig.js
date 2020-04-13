@@ -18,8 +18,10 @@ function DashboardConfig(props) {
   async function getAllNodes() {
     const getNodes = await Node.getNodes()
     setNodes(getNodes)
-    setCurrentView(<NodeIndex nodes={getNodes} findLocalNodes={findLocalNodes} getDeviceInfo={getDevicesOnNode}  />)
+    setCurrentView(<NodeIndex nodes={getNodes} findLocalNodes={findLocalNodes}   />)
   }
+
+
 
   async function findLocalNodes() {
     setCurrentView(<Spinner />)
@@ -28,9 +30,9 @@ function DashboardConfig(props) {
     setCurrentView(<NodeConfig createNode={createNode} createDevice={createDevice} createSensor={createSensor} createController={createController} foundNodes={nodes} redirect={redirectToShow} cancel={handleCancel} />)
   }
 
-  async function getDevicesOnNode() {
-    setCurrentView(<DeviceConfig nodeId={nodeId} />)
-  }
+  // async function getDevicesOnNode() {
+  //   setCurrentView(<DeviceConfig nodeId={nodeId} />)
+  // }
 
   function redirectToShow(id) {
     props.history.push(`/node/${id}`)
@@ -51,7 +53,6 @@ function DashboardConfig(props) {
   }
   async function createSensor(info) {
     const result = await Sensor.create(info);
-    console.log("createSensor -> result", result)
     return result
   }
 
@@ -69,16 +70,16 @@ function DashboardConfig(props) {
     getAllNodes()
   }, [])
 
-  useEffect(()=>{
-    console.log("dbNodes ",nodes);
-  },[nodes]);
+  // useEffect(()=>{
+  //   console.log("dbNodes ",nodes);
+  // },[nodes]);
 
   return (
     <main className="ConfigNodes config">
 
-      {currentView}
+      {/* {currentView} */}
 
-      {/* <NodeConfig createNode={createNode} cancel={handleCancel} redirect={redirectToShow} foundNodes={[{
+      <NodeConfig createNode={createNode} createDevice={createDevice} createSensor={createSensor} createController={createController}  redirect={redirectToShow} cancel={handleCancel} foundNodes={[{
         ip: '192.168.1.66',
         name: 'j400t',
         description: 'Q400 Jig',
@@ -92,7 +93,7 @@ function DashboardConfig(props) {
         location: "Tammy's Apt",
         type: 'Core Stub'
       }]
-} /> */}
+} />
 
     </main>
   )

@@ -65,7 +65,6 @@ module.exports = {
     const nodeinfo = await knex(`nodes`).insert([
       info
     ]).returning("*");
-    console.log("create -> nodeinfo", nodeinfo)
     return nodeinfo[0];
   },
   async update(type, info, id) {
@@ -118,30 +117,26 @@ module.exports = {
     return item[0];
   },
   async nodeExist(node) {
-    let result = await knex("nodes").select("id").where({ name: node.name }).catch(error =>{})
-    if (result.length === 0) {
+    // let result = await knex("nodes").select("id").where({ name: node.name }).catch(error =>{})
+    // if (result.length === 0) {
       const newNode = await knex("nodes").insert(node).returning('id').catch(error=> {});
-      console.log("nodeExist -> newNode", newNode)
       return  { value: false, id: newNode[0] };
-    } else {
-      return { value: true, id: result[0].id };
-    };
+    // } else {
+    //   return { value: true, id: result[0].id };
+    // };
   },
   async getDeviceListOnNode(id) {
     const ip = await knex("nodes").select("ipaddress").where({ id: id });
-    console.log("getDeviceListOnNode -> ip", ip)
     const deviceXML = await axios.get(`http://${ip[0].ipaddress}/devicelist.xml`
     )
     .catch(err => {
       console.log(err.message)
     });
-    console.log("getDeviceListOnNode -> deviceXML", deviceXML)
     return deviceXML.data;
   },
   async getAllNodeDependent(id) {
     const node = await this.getNodeById(id);
     const devices = await DeviceQuery.getAllDeviceDependentByNodeId(id);
-    console.log("TCL: getAllNodeDependent -> devices", devices)
     node.devices = devices;
     return node;
   },

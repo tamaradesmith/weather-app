@@ -53,7 +53,6 @@ const Node = {
     return res.json();
   },
   async updateActiveStates(info) {
-    console.log("updateActiveStates -> info", info)
     const res = await fetch(`${BASE_URL}/nodes/active`, {
       method: 'POST',
       headers: {
@@ -156,7 +155,7 @@ const Controller = {
 const User = {
   async user() {
     const res = await fetch(`${BASE_URL}/user`)
-    console.log("user -> res", res.text())
+    // console.log("user -> res", res.text())
 
   }
 }

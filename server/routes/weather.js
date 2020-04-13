@@ -143,7 +143,6 @@ router.get('/devices', async (req, res) => {
 
 router.post('/sensor/create', async (req, res) => {
   const info = req.body;
-  console.log("info", info)
   const sensor = await SensorQuery.create(info);
   console.log("sensor", sensor)
   res.send(sensor)

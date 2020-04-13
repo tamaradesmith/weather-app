@@ -15,10 +15,9 @@ function NodeConfig(props) {
   const [deviceList, setDeviceList] = useState(null);
   const [device, setDevice] = useState('');
   const [configView, setConfigView] = useState("")
-  
-  const [count, setCount] = useState(0);
+
   const [deviceCount, setDeviceCount] = useState(0)
-  const [sensorCount, setSensorCount] = useState(0);
+  const [sensorCount, setSensorCount] = useState(-1);
   const [controllerCount, setControllerCount] = useState(0);
 
   const initialState = { next: 'node' }
@@ -67,14 +66,12 @@ function NodeConfig(props) {
         document.querySelector("#location").value = foundNodes[index].location;
         document.querySelector("#description").value = foundNodes[index].description;
         document.querySelector("#type").value = foundNodes[index].type;
-      }
-    })
+      };
+    });
     document.querySelector("#form").classList.remove("hidden");
     document.querySelector("#form").classList.add("config-form");
     document.querySelector("#next").disabled = false;
-  }
-
-
+  };
 
   async function checkFields(info, inputs, target) {
     let flag = true;
@@ -97,13 +94,13 @@ function NodeConfig(props) {
           return sensorNext(info);
         case 'controller':
           return controllerNext(info);
-      }
-    }
-  }
+      };
+    };
+  };
 
   function handleNodeShow() {
     props.redirect(nodeId, 'nodes');
-  }
+  };
 
   function handleNo() {
     document.querySelector('#message').classList.add('hidden');
@@ -118,7 +115,7 @@ function NodeConfig(props) {
     document.querySelector('#nodeForm').classList.add('hidden');
     document.querySelector("#nodeForm").classList.remove("config-form");
     setDeviceList(deviceInfo);
-    renderDevice(deviceInfo);
+    // renderDevice();
   };
 
   // get Info from Forms
@@ -142,7 +139,7 @@ function NodeConfig(props) {
   function getDeviceInfo() {
     const deviceForm = document.querySelector('#deviceForm');
     const inputs = deviceForm.querySelectorAll('input');
-    const deviceInfo = deviceList[count];
+    const deviceInfo = deviceList[deviceCount];
     const formData = new FormData(deviceForm);
     const newDevice = {
       node_id: nodeId,
@@ -157,7 +154,7 @@ function NodeConfig(props) {
   function getSensorInfo() {
     const sensorForm = document.querySelector("#sensorForm");
     const inputs = sensorForm.querySelectorAll('input');
-    const sensorInfo = deviceList[count].sensors[sensorCount];
+    const sensorInfo = deviceList[deviceCount].sensors[sensorCount];
     const formData = new FormData(sensorForm);
     const newSensor = {
       device_id: device.id,
@@ -176,7 +173,7 @@ function NodeConfig(props) {
   function getControllerInfo() {
     const controllerForm = document.querySelector('#controllerForm');
     const inputs = controllerForm.querySelectorAll('input');
-    const controllerInfo = deviceList[count].controllers[controllerCount];
+    const controllerInfo = deviceList[deviceCount].controllers[controllerCount];
     const formData = new FormData(controllerForm);
     const newcontroller = {
       device_id: device.id,
@@ -191,29 +188,29 @@ function NodeConfig(props) {
 
   // Render Views
 
-  function renderDevice(list) {
-    if (list.length > 0) {
+  function renderDevice() {
+    if (deviceList.length > 0 && deviceCount <= deviceList.length) {
       dispatch({ type: 'device' });
-      setConfigView(<DeviceConfig deviceList={list} node={node} count={deviceCount} />);
+      setConfigView(<DeviceConfig deviceList={deviceList} node={node} count={deviceCount} />);
     };
   };
 
   function renderSensor(device) {
-    if (deviceList[count].sensors.length === 0) {
+    console.log("renderSensor -> device", device)
+    if (deviceList[deviceCount].sensors.length === 0) {
       renderControllers();
-      console.log('to Controller')
     } else {
-      dispatch({ type: "sensor" })
-      setConfigView(<SensorConfig device={device} node={node} sensorList={deviceList[count].sensors} sensorCount={sensorCount} />);
+      console.log("indoe render senssor")
+      setConfigView(<SensorConfig device={device} node={node} sensorList={deviceList[deviceCount].sensors} sensorCount={sensorCount} />);
     };
   };
 
   function renderControllers() {
-    if (deviceList[count].controllers.length === 0) {
-      nextDevice()
+    if (deviceList[deviceCount].controllers.length === 0) {
+      nextDevice();
     } else {
-      dispatch({ type: "controller" })
-      setConfigView(<ControllerConfig device={device} node={node} controllerList={deviceList[count].controllers} controllerCount={controllerCount} />);
+      dispatch({ type: "controller" });
+      setConfigView(<ControllerConfig device={device} node={node} controllerList={deviceList[deviceCount].controllers} controllerCount={controllerCount} />);
     };
   };
 
@@ -221,25 +218,30 @@ function NodeConfig(props) {
 
   async function createNode(info) {
     const nodeDB = await props.createNode(info);
-    setNodeId(nodeDB.id);
+    setNodeId(await nodeDB.id);
     const nodeInfo = await Node.getNode(nodeDB.id);
     setNode(nodeInfo);
     if (nodeDB.value === true) {
       document.querySelector('#message').classList.remove('hidden');
       document.querySelector("#message").classList.add("message-div");
     } else {
-      setTimeout(() => {
-        getNode(nodeDB.id);
-      }, 1000);
+      getNode(nodeDB.id);
     };
   };
 
   async function createDevice(info) {
     const deviceDb = await props.createDevice(info);
-    setDevice(deviceDb);
-    setDeviceCount(deviceCount + 1);
+    console.log("createDevice -> typeof (device.id)", typeof (parseFloat(deviceDb.id)))
+    if (typeof (parseFloat(deviceDb.id)) === "number") {
+      console.log("createDevice -> deviceDb", deviceDb)
+      setDevice(await deviceDb);
+      dispatch({ type: "sensor" })
+      setSensorCount(0);
+    } else {
+      console.log("error :", deviceCount)
+    };
     // document.querySelector('#deviceDiv').classList.add("hidden")
-    renderSensor(deviceDb);
+    // renderSensor(deviceDb);
   };
 
 
@@ -247,43 +249,55 @@ function NodeConfig(props) {
 
   async function sensorNext(sensor) {
     const newSensor = await props.createSensor(sensor);
-    // console.log("sensorNext -> newSensor", newSensor)
-    (sensorCount + 1 < deviceList[count].sensors.length) ? setSensorCount(sensorCount + 1) : renderControllers();
-    renderSensor(device)
-    return sensorCount;
+    if (parseInt(sensorCount) + 1 < deviceList[deviceCount].sensors.length) {
+      setSensorCount(sensorCount + 1)
+    } else {
+      renderControllers();
+    }
   };
 
+
+
   function nextDevice() {
-    if (count + 1 >= deviceList.length) {
+    console.log("nextDevice -> deviceCount + 1 >= deviceList.length", deviceCount + 1 >= deviceList.length);
+    console.log("nextDevice -> deviceCount", deviceList);
+    if (deviceCount + 1 >= deviceList.length) {
       props.redirect(node.id);
     } else {
-      document.querySelector('#deviceDiv').classList.remove("hidden")
-      setConfigView([]);
       dispatch({ type: "device" })
-      setSensorCount(0);
-      setControllerCount(0);
-      setCount(count + 1);
+      setDeviceCount(deviceCount + 1)
+      // renderDevice();
     };
   };
 
   async function controllerNext(controller) {
     const newController = await props.createController(controller);
-    (controllerCount + 1 < deviceList[count].controllers.length) ? setControllerCount(controllerCount + 1) : nextDevice()
+    (controllerCount + 1 < deviceList[deviceCount].controllers.length) ? setControllerCount(controllerCount + 1) : nextDevice()
     return newController;
   }
 
-  useEffect(() => {
-    console.log("nodeID ", nodeId)
-  }, [nodeId])
 
   useEffect(() => {
-    console.log("deviceList ", deviceList)
-  }, [deviceList])
+    if (sensorCount > -1 &&
+      device != undefined) {
+      renderSensor(device);
+    } else {
+      setSensorCount(sensorCount);
+    }
+  }, [sensorCount]);
 
   useEffect(() => {
-    console.log("Node ", node)
-  }, [node]);
 
+    if (deviceList !== null) { 
+      renderDevice()
+     }
+  }, [deviceList]);
+
+  useEffect(() => {
+    if (deviceList !== null){
+      renderDevice();
+    }
+  }, [deviceCount])
   if (foundNodes === null) {
     return "Searching..."
   };
