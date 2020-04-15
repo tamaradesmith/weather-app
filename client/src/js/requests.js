@@ -146,15 +146,11 @@ const Controller = {
     })
     return res.json()
   },
-  // async getControllerTypes() {
-  //   const res = await fetch(`${BASE_URL}/controllers/types`)
-  //   return res.json();
-  // },
 }
 
 const User = {
   async user() {
-    const res = await fetch(`${BASE_URL}/user`)
+    // const res = await fetch(`${BASE_URL}/user`)
     // console.log("user -> res", res.text())
 
   }

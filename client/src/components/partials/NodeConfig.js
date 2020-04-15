@@ -4,7 +4,6 @@ import { Node, Device } from "../../js/requests";
 import DeviceConfig from './DeviceConfig';
 import SensorConfig from './SensorConfig'
 import ControllerConfig from "./ControllerConfig";
-import { render } from "react-dom";
 
 function NodeConfig(props) {
 
@@ -242,7 +241,7 @@ function NodeConfig(props) {
   // Next functions
 
   async function sensorNext(sensor) {
-    const newSensor = await props.createSensor(sensor);
+    await props.createSensor(sensor);
     if (parseInt(sensorCount) + 1 < deviceList[deviceCount].sensors.length) {
       setSensorCount(sensorCount + 1)
     } else {
@@ -260,14 +259,14 @@ function NodeConfig(props) {
   };
 
   async function controllerNext(controller) {
-    const newController = await props.createController(controller);
+    await props.createController(controller);
     (controllerCount + 1 < deviceList[deviceCount].controllers.length) ? setControllerCount(controllerCount + 1) : nextDevice()
-    return newController;
+
   }
 
   useEffect(() => {
     if (sensorCount > -1 &&
-      device != undefined) {
+      device !== undefined) {
       renderSensor();
     } else {
       setSensorCount(sensorCount);

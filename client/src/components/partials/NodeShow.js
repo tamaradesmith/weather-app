@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useReducer } from "react";
-import { Node, Device, Controller, Sensor } from "../../js/requests";
+import { Node, Device} from "../../js/requests";
 
 
 import NodeDetails from './NodeDetails'
@@ -10,7 +10,7 @@ import DeviceDetails from './DeviceDetails'
 function NodeShow(props) {
   const [node, setNode] = useState(null);
   const [devices, setDevices] = useState(null);
-  const [updates, setUpdates] = useState([]);
+  // const [updates, setUpdates] = useState([]);
   const [updateNode, setUpdateNode] = useState(null)
   const [updateDevice, setUpdateDevice] = useState([]);
   const [updateSensor, setUpdateSensor] = useState([]);
@@ -86,7 +86,7 @@ function NodeShow(props) {
   async function handleUpdate() {
     const body = {nodes: updateNode, devices: updateDevice, sensors: updateSensor, controllers: updateController}
     const result = await Node.updateActiveStates(body)
-    // console.log(body);
+    console.log("handleUpdate -> result", result)
   };
 
   function checkIfExistsInUpdate(newItem, existing) {

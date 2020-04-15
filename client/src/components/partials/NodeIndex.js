@@ -10,7 +10,7 @@ function NodeIndex(props) {
     props.findLocalNodes();
   }
 
-  function handleDeviceClick(){
+  function handleDeviceClick() {
     props.getDeviceInfo()
   }
 
@@ -26,16 +26,21 @@ function NodeIndex(props) {
         <h3>Location</h3>
         <p></p>
       </div>
-      {
-        nodes.map((node, index) => (
-          <div key={index} className="config-list">
-            <Link to={`/node/${node.id}`}>{node.name}</Link>
-            <p>{node.description}</p>
-            <p>{node.location} </p>
-            <button className="config-button">Update</button>
-          </div>
-        ))
-      }
+      <div className="show-div">
+        <div className="show-detail-div">
+
+          {
+            nodes.map((node, index) => (
+              <div key={index} className="config-list">
+                <Link to={`/node/${node.id}`}>{node.name}</Link>
+                <p>{node.description}</p>
+                <p>{node.location} </p>
+                <button className="config-button">Update</button>
+              </div>
+            ))
+          }
+        </div>
+      </div>
     </div>
   )
 }
