@@ -17,7 +17,7 @@ function SensorDetails(props) {
         <h3> Active</h3>
       </div>
 
-      <div className="show-div-sensor">
+      <div className="show-div">
         <div className="show-detail-div">
 
           {devices.map((device, index) => (

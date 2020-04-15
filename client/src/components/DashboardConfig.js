@@ -70,16 +70,13 @@ function DashboardConfig(props) {
     getAllNodes()
   }, [])
 
-  // useEffect(()=>{
-  //   console.log("dbNodes ",nodes);
-  // },[nodes]);
 
   return (
     <main className="ConfigNodes config">
 
-      {/* {currentView} */}
+      {currentView}
 
-      <NodeConfig createNode={createNode} createDevice={createDevice} createSensor={createSensor} createController={createController}  redirect={redirectToShow} cancel={handleCancel} foundNodes={[{
+      {/* <NodeConfig createNode={createNode} createDevice={createDevice} createSensor={createSensor} createController={createController}  redirect={redirectToShow} cancel={handleCancel} foundNodes={[{
         ip: '192.168.1.66',
         name: 'j400t',
         description: 'Q400 Jig',
@@ -93,7 +90,7 @@ function DashboardConfig(props) {
         location: "Tammy's Apt",
         type: 'Core Stub'
       }]
-} />
+} /> */}
 
     </main>
   )

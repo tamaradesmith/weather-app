@@ -195,12 +195,11 @@ function NodeConfig(props) {
     };
   };
 
-  function renderSensor(device) {
-    console.log("renderSensor -> device", device)
+  function renderSensor() {
     if (deviceList[deviceCount].sensors.length === 0) {
       renderControllers();
     } else {
-      console.log("indoe render senssor")
+      dispatch({ type: "sensor" })
       setConfigView(<SensorConfig device={device} node={node} sensorList={deviceList[deviceCount].sensors} sensorCount={sensorCount} />);
     };
   };
@@ -231,17 +230,12 @@ function NodeConfig(props) {
 
   async function createDevice(info) {
     const deviceDb = await props.createDevice(info);
-    console.log("createDevice -> typeof (device.id)", typeof (parseFloat(deviceDb.id)))
     if (typeof (parseFloat(deviceDb.id)) === "number") {
-      console.log("createDevice -> deviceDb", deviceDb)
       setDevice(await deviceDb);
-      dispatch({ type: "sensor" })
       setSensorCount(0);
     } else {
       console.log("error :", deviceCount)
     };
-    // document.querySelector('#deviceDiv').classList.add("hidden")
-    // renderSensor(deviceDb);
   };
 
 
@@ -253,20 +247,15 @@ function NodeConfig(props) {
       setSensorCount(sensorCount + 1)
     } else {
       renderControllers();
+      setSensorCount(-1);
     }
   };
 
-
-
   function nextDevice() {
-    console.log("nextDevice -> deviceCount + 1 >= deviceList.length", deviceCount + 1 >= deviceList.length);
-    console.log("nextDevice -> deviceCount", deviceList);
     if (deviceCount + 1 >= deviceList.length) {
       props.redirect(node.id);
     } else {
-      dispatch({ type: "device" })
       setDeviceCount(deviceCount + 1)
-      // renderDevice();
     };
   };
 
@@ -276,28 +265,27 @@ function NodeConfig(props) {
     return newController;
   }
 
-
   useEffect(() => {
     if (sensorCount > -1 &&
       device != undefined) {
-      renderSensor(device);
+      renderSensor();
     } else {
       setSensorCount(sensorCount);
     }
   }, [sensorCount]);
 
   useEffect(() => {
-
-    if (deviceList !== null) { 
+    if (deviceList !== null) {
       renderDevice()
-     }
+    }
   }, [deviceList]);
 
   useEffect(() => {
-    if (deviceList !== null){
+    if (deviceList !== null) {
       renderDevice();
     }
-  }, [deviceCount])
+  }, [deviceCount]);
+
   if (foundNodes === null) {
     return "Searching..."
   };
@@ -356,7 +344,9 @@ function NodeConfig(props) {
 
       <div className="config-deivce-bottom">
 
-        {/* <p>{count + 1} / {deviceList.length}</p> */}
+        {deviceList !== null ? (
+          <p>{deviceCount + 1} / {deviceList.length}</p>
+        ) : (null)}
         <button id="cancel" className="config-button config-cancel" onClick={handleCancel}>Cancel</button>
         <button id="next" className="config-button config-next" onClick={handleNext}  >Next</button>
 

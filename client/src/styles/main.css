@@ -382,11 +382,13 @@ input {
   background: var(--active-colour);
 }
 .show-div {
-  height: 239px;
+  height: 275px;
   overflow: hidden;
 }
 .show-detail-div {
-  max-height: 250px;
+  /* max-height: 250px; */
+  max-height: 100%;
+
   overflow-y: auto;
 }
 .show-node-check {

@@ -3,9 +3,7 @@ import React from 'react';
 function SensorConfig(props) {
 
   const { device, node, sensorList, sensorCount } = props;
-  // console.log("SensorConfig -> sensorList", sensorList)
-  // console.log("SensorConfig -> sensorCount", sensorCount)
-  // console.log("SensorConfig -> device", device);
+
 
   if (device === undefined) {
     console.log('loading')

@@ -39,18 +39,7 @@ router.get('/node/:id/devices/config', async (req, res) => {
   res.send(devices);
 })
 
-
-// CREATE
-// router.post('/:type/create', async (req, res) => {
-//   console.log("type", type)
-//   const type = req.params.type;
-//   const body = req.body;
-//   const status = await NodeQuery.create(type, body);
-//   console.log("TCL: nodeStatus", status);
-//   res.send(nodeStatus);
-// })
-
-// // UPDATE
+// UPDATE
 
 router.post(`/:type/:id/update`, async (req, res) => {
   const type = req.params.type;
@@ -60,23 +49,14 @@ router.post(`/:type/:id/update`, async (req, res) => {
   res.send(updateItem);
 })
 
-//  Get Existing
-
-// router.get('/:type/existing', async (req, res) => {
-//   const type = req.params.type;
-//   const list = await NodeQuery.getExisting(type);
-//   res.send(list);
-// })
-
-
 // Node Routes
+
 // get Nodes
 
 router.get('/nodes', async (req, res) => {
   const nodes = await NodeQuery.getNodes();
   res.send(nodes)
 })
-
 
 
 // Search for nodes
@@ -144,7 +124,6 @@ router.get('/devices', async (req, res) => {
 router.post('/sensor/create', async (req, res) => {
   const info = req.body;
   const sensor = await SensorQuery.create(info);
-  console.log("sensor", sensor)
   res.send(sensor)
 })
 

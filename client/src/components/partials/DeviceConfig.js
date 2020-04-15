@@ -218,16 +218,6 @@ function DeviceConfig(props) {
 
         </form>
       </div>
-{/* 
-      {configView}
-
-      <div className="config-deivce-bottom">
-
-        <p>{count + 1} / {deviceList.length}</p>
-        <button id="cancel" className="config-button config-cancel" onClick={handleCancel}>Cancel</button>
-        <button id="next" className="config-button config-next" onClick={handleNext} >Next</button>
-
-      </div> */}
     </div>
   )
 }
