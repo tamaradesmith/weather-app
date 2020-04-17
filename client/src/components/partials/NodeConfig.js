@@ -4,10 +4,11 @@ import { Node, Device } from "../../js/requests";
 import DeviceConfig from './DeviceConfig';
 import SensorConfig from './SensorConfig'
 import ControllerConfig from "./ControllerConfig";
+import Spinner from './Spinner'
 
 function NodeConfig(props) {
 
-  const { foundNodes, cancel } = props
+  const {foundNodes, cancel } = props
 
   const [nodeId, setNodeId] = useState();
   const [node, setNode] = useState('');
@@ -159,6 +160,7 @@ function NodeConfig(props) {
       device_id: device.id,
       name: sensorInfo.name,
       type: sensorInfo.type,
+      url: sensorInfo.url,
       location: node.location,
       description: formData.get('description'),
       min: sensorInfo.min,
@@ -215,6 +217,7 @@ function NodeConfig(props) {
   // Create Functions
 
   async function createNode(info) {
+    setConfigView(<Spinner />);
     const nodeDB = await props.createNode(info);
     setNodeId(await nodeDB.id);
     const nodeInfo = await Node.getNode(nodeDB.id);

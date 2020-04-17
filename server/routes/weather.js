@@ -39,6 +39,14 @@ router.get('/node/:id/devices/config', async (req, res) => {
   res.send(devices);
 })
 
+// TESTING ROUTE DELATE LATER!!!! 
+router.get('/node/:id/deviceList', async (req, res) => {
+  const id = req.params.id;
+  const devicesXML = await NodeQuery.getDeviceListOnNode(id);
+  const devices = ConfigHelpers.getDevices(devicesXML);
+  res.send(devices);
+})
+
 // UPDATE
 
 router.post(`/:type/:id/update`, async (req, res) => {

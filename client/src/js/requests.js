@@ -42,7 +42,7 @@ const Node = {
     const res = await fetch(`${BASE_URL}/node/${NodeId}`);
     return res.json();
   },
-  async create(info){
+  async create(info) {
     const res = await fetch(`${BASE_URL}/node/create`, {
       method: 'POST',
       headers: {
@@ -87,6 +87,10 @@ const Device = {
     });
     return res.json()
   },
+  async getDeviceList(nodeId) {
+    const res = await fetch(`${BASE_URL}/node/${nodeId}/deviceList`);
+    return res.json();
+  }
 }
 
 const Sensor = {

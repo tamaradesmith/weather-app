@@ -10,15 +10,10 @@ function NodeIndex(props) {
     props.findLocalNodes();
   }
 
-  function handleDeviceClick() {
-    props.getDeviceInfo()
-  }
-
   return (
     <div className="NodeIndex">
       <div className="link-div">
         <button className="config-button config-link" onClick={handleClick} >Add New Node</button>
-        <button className="config-button config-link" onClick={handleDeviceClick}>Add New device</button>
       </div>
       <div className="config-list header">
         <h3>Name</h3>
