@@ -4,11 +4,12 @@ import { Node, Device } from "../../js/requests";
 import DeviceConfig from './DeviceConfig';
 import SensorConfig from './SensorConfig'
 import ControllerConfig from "./ControllerConfig";
+import PropertyConfig from "./PropertyConfig";
 import Spinner from './Spinner'
 
 function NodeConfig(props) {
 
-  const {foundNodes, cancel } = props
+  const { foundNodes, cancel } = props
 
   const [nodeId, setNodeId] = useState();
   const [node, setNode] = useState('');
@@ -19,6 +20,7 @@ function NodeConfig(props) {
   const [deviceCount, setDeviceCount] = useState(0)
   const [sensorCount, setSensorCount] = useState(-1);
   const [controllerCount, setControllerCount] = useState(0);
+  const [propertyCount, setPropertyCount] = useState(0);
 
   const initialState = { next: 'node' }
   const [next, dispatch] = useReducer(reducer, initialState);
@@ -37,7 +39,9 @@ function NodeConfig(props) {
       case 'sensor':
         return { next: "sensor" };
       case 'controller':
-        return { next: "controller" }
+        return { next: "controller" };
+      case 'property':
+        return { next: "property" };
       default:
         throw new Error();
     }
@@ -54,7 +58,9 @@ function NodeConfig(props) {
       case 'sensor':
         return getSensorInfo();
       case 'controller':
-        return getControllerInfo()
+        return getControllerInfo();
+      case 'property':
+        return getPropertyInfo();
     }
   };
 
@@ -94,6 +100,8 @@ function NodeConfig(props) {
           return sensorNext(info);
         case 'controller':
           return controllerNext(info);
+        case 'property':
+          return propertyNext(info);
       };
     };
   };
@@ -176,17 +184,38 @@ function NodeConfig(props) {
     const inputs = controllerForm.querySelectorAll('input');
     const controllerInfo = deviceList[deviceCount].controllers[controllerCount];
     const formData = new FormData(controllerForm);
-    const newcontroller = {
+    const newController = {
       device_id: device.id,
+      url: controllerInfo.url,
       location: node.location,
       name: controllerInfo.name,
       type: controllerInfo.type,
       description: formData.get("description"),
       active: (formData.get(`active`) === "on") ? true : false,
     };
-    checkFields(newcontroller, inputs, controllerForm)
+    checkFields(newController, inputs, controllerForm)
   }
 
+  function getPropertyInfo() {
+    const propertyForm = document.querySelector('#propertyForm');
+    const inputs = propertyForm.querySelectorAll('input');
+    const propertyInfo = deviceList[deviceCount].properties[propertyCount];
+    const formData = new FormData(propertyForm);
+    const newProperty = {
+      device_id: device.id,
+      location: node.location,
+      name: propertyInfo.name,
+      type: propertyInfo.type,
+      url: propertyInfo.url,
+      members: (propertyInfo.members) ? propertyInfo.members : "n/a",
+      min: (propertyInfo.min) ? propertyInfo.min : 0,
+      max: (propertyInfo.max) ? propertyInfo.max : 0,
+      unit: (propertyInfo.unit) ? formData.get('unit') : "n/a",
+      description: formData.get("description"),
+      active: (formData.get(`active`) === "on") ? true : false,
+    };
+    checkFields(newProperty, inputs, propertyForm)
+  }
   // Render Views
 
   function renderDevice() {
@@ -207,13 +236,22 @@ function NodeConfig(props) {
 
   function renderControllers() {
     if (deviceList[deviceCount].controllers.length === 0) {
-      nextDevice();
+      // nextDevice();
+      renderProperties();
     } else {
       dispatch({ type: "controller" });
       setConfigView(<ControllerConfig device={device} node={node} controllerList={deviceList[deviceCount].controllers} controllerCount={controllerCount} />);
     };
   };
 
+  function renderProperties() {
+    if (deviceList[deviceCount].properties.length === 0) {
+      nextDevice();
+    } else {
+      dispatch({ type: "property" });
+      setConfigView(<PropertyConfig device={device} node={node} propertyList={deviceList[deviceCount].properties} propertyCount={propertyCount} />);
+    };
+  };
   // Create Functions
 
   async function createNode(info) {
@@ -263,9 +301,13 @@ function NodeConfig(props) {
 
   async function controllerNext(controller) {
     await props.createController(controller);
-    (controllerCount + 1 < deviceList[deviceCount].controllers.length) ? setControllerCount(controllerCount + 1) : nextDevice()
+    (controllerCount + 1 < deviceList[deviceCount].controllers.length) ? setControllerCount(controllerCount + 1) : renderProperties();
+  };
 
-  }
+  async function propertyNext(property) {
+    await props.createProperty(property);
+    (propertyCount + 1 < deviceList[deviceCount].properties.length) ? setPropertyCount(propertyCount + 1) : nextDevice();
+  };
 
   useEffect(() => {
     if (sensorCount > -1 &&
@@ -273,19 +315,25 @@ function NodeConfig(props) {
       renderSensor();
     } else {
       setSensorCount(sensorCount);
-    }
+    };
   }, [sensorCount]);
 
   useEffect(() => {
     if (deviceList !== null) {
       renderDevice()
-    }
+    };
   }, [deviceList]);
 
   useEffect(() => {
     if (deviceList !== null) {
+      renderProperties()
+    };
+  }, [propertyCount]);
+
+  useEffect(() => {
+    if (deviceList !== null) {
       renderDevice();
-    }
+    };
   }, [deviceCount]);
 
   if (foundNodes === null) {
@@ -353,6 +401,7 @@ function NodeConfig(props) {
         <button id="next" className="config-button config-next" onClick={handleNext}  >Next</button>
 
       </div>
+
     </div>
   )
 }

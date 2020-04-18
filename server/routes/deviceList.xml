@@ -11,7 +11,13 @@
 <controllers></controllers>
 
 <properties>
-    <property><name>SealLevelPressure</name><type>Pressure</type><url>rest/properties/BMP280/SealLevelPressure</url><min>30000.000000</min><max>110000.000000</max><unit>kPa</unit></property></properties></device>
+    <property>
+      <name>SealLevelPressure</name>
+      <type>Pressure</type>
+      <url>rest/properties/BMP280/SealLevelPressure</url><min>30000.000000</min>
+      <max>110000.000000</max>
+      <unit>kPa</unit>
+    </property></properties></device>
 
 <device><name>CCS811</name><type>CCS811</type>
 
@@ -47,7 +53,12 @@
 
 <properties>
     <property><name>IntegrationTime</name><type>time</type><url>rest/properties/TCS34725/IntegrationTime</url><members><member>2.4ms</member><member>24ms</member><member>50ms</member><member>101ms</member><member>154ms</member><member>700ms</member></members></property>
-    <property><name>Gain</name><type>time</type><url>rest/properties/TCS34725/Gain</url><members><member>1x</member><member>4x</member><member>16x</member><member>60x</member></members></property></properties></device>
+    <property>
+      <name>Gain</name>
+      <type>time</type>
+      <url>rest/properties/TCS34725/Gain</url>
+      <members><member>1x</member><member>4x</member><member>16x</member><member>60x</member></members>
+      </property></properties></device>
 
 <device><name>SI7021</name><type>SHT31D</type>
 

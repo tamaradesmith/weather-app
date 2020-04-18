@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Node, Device, Sensor, Controller, User } from '../js/requests';
+import { Node, Device, Sensor, Controller, Property, User } from '../js/requests';
 
 import NodeIndex from './partials/NodeIndex'
 import NodeConfig from "./partials/NodeConfig";
@@ -25,7 +25,7 @@ function DashboardConfig(props) {
       document.querySelector("#message").classList.add("message-div");
       setCurrentView(<NodeIndex nodes={nodes} findLocalNodes={findLocalNodes} />);
     } else {
-      setCurrentView(<NodeConfig createNode={createNode} createDevice={createDevice} createSensor={createSensor} createController={createController} foundNodes={nodes} redirect={redirectToShow} cancel={handleCancel} />);
+      setCurrentView(<NodeConfig createNode={createNode} createDevice={createDevice} createSensor={createSensor} createController={createController} createProperty={createProperty} foundNodes={nodes} redirect={redirectToShow} cancel={handleCancel}  />);
     };
   };
 
@@ -60,15 +60,16 @@ function DashboardConfig(props) {
     return result;
   };
 
+  async function createProperty(info) {
+    const result = await Property.create(info);
+    return result;
+  };
 
   function user() {
     console.log("meow");
     User.user();
   };
 
-  // useEffect(() => {
-  //   renderNode();
-  // }, [foundLocalNodes])
 
   useEffect(() => {
     getAllNodes()
@@ -79,6 +80,7 @@ function DashboardConfig(props) {
     <main className="ConfigNodes config">
 
       {currentView}
+
 
       <div id='message' className="hidden">
         <p> No nodes located</p>

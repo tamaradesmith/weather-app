@@ -152,6 +152,18 @@ const Controller = {
   },
 }
 
+const Property = {
+  async create(info){
+    const res = await fetch(`${BASE_URL}/property/create`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(info),
+    })
+    return res.json()
+  },
+}
 const User = {
   async user() {
     // const res = await fetch(`${BASE_URL}/user`)
@@ -160,4 +172,4 @@ const User = {
   }
 }
 
-export { Sensor, Node, Device, Controller, Crud, User };
+export { Sensor, Node, Device, Controller, Property, User };

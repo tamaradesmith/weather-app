@@ -6,7 +6,6 @@ function SensorConfig(props) {
 
 
   if (device === undefined) {
-    console.log('loading')
     return "Loading...";
   };
 

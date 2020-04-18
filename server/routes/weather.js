@@ -9,6 +9,7 @@ const NodeQuery = require('../db/queries/nodeQuery.js');
 const DeviceQuery = require('../db/queries/deviceQuery');
 const SensorQuery = require('../db/queries/sensorQuery');
 const ControllerQuery = require('../db/queries/controllerQuery');
+const PropertyQuery = require('../db/queries/propertyQuery')
 
 // Helpers
 
@@ -189,6 +190,12 @@ router.get('/controllers/types', async (req, res) => {
   res.send(types)
 })
 
+// PROPTERY ROUTES
 
+router.post('/property/create', async (req, res) =>{
+  const info = req.body;
+  const property = await PropertyQuery.create(info);
+  res.send(property)
+})
 
 module.exports = router;
