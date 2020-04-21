@@ -19,8 +19,8 @@ function NodeConfig(props) {
 
   const [deviceCount, setDeviceCount] = useState(0)
   const [sensorCount, setSensorCount] = useState(-1);
-  const [controllerCount, setControllerCount] = useState(0);
-  const [propertyCount, setPropertyCount] = useState(0);
+  const [controllerCount, setControllerCount] = useState(-1);
+  const [propertyCount, setPropertyCount] = useState(-1);
 
   const initialState = { next: 'node' }
   const [next, dispatch] = useReducer(reducer, initialState);
@@ -227,17 +227,18 @@ function NodeConfig(props) {
 
   function renderSensor() {
     if (deviceList[deviceCount].sensors.length === 0) {
-      renderControllers();
+      setSensorCount(-1);
+      setControllerCount(0);
     } else {
-      dispatch({ type: "sensor" })
+      dispatch({ type: "sensor" });
       setConfigView(<SensorConfig device={device} node={node} sensorList={deviceList[deviceCount].sensors} sensorCount={sensorCount} />);
     };
   };
 
   function renderControllers() {
     if (deviceList[deviceCount].controllers.length === 0) {
-      // nextDevice();
-      renderProperties();
+      setControllerCount(-1);
+      setPropertyCount(0);
     } else {
       dispatch({ type: "controller" });
       setConfigView(<ControllerConfig device={device} node={node} controllerList={deviceList[deviceCount].controllers} controllerCount={controllerCount} />);
@@ -246,6 +247,7 @@ function NodeConfig(props) {
 
   function renderProperties() {
     if (deviceList[deviceCount].properties.length === 0) {
+      setPropertyCount(-1);
       nextDevice();
     } else {
       dispatch({ type: "property" });
@@ -274,22 +276,12 @@ function NodeConfig(props) {
       setDevice(await deviceDb);
       setSensorCount(0);
     } else {
-      console.log("error :", deviceCount)
+      console.log("error :", deviceCount);
     };
   };
 
 
   // Next functions
-
-  async function sensorNext(sensor) {
-    await props.createSensor(sensor);
-    if (parseInt(sensorCount) + 1 < deviceList[deviceCount].sensors.length) {
-      setSensorCount(sensorCount + 1)
-    } else {
-      renderControllers();
-      setSensorCount(-1);
-    }
-  };
 
   function nextDevice() {
     if (deviceCount + 1 >= deviceList.length) {
@@ -299,14 +291,34 @@ function NodeConfig(props) {
     };
   };
 
+  async function sensorNext(sensor) {
+    await props.createSensor(sensor);
+    if (parseInt(sensorCount) + 1 < deviceList[deviceCount].sensors.length) {
+      setSensorCount(sensorCount + 1)
+    } else {
+      setSensorCount(-1);
+      setControllerCount(0);
+    }
+  };
+
   async function controllerNext(controller) {
     await props.createController(controller);
-    (controllerCount + 1 < deviceList[deviceCount].controllers.length) ? setControllerCount(controllerCount + 1) : renderProperties();
+    if (controllerCount + 1 < deviceList[deviceCount].controllers.length) {
+      setControllerCount(controllerCount + 1)
+    } else {
+      setControllerCount(-1);
+      setPropertyCount(0);
+    };
   };
 
   async function propertyNext(property) {
     await props.createProperty(property);
-    (propertyCount + 1 < deviceList[deviceCount].properties.length) ? setPropertyCount(propertyCount + 1) : nextDevice();
+    if (propertyCount + 1 < deviceList[deviceCount].properties.length) {
+      setPropertyCount(propertyCount + 1);
+    } else {
+      nextDevice();
+      setPropertyCount(-1);
+    }
   };
 
   useEffect(() => {
@@ -319,16 +331,29 @@ function NodeConfig(props) {
   }, [sensorCount]);
 
   useEffect(() => {
+    if (controllerCount > -1 &&
+      device !== undefined) {
+        renderControllers();
+    } else {
+      setControllerCount(controllerCount);
+    };
+  }, [controllerCount]);
+
+  useEffect(() => {
+    if (propertyCount > -1 &&
+      device !== undefined) {
+      renderProperties();
+    } else {
+      setPropertyCount(propertyCount);
+    };
+  }, [propertyCount]);
+
+  useEffect(() => {
     if (deviceList !== null) {
       renderDevice()
     };
   }, [deviceList]);
 
-  useEffect(() => {
-    if (deviceList !== null) {
-      renderProperties()
-    };
-  }, [propertyCount]);
 
   useEffect(() => {
     if (deviceList !== null) {

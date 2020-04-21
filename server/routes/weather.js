@@ -92,7 +92,8 @@ router.get('/node/:id/devices', async (req, res) => {
   const devices = await DeviceQuery.getDevicseByNodeId(nodeId);
   const devicesWithSensors = await SensorQuery.getAllSensorOnNodeByDevices(devices);
   const devicesWithController = await ControllerQuery.getAllControllersOnNodeByDevices(devicesWithSensors);
-  res.send(devicesWithController)
+  const devicesWithProperties = await PropertyQuery.getAllPropertiesOnNodeByDevice(devicesWithController)
+  res.send(devicesWithProperties)
 })
 
 router.get('/node/:id/devices/sensors', async (req, res) => {

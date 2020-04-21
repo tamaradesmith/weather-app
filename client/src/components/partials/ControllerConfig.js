@@ -3,7 +3,7 @@ import React from 'react';
 function ControllerConfig(props) {
 
   const { device, node, controllerList, controllerCount} = props;
-
+console.log("render Controller Config")
   return (
     <form id="controllerForm" className="ControllerConfig config-form" >
 

@@ -2,10 +2,11 @@ import React, { useState, useEffect, useReducer } from "react";
 import { Node, Device} from "../../js/requests";
 
 
-import NodeDetails from './NodeDetails'
+import NodeDetails from './NodeDetails';
 import SensorDetails from './SensorDetails';
-import ControllerDetails from './ControllerDetails'
-import DeviceDetails from './DeviceDetails'
+import ControllerDetails from './ControllerDetails';
+import DeviceDetails from './DeviceDetails';
+import PropertyDetails from './PropertyDetails';
 
 function NodeShow(props) {
   const [node, setNode] = useState(null);
@@ -23,17 +24,20 @@ function NodeShow(props) {
   function reducer(state, action) {
     switch (action.view) {
       case 'general':
-        updateButtonClass('general')
-        return { view: <NodeDetails node={node} activeUpdate={changeActive} /> }
+        updateButtonClass('general');
+        return { view: <NodeDetails node={node} activeUpdate={changeActive} /> };
       case 'devices':
-        updateButtonClass('devices')
-        return { view: <DeviceDetails devices={devices} activeUpdate={changeActive} /> }
+        updateButtonClass('devices');
+        return { view: <DeviceDetails devices={devices} activeUpdate={changeActive} /> };
       case 'sensors':
-        updateButtonClass('sensors')
-        return { view: <SensorDetails devices={devices} activeUpdate={changeActive} /> }
+        updateButtonClass('sensors');
+        return { view: <SensorDetails devices={devices} activeUpdate={changeActive} /> };
       case 'controllers':
-        updateButtonClass('controllers')
-        return { view: <ControllerDetails devices={devices} activeUpdate={changeActive} /> }
+        updateButtonClass('controllers');
+        return { view: <ControllerDetails devices={devices} activeUpdate={changeActive} /> };
+      case 'properties':
+        updateButtonClass('properties');
+        return { view: <PropertyDetails devices={devices} activeUpdate={changeActive} /> };
       default:
         throw new Error();
     }
@@ -124,6 +128,7 @@ function NodeShow(props) {
         <button id="devices" className="config-button tab-button" onClick={() => dispatch({ view: 'devices' })}>Devices</button>
         <button id="sensors" className="config-button tab-button" onClick={() => dispatch({ view: 'sensors' })}>Sensors</button>
         <button id="controllers" className="config-button tab-button" onClick={() => dispatch({ view: 'controllers' })} >Controllers</button>
+        <button id="properties" className="config-button tab-button" onClick={() => dispatch({ view: 'properties' })} >Properties</button>
         <button id="save" className="config-button tab-button" onClick={handleUpdate} >Save</button>
       </div>
 
