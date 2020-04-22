@@ -5,7 +5,7 @@ module.exports = {
     const devices = await knex("devices").select("*").where({ active: true });
     return devices;
   },
-  async getDevicseByNodeId(id) {
+  async getDevicesByNodeId(id) {
     const devices = await knex('devices').select("*").where({ node_id: id });
     return devices
   },

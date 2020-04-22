@@ -37,35 +37,41 @@ module.exports = {
       return 'deviceSensor'
     }));
     return devices;
-},
+  },
   // get Sensors by Type 
   async getSensorsByType(type) {
-  const sensors = await knex('sensors').select("*").where({ type: type, active: true });
-  return sensors;
-},
-// get all different type of sensors
-async getTypeOfSensors() {
-  const types = await knex.distinct().from('sensors').pluck("type");
-  return types
-},
-// get Sensors locations
-async getSensorsLocations() {
-  const locations = await knex.distinct().from('sensors').pluck("location").where({ active: true });
-  return locations;
-},
-//  Get Temperature Sensor- Inside and outside only
-async getTemperatureSensors() {
-  const sensors = await knex("sensors").select("*").where({ type: "temperature", active: true, location: 'outside' }).orWhere({ location: 'inside', type: "temperature", active: true })
-  return sensors
-},
-// get High and Low 24 hours
-async getHighsAndLows(sensorId) {
-  const reading = await knex("readings").select("value").where({ sensor_id: sensorId }).orderBy('value');
-  const readings = { high: reading[reading.length - 1].value, low: reading[0].value }
-  return readings
-},
-async getLast24ReadingsBySensor(sensorId) {
-  const readings = await knex('readings').select("value", "time").where({ sensor_id: sensorId }).orderBy('time', "desc").limit(12);
-  return readings
-},
+    const sensors = await knex('sensors').select("*").where({ type: type, active: true });
+    return sensors;
+  },
+  // get Sensors by Type and Device Id
+  async getSensorsByTypeAndDeviceId(type, deviceId) {
+    const sensors = await knex('sensors').select("*").where({ type, device_id: deviceId, active: true });
+        return sensors[0];
+  },
+  // get all different type of sensors
+  async getTypeOfSensors() {
+    const types = await knex.distinct().from('sensors').pluck("type");
+    return types
+  },
+  // get Sensors locations
+  async getSensorsLocations() {
+    const locations = await knex.distinct().from('sensors').pluck("location").where({ active: true });
+    return locations;
+  },
+
+  //  Get All Temperature Sensor- 
+  async getTemperatureSensors() {
+    const sensors = await knex("sensors").select("*").where({ type: "temperature", active: true, location: 'outside' }).orWhere({ location: 'inside', type: "temperature", active: true })
+    return sensors
+  },
+  // get High and Low 24 hours
+  async getHighsAndLows(sensorId) {
+    const reading = await knex("readings").select("value").where({ sensor_id: sensorId }).orderBy('value');
+    const readings = { high: reading[reading.length - 1].value, low: reading[0].value }
+    return readings
+  },
+  async getLast24ReadingsBySensor(sensorId) {
+    const readings = await knex('readings').select("value", "time").where({ sensor_id: sensorId }).orderBy('time', "desc").limit(12);
+    return readings
+  },
 }

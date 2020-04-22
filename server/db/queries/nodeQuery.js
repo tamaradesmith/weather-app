@@ -39,12 +39,16 @@ module.exports = {
     return result[0];
 
   },
-  async getNodeById(id) {
-    const node = await knex("nodes").select("*").where({ id: id });
-    return node[0]
-  },
   async getNodes() {
     const nodes = await knex("nodes").select("*").where({ active: true })
+    return nodes;
+  },
+  async getNodeById(id) {
+    const node = await knex("nodes").select("*").where({ id });
+    return node[0]
+  },
+  async getNodesBySite(site){
+    const nodes = await knex('nodes').select("*").where({site});
     return nodes;
   },
   async getNodesLocations() {
@@ -55,10 +59,10 @@ module.exports = {
     const list = await knex(`${type}`).select("name", `${description}`, "id");
     return list;
   },
-  async getItemInfo(type, id) {
-    const item = await knex(`${type}`).select("*").where({ id: id });
-    return item[0];
-  },
+  // async getItemInfo(type, id) {
+  //   const item = await knex(`${type}`).select("*").where({ id: id });
+  //   return item[0];
+  // },
   async nodeExist(node) {
     // let result = await knex("nodes").select("id").where({ name: node.name }).catch(error =>{})
     // if (result.length === 0) {
