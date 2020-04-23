@@ -2,18 +2,22 @@ const knex = require('../../client');
 // const axios = require('axios');
 
 module.exports = {
-  async  saveSensorReading(params) {
-    const nodeData = await knex('nodes').select("*").where({ name: params.node });
-    const deviceData = await knex('devices').select("*").where({ name: params.device, node_id: nodeData[0].id });
-    const sensorData = await knex('sensors').select("*").where({ name: params.sensor, device_id: deviceData[0].id });
-    await knex('readings').insert([
-      {
-        value: params.value,
-        time: params.date,
-        sensor_id: sensorData[0].id,
-      }
-    ])
-    return "reading Saved";
+  // async  saveSensorReading(params) {
+  //   const nodeData = await knex('nodes').select("*").where({ name: params.node });
+  //   const deviceData = await knex('devices').select("*").where({ name: params.device, node_id: nodeData[0].id });
+  //   const sensorData = await knex('sensors').select("*").where({ name: params.sensor, device_id: deviceData[0].id });
+  //   await knex('readings').insert([
+  //     {
+  //       value: params.value,
+  //       time: params.date,
+  //       sensor_id: sensorData[0].id,
+  //     }
+  //   ])
+  //   return "reading Saved";
+  // },
+  async createReading(info){
+    const reading = knex('readings').insert(info).returning("*");
+    return reading;
   },
   async create(info) {
     const sensor = await knex("sensors").insert(info).returning("*");

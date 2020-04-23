@@ -58,21 +58,24 @@ async function getSensorsByDevicesIdAndSensorType(nodes, type) {
 
 // READING FUNCTIONS 
 function getReadingsforSensors(sensors) {
-  sensors.forEach(async sensor => {
-    const reading = await getReadingFromSensor(sensor);
-    // console.log("getReadingsforSensors -> sensor", reading);
-
+  sensors.forEach((sensor, index) => {
+    setTimeout(async () => {
+      const reading = await getReadingFromSensor(sensor);
+    }, index * 100);
   });
+  return
 }
 
 async function getReadingFromSensor(sensor) {
-  const readingData = await axois.get(sensor.url).catch(err =>{
-    console.log(err);
+  const readingData = await axois.get(sensor.url).catch(err => {
+    console.log(err.response);
   });
- const reading = getValue(readingData.data);
- console.log("getReadingFromSensor -> reading", reading);
-
-// return reading
+  if (readingData !== undefined) {
+    const value = getValue(readingData.data);
+    const reading =  {value, sensor_id: sensor.id, time: new Date() }
+    const Readingsaved = await SensorQuery.createReading(reading)
+  }
+  return 
 }
 
 function getValue(data) {
@@ -81,4 +84,14 @@ function getValue(data) {
   return data.substring(start + 7, end);
 }
 
+
+  
 getTempertureSensorsByNodeSite("New Westminster")
+  setInterval(() => {
+  getTempertureSensorsByNodeSite("New Westminster")
+}, 15*60 *1000);
+
+  
+// const getReading = new Promise((resolve, reject)=>{
+
+// })
