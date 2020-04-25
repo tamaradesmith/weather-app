@@ -8,6 +8,7 @@ function Pressure(props) {
 
   async function getLastReading() {
     const reading = await Sensor.getLastReading(sensor.id);
+    console.log("getLastReading -> reading", reading);
     setPressure(reading.value);
   }
 
@@ -16,9 +17,12 @@ function Pressure(props) {
     return "Loading";
   }
 
+
   return (
     <div className="Pressure">
       <h4 className="gauge-header">{sensor.name}</h4>
+      {pressure !== "none" ? (
+<>
       <JqxLinearGauge value={pressure} ranges={ranges} style={{ margin: '0 auto', float: 'left', fontSize: "1em" }}
         width={175} height={315} max={pressure + 8} min={pressure-6} pointer={pointerStyle}
         animationDuration={1500}
@@ -32,6 +36,10 @@ function Pressure(props) {
       <p className="temperature-label">
         Current: {pressure}
       </p>
+      </>
+      ) : (
+        <p> No Reading </p>
+      )}
     </div>
   );
 };

@@ -160,6 +160,7 @@ router.get('/sensors/locations', async (req, res) => {
 router.get('/sensor/:id/reading', async (req, res) => {
   const sensorId = req.params.id;
   const lastSensorReading = await SensorQuery.getLastReading(sensorId);
+  console.log("lastSensorReading", lastSensorReading);
   res.send(lastSensorReading);
 });
 

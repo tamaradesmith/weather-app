@@ -12,6 +12,7 @@ function Temperature(props) {
 
   async function getLastReading() {
     const reading = await Sensor.getLastReading(sensor.id)
+    console.log("getLastReading -> reading", reading);
     setTemerature((reading.value).toFixed(0))
   }
   async function getHighsAndLows() {

@@ -7,10 +7,13 @@ const SensorQuery = require('../db/queries/sensorQuery');
 const NodeQuery = require('../db/queries/nodeQuery');
 const DeviceQuery = require('../db/queries/deviceQuery')
 
-async function getTempertureSensorsByNodeSite(site) {
+
+// Get BY TYPE
+
+async function getSensorsByTypeByNodeSite(site, type) {
   const nodes = await getNodeBySite(site);
   const NodesWithDevice = await getDevicesOnNodes(nodes);
-  const sensors = await getSensorsByDevicesIdAndSensorType(NodesWithDevice, "temperature");
+  const sensors = await getSensorsByDevicesIdAndSensorType(NodesWithDevice, type);
   getReadingsforSensors(sensors);
 };
 
@@ -60,7 +63,7 @@ async function getSensorsByDevicesIdAndSensorType(nodes, type) {
 function getReadingsforSensors(sensors) {
   sensors.forEach((sensor, index) => {
     setTimeout(async () => {
-      const reading = await getReadingFromSensor(sensor);
+      getReadingFromSensor(sensor);
     }, index * 100);
   });
   return
@@ -68,14 +71,20 @@ function getReadingsforSensors(sensors) {
 
 async function getReadingFromSensor(sensor) {
   const readingData = await axois.get(sensor.url).catch(err => {
-    console.log(err.response);
+    console.log("getReadingFromSensor -> err", err);
+    console.log(`${sensor.id}: ${new Date()} error`);
   });
-  if (readingData !== undefined) {
+  if (readingData !== undefined && checkstatus(readingData.data).toLowerCase() === "ok") {
     const value = getValue(readingData.data);
-    const reading =  {value, sensor_id: sensor.id, time: new Date() }
-    const Readingsaved = await SensorQuery.createReading(reading)
+    const reading = { value, sensor_id: sensor.id, time: new Date() }
+    await SensorQuery.createReading(reading)
   }
-  return 
+  return
+}
+function checkstatus(data) {
+  const start = data.indexOf("<statusmessage>");
+  const end = data.indexOf("</statusmessage>");
+  return data.substring(start + 15, end);
 }
 
 function getValue(data) {
@@ -85,13 +94,14 @@ function getValue(data) {
 }
 
 
-  
-getTempertureSensorsByNodeSite("New Westminster")
-  setInterval(() => {
-  getTempertureSensorsByNodeSite("New Westminster")
-}, 15*60 *1000);
 
-  
-// const getReading = new Promise((resolve, reject)=>{
+getSensorsByTypeByNodeSite("New Westminster", "temperature")
+setInterval(() => {
+  getSensorsByTypeByNodeSite("New Westminster")
+}, 15 * 60 * 1000);
 
-// })
+setInterval(() => {
+  getSensorsByTypeByNodeSite("New Westminster", "pressure")
+
+}, 15 * 60 * 1000);
+

@@ -16,6 +16,7 @@ module.exports = {
   //   return "reading Saved";
   // },
   async createReading(info){
+    info.value = info.value.toFixed(2);
     const reading = knex('readings').insert(info).returning("*");
     return reading;
   },
@@ -25,8 +26,9 @@ module.exports = {
   },
   // get last reading one sensor
   async getLastReading(sensorId) {
-    const reading = await knex('readings').select('value').where({ sensor_id: sensorId }).orderBy('time', "desc").limit(1)
-    return reading[0];
+    const reading = await knex('readings').select('value').where({ sensor_id: sensorId }).orderBy('time', "desc").limit(1);
+ const result = (reading[0] === undefined) ? {value: "none"} : reading[0];
+    return result;
   },
   // get Sensors
   async getSensors() {
