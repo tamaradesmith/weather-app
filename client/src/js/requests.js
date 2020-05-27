@@ -1,33 +1,33 @@
 const BASE_URL = 'http://localhost:4000';
 
-const Crud = {
-  async create(type, info) {
-    const res = await fetch(`${BASE_URL}/${type}/create`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify(info),
-    });
-    return res.json();
-  },
+// const Crud = {
+//   async create(type, info) {
+//     const res = await fetch(`${BASE_URL}/${type}/create`, {
+//       method: 'POST',
+//       headers: {
+//         'Content-Type': 'application/json'
+//       },
+//       body: JSON.stringify(info),
+//     });
+//     return res.json();
+//   },
 
-  async getExisting(type) {
-    const res = await fetch(`${BASE_URL}/${type}/existing`);
-    return res.json();
-  },
+//   async getExisting(type) {
+//     const res = await fetch(`${BASE_URL}/${type}/existing`);
+//     return res.json();
+//   },
 
-  async update(type, info, id) {
-    const res = await fetch(`${BASE_URL}/${type}/${id}/update`, {
-      method: `POST`,
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify(info),
-    });
-    return res;
-  }
-}
+//   async update(type, info, id) {
+//     const res = await fetch(`${BASE_URL}/${type}/${id}/update`, {
+//       method: `POST`,
+//       headers: {
+//         'Content-Type': 'application/json'
+//       },
+//       body: JSON.stringify(info),
+//     });
+//     return res;
+//   }
+// }
 
 const Node = {
   async searchForNodes() {

@@ -12,8 +12,8 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
 
-app.use(express.urlencoded({ extended: true }));
-app.use(express.json())
+// app.use(express.urlencoded({ extended: true }));
+// app.use(express.json())
 app.use(logger('dev'));
 app.use(cookieParser('keyboard_cat'));
 // app.use(cookieParser(process.env.COOKIE_SECRET));
@@ -24,13 +24,13 @@ app.use('/auth', auth)
 app.use('/', weather);
 
 // return errors
-app.use(function(res,res, next){
+app.use(function (res, res, next) {
   const err = new Error('Not Found');
   err.status = 404;
   console.log("err.status", err.status)
   next(err);
 })
-app.use(function(err, req, res, next){
+app.use(function (err, req, res, next) {
   res.status(err.status || 500);
   res.json({
     message: err.message,
