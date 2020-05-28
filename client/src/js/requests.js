@@ -1,34 +1,5 @@
 const BASE_URL = 'http://localhost:4000';
 
-// const Crud = {
-//   async create(type, info) {
-//     const res = await fetch(`${BASE_URL}/${type}/create`, {
-//       method: 'POST',
-//       headers: {
-//         'Content-Type': 'application/json'
-//       },
-//       body: JSON.stringify(info),
-//     });
-//     return res.json();
-//   },
-
-//   async getExisting(type) {
-//     const res = await fetch(`${BASE_URL}/${type}/existing`);
-//     return res.json();
-//   },
-
-//   async update(type, info, id) {
-//     const res = await fetch(`${BASE_URL}/${type}/${id}/update`, {
-//       method: `POST`,
-//       headers: {
-//         'Content-Type': 'application/json'
-//       },
-//       body: JSON.stringify(info),
-//     });
-//     return res;
-//   }
-// }
-
 const Node = {
   async searchForNodes() {
     const res = await fetch(`${BASE_URL}/nodes/search`);
@@ -39,11 +10,11 @@ const Node = {
     return res.json();
   },
   async getNode(NodeId) {
-    const res = await fetch(`${BASE_URL}/node/${NodeId}`);
+    const res = await fetch(`${BASE_URL}/nodes/${NodeId}`);
     return res.json();
   },
   async create(info) {
-    const res = await fetch(`${BASE_URL}/node/create`, {
+    const res = await fetch(`${BASE_URL}/nodes/create`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
@@ -54,7 +25,7 @@ const Node = {
   },
   async updateActiveStates(info) {
     const res = await fetch(`${BASE_URL}/nodes/active`, {
-      method: 'POST',
+      method: 'PATCH',
       headers: {
         'Content-Type': 'application/json'
       },
@@ -70,11 +41,11 @@ const Device = {
     return res.json();
   },
   async getDevicesFromNodeById(nodeId) {
-    const res = await fetch(`${BASE_URL}/node/${nodeId}/devices/config`);
+    const res = await fetch(`${BASE_URL}/nodes/${nodeId}/devices/config`);
     return res.json();
   },
   async getDeivcesByNodeId(nodeId) {
-    const res = await fetch(`${BASE_URL}/node/${nodeId}/devices`);
+    const res = await fetch(`${BASE_URL}/nodes/${nodeId}/devices`);
     return res.json();
   },
   async create(info) {
@@ -95,7 +66,7 @@ const Device = {
 
 const Sensor = {
   async create(info) {
-    const res = await fetch(`${BASE_URL}/sensor/create`, {
+    const res = await fetch(`${BASE_URL}/sensors/create`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -105,7 +76,7 @@ const Sensor = {
     return res.json()
   },
   async getLastReading(sensorId) {
-    const res = await fetch(`${BASE_URL}/sensor/${sensorId}/reading`);
+    const res = await fetch(`${BASE_URL}/sensors/${sensorId}/reading`);
     return res.json();
   },
   async getSensorsbyType(type) {
@@ -130,11 +101,11 @@ const Sensor = {
   },
   // temperature  
   async getHighsAndLows(sensorId) {
-    const res = await fetch(`${BASE_URL}/sensor/${sensorId}/highslows`);
+    const res = await fetch(`${BASE_URL}/sensors/${sensorId}/highslows`);
     return res.json();
   },
   async getLast24Readings(sensorId) {
-    const res = await fetch(`${BASE_URL}/sensor/${sensorId}/24`)
+    const res = await fetch(`${BASE_URL}/sensors/${sensorId}/24`)
     return res.json();
   },
 };

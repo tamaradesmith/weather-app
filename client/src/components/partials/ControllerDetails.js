@@ -3,12 +3,12 @@ import React from 'react';
 function ControllerDetails(props) {
   const { devices } = props;
 
-function handleChange(event){
+  function handleChange(event) {
 
-  const target= event.target;
-  props.activeUpdate("controller", target.id, target.checked)
-}
-  
+    const target = event.target;
+    props.activeUpdate("controller", target.id, target.checked, target.dataset.device, target.dataset.controller)
+  }
+
   return (
     <div>
       <div className='show-grid-sensor-inner header'>
@@ -25,14 +25,13 @@ function handleChange(event){
               {device.controllers.length > 0 ? (
                 <>
                   <p className='show-header-table'> Device: {device.name} </p>
-                  {device.controllers.map(controller => (
+                  {device.controllers.map((controller, i) => (
                     <div key={controller.id} className="show-grid-sensor-inner">
                       <>
                         <p> {controller.name} </p>
                         <p> {controller.type} </p>
                         <p> {controller.description} </p>
-                        <input type="checkbox" id={controller.id} defaultChecked={controller.active === true ? true : false} className="show-check"  onChange={handleChange} />
-                        {/* <input type="checkbox" id={sensor.id} defaultChecked={sensor.active === true ? true : false} className="show-check" /> */}
+                        <input type="checkbox" id={controller.id} data-device={index} data-controller={i} defaultChecked={controller.active === true ? true : false} className="show-check" onChange={handleChange} />
                       </>
                     </div>
                   ))}

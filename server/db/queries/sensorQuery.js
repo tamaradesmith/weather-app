@@ -1,4 +1,5 @@
 const knex = require('../../client');
+
 // const axios = require('axios');
 
 module.exports = {
@@ -15,11 +16,7 @@ module.exports = {
   //   ])
   //   return "reading Saved";
   // },
-  async createReading(info){
-    info.value = info.value.toFixed(2);
-    const reading = knex('readings').insert(info).returning("*");
-    return reading;
-  },
+
   async create(info) {
     const sensor = await knex("sensors").insert(info).returning("*");
     return sensor[0];
@@ -27,7 +24,7 @@ module.exports = {
   // get last reading one sensor
   async getLastReading(sensorId) {
     const reading = await knex('readings').select('value').where({ sensor_id: sensorId }).orderBy('time', "desc").limit(1);
- const result = (reading[0] === undefined) ? {value: "none"} : reading[0];
+    const result = (reading[0] === undefined) ? { value: "none" } : reading[0];
     return result;
   },
   // get Sensors
@@ -35,6 +32,10 @@ module.exports = {
     const sensors = await knex('sensors').select('*').where({ active: true });
     return sensors;
   },
+
+
+  // SPECIAL QUERIES
+
   // Group sensor by Devices
   async  getAllSensorOnNodeByDevices(devices) {
     await Promise.all(devices.map(async device => {
@@ -52,7 +53,7 @@ module.exports = {
   // get Sensors by Type and Device Id
   async getSensorsByTypeAndDeviceId(type, deviceId) {
     const sensors = await knex('sensors').select("*").where({ type, device_id: deviceId, active: true });
-        return sensors[0];
+    return sensors[0];
   },
   // get all different type of sensors
   async getTypeOfSensors() {
@@ -64,11 +65,32 @@ module.exports = {
     const locations = await knex.distinct().from('sensors').pluck("location").where({ active: true });
     return locations;
   },
-
   //  Get All Temperature Sensor- 
   async getTemperatureSensors() {
     const sensors = await knex("sensors").select("*").where({ type: "temperature", active: true, location: 'outside' }).orWhere({ location: 'inside', type: "temperature", active: true })
     return sensors
+  },
+
+
+  // ACTIVE UPDATES
+
+  async activeByDeviceID(deviceId, activeState) {
+    return await knex('sensors').where({ device_id: deviceId }).update({ active: activeState }).returning('id');
+  },
+  async activeBySensorsId(sensors){
+    return await Promise.all(sensors.map(async sensor =>{
+     const result = await knex('sensors').where({id: sensor.id}).update({active: sensor.active}).returning('id');
+      return result[0];
+    }));
+  },
+
+
+  // READINGS QUERIES
+
+  async createReading(info) {
+    info.value = info.value.toFixed(2);
+    const reading = knex('readings').insert(info).returning("*");
+    return reading;
   },
   // get High and Low 24 hours
   async getHighsAndLows(sensorId) {

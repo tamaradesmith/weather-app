@@ -22,7 +22,7 @@ module.exports = {
         };
       });
     })).catch(error => {
-      // console.log("searchForNodes Promise.all -> error", error)
+      console.log("searchForNodes Promise.all -> error", error)
     });
     if (count + 9 > 100) {
       return nodes;

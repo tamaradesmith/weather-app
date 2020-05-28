@@ -61,6 +61,8 @@ function NodeConfig(props) {
         return getControllerInfo();
       case 'property':
         return getPropertyInfo();
+      default:
+        break;
     }
   };
 
@@ -102,6 +104,8 @@ function NodeConfig(props) {
           return controllerNext(info);
         case 'property':
           return propertyNext(info);
+          default:
+            break;
       };
     };
   };
@@ -328,15 +332,17 @@ function NodeConfig(props) {
     } else {
       setSensorCount(sensorCount);
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [sensorCount]);
 
   useEffect(() => {
     if (controllerCount > -1 &&
       device !== undefined) {
-        renderControllers();
+      renderControllers();
     } else {
       setControllerCount(controllerCount);
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [controllerCount]);
 
   useEffect(() => {
@@ -346,12 +352,14 @@ function NodeConfig(props) {
     } else {
       setPropertyCount(propertyCount);
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [propertyCount]);
 
   useEffect(() => {
     if (deviceList !== null) {
       renderDevice()
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [deviceList]);
 
 
@@ -359,6 +367,7 @@ function NodeConfig(props) {
     if (deviceList !== null) {
       renderDevice();
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [deviceCount]);
 
   if (foundNodes === null) {

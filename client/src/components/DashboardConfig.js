@@ -65,14 +65,15 @@ function DashboardConfig(props) {
     return result;
   };
 
-  function user() {
-    console.log("meow");
-    User.user();
-  };
+  // function user() {
+  //   console.log("meow");
+  //   User.user();
+  // };
 
 
   useEffect(() => {
-    getAllNodes()
+    getAllNodes();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
 

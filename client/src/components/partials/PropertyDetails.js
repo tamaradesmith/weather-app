@@ -4,7 +4,9 @@ function PropertyDetails(props) {
   const { devices } = props;
 
   function handleChange(event) {
-    props.activeUpdate("property", event.target.id, event.target.checked);
+    const target = event.target
+
+    props.activeUpdate("property", target.id, target.checked, target.dataset.device, target.dataset.property);
   };
 
   return (
@@ -22,12 +24,12 @@ function PropertyDetails(props) {
               {device.properties.length > 0 ? (
                 <>
                   <p className='show-header-table'> Device: {device.name} </p>
-                  {device.properties.map(property => (
+                  {device.properties.map((property, i) => (
                     <div key={property.id} className="show-grid-sensor-inner">
                       <p>{property.name}</p>
                       <p>{property.type}</p>
                       <p>{property.description}</p>
-                      <input type="checkbox" id={property.id} defaultChecked={property.active === true ? true : false} className="show-check" onChange={handleChange} />
+                      <input type="checkbox" id={property.id} data-device={index} data-property={i} defaultChecked={property.active === true ? true : false} className="show-check" onChange={handleChange} />
                     </div>
                   ))}
                 </>

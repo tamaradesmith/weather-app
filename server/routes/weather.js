@@ -4,12 +4,13 @@ const app = express();
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
-// query
+// QUERY
+
 const NodeQuery = require('../db/queries/nodeQuery.js');
 const DeviceQuery = require('../db/queries/deviceQuery');
 const SensorQuery = require('../db/queries/sensorQuery');
 const ControllerQuery = require('../db/queries/controllerQuery');
-const PropertyQuery = require('../db/queries/propertyQuery')
+const PropertyQuery = require('../db/queries/propertyQuery');
 
 // Helpers
 
@@ -17,23 +18,42 @@ const ConfigHelpers = require('./configHelpers')
 const NodeHelpers = require('./nodeHelper')
 
 
-// Save Reading to DB
 
-router.post('/sensors/readings', (req, res) => {
-  const postParams = {
-    node: req.body.node,
-    device: req.body.device,
-    sensor: req.body.sensor,
-    date: req.body.date,
-    value: req.body.value,
-  };
-  SensorQuery.saveSensorReading(postParams);
-  res.send(postParams.sensor);
-})
+// Node Routes
 
+// CRUD ROUTES
+
+router.get('/', async (req, res) => {
+  const nodes = await NodeQuery.getNodes();
+  res.send(nodes);
+});
+
+router.post('/', async (req, res) => {
+  const nodeInfo = req.body;
+  const existing = await NodeQuery.nodeExist(nodeInfo);
+  res.send(existing);
+});
+
+router.get('/:id', async (req, res) => {
+  const id = req.params.id
+  const node = await NodeQuery.getNodeById(id)
+  res.send(node)
+});
+
+// router.patch(`/:type/:id/update`, async (req, res) => {
+//   const type = req.params.type;
+//   const id = req.params.id;
+//   const info = req.body;
+//   const updateItem = await NodeQuery.update(type, info, id);
+//   res.send(updateItem);
+// });
+
+
+
+// Special ROUTES
 
 // get Config Devices 
-router.get('/node/:id/devices/config', async (req, res) => {
+router.get('/:id/devices/config', async (req, res) => {
   const id = req.params.id;
   const devicesXML = await NodeQuery.getDeviceListOnNode(id);
   const devices = ConfigHelpers.getDevices(devicesXML);
@@ -41,53 +61,24 @@ router.get('/node/:id/devices/config', async (req, res) => {
 })
 
 // TESTING ROUTE DELATE LATER!!!! 
-router.get('/node/:id/deviceList', async (req, res) => {
-  const id = req.params.id;
-  const devicesXML = await NodeQuery.getDeviceListOnNode(id);
-  const devices = ConfigHelpers.getDevices(devicesXML);
-  res.send(devices);
-})
+// router.get('/:id/deviceList', async (req, res) => {
+//   const id = req.params.id;
+//   const devicesXML = await NodeQuery.getDeviceListOnNode(id);
+//   const devices = ConfigHelpers.getDevices(devicesXML);
+//   res.send(devices);
+// })
 
-// UPDATE
-
-router.post(`/:type/:id/update`, async (req, res) => {
-  const type = req.params.type;
-  const id = req.params.id
-  const info = req.body;
-  const updateItem = await NodeQuery.update(type, info, id);
-  res.send(updateItem);
-})
-
-// Node Routes
-
-// get Nodes
-
-router.get('/nodes', async (req, res) => {
-  const nodes = await NodeQuery.getNodes();
-  res.send(nodes)
-})
 
 
 // Search for nodes
 
-router.get('/nodes/search', async (req, res) => {
+router.get('/search', async (req, res) => {
   const nodes = await NodeHelpers.searchForNodes();
   res.send(nodes);
 });
 
-router.post('/node/create', async (req, res) => {
-  const nodeInfo = req.body;
-  const existing = await NodeQuery.nodeExist(nodeInfo);
-  res.send(existing);
-})
 
-router.get('/node/:id', async (req, res) => {
-  const id = req.params.id
-  const node = await NodeQuery.getNodeById(id)
-  res.send(node)
-})
-
-router.get('/node/:id/devices', async (req, res) => {
+router.get('/:id/devices', async (req, res) => {
   const nodeId = req.params.id;
   const devices = await DeviceQuery.getDevicesByNodeId(nodeId);
   const devicesWithSensors = await SensorQuery.getAllSensorOnNodeByDevices(devices);
@@ -96,108 +87,139 @@ router.get('/node/:id/devices', async (req, res) => {
   res.send(devicesWithProperties)
 })
 
-router.get('/node/:id/devices/sensors', async (req, res) => {
+router.get('/:id/devices/sensors', async (req, res) => {
   const nodeId = req.params.id;
   const devices = await DeviceQuery.getDevicseByNodeId(nodeId);
   const sensors = await SensorQuery.getAllSensorOnNodeByDevices(devices);
   res.send(sensors);
 })
 
-router.post('/nodes/active', async (req, res) => {
+router.patch('/active', async (req, res) => {
   const info = req.body;
-  const node = await NodeQuery.updateActive(info.nodes);
-  // console.log("node", node)
-  res.send("good")
+  let result = {};
+  if (info.nodes) {
+    result = await NodeQuery.updateActive(info.nodes);
+  } else if (info.devices.length > 0) {
+    result = await DeviceQuery.activeByDevicesId(info.devices);
+  } else {
+    if (info.sensors.length > 0) {
+      result.sensors = await SensorQuery.activeBySensorsId(info.sensors);
+    };
+    if (info.controllers.length > 0) {
+      result.controllers = await ControllerQuery.activeByControllersId(info.controllers);
+    };
+    if (info.properties.length > 0) {
+      result.properties = await PropertyQuery.activeByPropertiesId(info.properties);
+    };
+  };
+  res.send(result);
 })
 
 // DEVICE ROUTES
 
 // create Device
 
-router.post('/device/create', async (req, res) => {
-  const info = req.body;
-  const device = await DeviceQuery.create(info);
-  res.send(device)
-})
+// router.post('/device/create', async (req, res) => {
+//   const info = req.body;
+//   const device = await DeviceQuery.create(info);
+//   res.send(device)
+// })
 
-// get Device
+// // get Device
 
-router.get('/devices', async (req, res) => {
-  const devices = await DeviceQuery.getDevices();
-  res.send(devices)
-})
+// router.get('/devices', async (req, res) => {
+//   const devices = await DeviceQuery.getDevices();
+//   res.send(devices)
+// })
 
-// SENSOR ROUTES
+// // SENSOR ROUTES
 
-// create Sensors
+// // create Sensors
 
-router.post('/sensor/create', async (req, res) => {
-  const info = req.body;
-  const sensor = await SensorQuery.create(info);
-  res.send(sensor)
-})
+// router.post('/sensor/create', async (req, res) => {
+//   const info = req.body;
+//   const sensor = await SensorQuery.create(info);
+//   res.send(sensor)
+// })
 
-router.get('/sensors', async (req, res) => {
-  const sensors = await SensorQuery.getSensors();
-  res.send(sensors);
-})
+// router.get('/sensors', async (req, res) => {
+//   const sensors = await SensorQuery.getSensors();
+//   res.send(sensors);
+// })
 
-router.get('/sensors/types', async (req, res) => {
-  const types = await SensorQuery.getTypeOfSensors();
-  res.send(types);
-})
-router.get('/sensors/type/:type', async (req, res) => {
-  const type = req.params.type
-  const sensors = (type != "temperature") ? await SensorQuery.getSensorsByType(type) : await SensorQuery.getTemperatureSensors();
-  res.send(sensors);
-})
-router.get('/sensors/locations', async (req, res) => {
-  const locations = await SensorQuery.getSensorsLocations();
-  res.send(locations)
-})
-
-// get last reading
-router.get('/sensor/:id/reading', async (req, res) => {
-  const sensorId = req.params.id;
-  const lastSensorReading = await SensorQuery.getLastReading(sensorId);
-  console.log("lastSensorReading", lastSensorReading);
-  res.send(lastSensorReading);
-});
+// router.get('/sensors/types', async (req, res) => {
+//   const types = await SensorQuery.getTypeOfSensors();
+//   res.send(types);
+// })
+// router.get('/sensors/type/:type', async (req, res) => {
+//   const type = req.params.type
+//   const sensors = (type != "temperature") ? await SensorQuery.getSensorsByType(type) : await SensorQuery.getTemperatureSensors();
+//   res.send(sensors);
+// })
+// router.get('/sensors/locations', async (req, res) => {
+//   const locations = await SensorQuery.getSensorsLocations();
+//   res.send(locations)
+// })
 
 
-// Get Hightest and Lowest reading 
 
-router.get('/sensor/:id/highslows', async (req, res) => {
-  const sensorId = req.params.id;
-  const highslows = await SensorQuery.getHighsAndLows(sensorId);
-  res.send(highslows);
-});
-// get last 24 readings
-router.get('/sensor/:id/24', async (req, res) => {
-  const sensorId = req.params.id;
-  const readings = await SensorQuery.getLast24ReadingsBySensor(sensorId);
-  res.send(readings)
-})
+// // Save Reading to DB
 
-// CONTROLLER ROUTES
+// router.post('/sensors/readings', (req, res) => {
+//   const postParams = {
+//     node: req.body.node,
+//     device: req.body.device,
+//     sensor: req.body.sensor,
+//     date: req.body.date,
+//     value: req.body.value,
+//   };
+//   SensorQuery.saveSensorReading(postParams);
+//   res.send(postParams.sensor);
+// })
 
-router.post('/controller/create', async (req, res) => {
-  const info = req.body;
-  const controller = await ControllerQuery.create(info);
-  res.send(controller)
-})
 
-router.get('/controllers/types', async (req, res) => {
-  const types = await ControllerQuery.getTypeofControllers();
-  res.send(types)
-})
+// // get last reading
+// router.get('/sensor/:id/reading', async (req, res) => {
+//   const sensorId = req.params.id;
+//   const lastSensorReading = await SensorQuery.getLastReading(sensorId);
+//   console.log("lastSensorReading", lastSensorReading);
+//   res.send(lastSensorReading);
+// });
+
+
+// // Get Hightest and Lowest reading 
+
+// router.get('/sensor/:id/highslows', async (req, res) => {
+//   const sensorId = req.params.id;
+//   const highslows = await SensorQuery.getHighsAndLows(sensorId);
+//   res.send(highslows);
+// });
+// // get last 24 readings
+// router.get('/sensor/:id/24', async (req, res) => {
+//   const sensorId = req.params.id;
+//   const readings = await SensorQuery.getLast24ReadingsBySensor(sensorId);
+//   res.send(readings)
+// })
+
+// // CONTROLLER ROUTES
+
+// router.post('/controller/create', async (req, res) => {
+//   const info = req.body;
+//   const controller = await ControllerQuery.create(info);
+//   res.send(controller)
+// })
+
+// router.get('/controllers/types', async (req, res) => {
+//   const types = await ControllerQuery.getTypeofControllers();
+//   res.send(types)
+// })
 
 // PROPTERY ROUTES
 
-router.post('/property/create', async (req, res) =>{
-  const info = req.body;
-  const property = await PropertyQuery.create(info);
-  res.send(property)
-})
+// router.post('/property/create', async (req, res) =>{
+//   const info = req.body;
+//   const property = await PropertyQuery.create(info);
+//   res.send(property)
+// });
 
 module.exports = router;
