@@ -7,23 +7,22 @@ import Spinner from './partials/Spinner';
 
 function DashboardConfig(props) {
 
-  const [currentView, setCurrentView] = useState(null);
+  const [currentView, setCurrentView] = useState(<Spinner />);
 
   async function getAllNodes() {
-    const getNodes = await Node.getNodes()
-    setCurrentView(<NodeIndex nodes={getNodes} findLocalNodes={findLocalNodes} />)
+    setCurrentView(<NodeIndex />)
   }
-
 
   async function findLocalNodes() {
     setCurrentView(<Spinner />);
     document.querySelector('#message').classList.add('hidden');
     document.querySelector("#message").classList.remove("message-div");
+    document.querySelector('#search-button').classList.add('hidden');
     const nodes = await Node.searchForNodes();
     if (nodes.length === 0) {
       document.querySelector('#message').classList.remove('hidden');
       document.querySelector("#message").classList.add("message-div");
-      setCurrentView(<NodeIndex nodes={nodes} findLocalNodes={findLocalNodes} />);
+    
     } else {
       setCurrentView(<NodeConfig createNode={createNode} createDevice={createDevice} createSensor={createSensor} createController={createController} createProperty={createProperty} foundNodes={nodes} redirect={redirectToShow} cancel={handleCancel}  />);
     };
@@ -35,9 +34,10 @@ function DashboardConfig(props) {
   };
 
   function handleCancel() {
-    getAllNodes();
+    document.querySelector('#search-button').classList.remove('hidden');
     document.querySelector('#message').classList.add('hidden');
     document.querySelector("#message").classList.remove("message-div");
+    setCurrentView(<NodeIndex />);
   };
 
   async function createNode(info) {
@@ -70,15 +70,9 @@ function DashboardConfig(props) {
   //   User.user();
   // };
 
-
-  useEffect(() => {
-    getAllNodes();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
-
-
   return (
     <main className="ConfigNodes config">
+      {/* <button id="search-button" className="config-button config-link"  onClick={findLocalNodes}>Search For Nodes</button> */}
 
       {currentView}
 

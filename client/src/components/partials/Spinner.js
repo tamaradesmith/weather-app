@@ -14,11 +14,11 @@ function Spinner(props) {
           }
         }, 500);
       } else {
-        if (index <= 11) {
+        if (index <= 17) {
           document.querySelector(`#paw${index}`).classList.remove('hidden');
           index++;
-        } else if (index <= 22) {
-          document.querySelector(`#paw${index - 11}`).classList.add('hidden');
+        } else if (index <= 34) {
+          document.querySelector(`#paw${index - 17}`).classList.add('hidden');
           index++;
         } else {
           index = 1;
@@ -32,17 +32,23 @@ function Spinner(props) {
 
     <div className="spinner-div">
       <p className="spinner-text">  Hunting for Nodes....</p>
-      <img id="paw1" src={paw} alt={"spnner"} className="icon-spinner paw1 hidden" />
-      <img id="paw2" src={paw} alt={"spnner"} className="icon-spinner paw2 hidden" />
-      <img id="paw3" src={paw} alt={"spnner"} className="icon-spinner paw3 hidden" />
-      <img id="paw4" src={paw} alt={"spnner"} className="icon-spinner paw4 hidden" />
-      <img id="paw5" src={paw} alt={"spnner"} className="icon-spinner paw5 hidden" />
-      <img id="paw6" src={paw} alt={"spnner"} className="icon-spinner paw6 hidden" />
-      <img id="paw7" src={paw} alt={"spnner"} className="icon-spinner paw7 hidden" />
-      <img id="paw8" src={paw} alt={"spnner"} className="icon-spinner paw8 hidden" />
-      <img id="paw9" src={paw} alt={"spnner"} className="icon-spinner paw9 hidden" />
-      <img id="paw10" src={paw} alt={"spnner"} className="icon-spinner paw10 hidden" />
-      <img id="paw11" src={paw} alt={"spnner"} className="icon-spinner paw11 hidden" />
+      <img id="paw1" src={paw} alt={"spnner"} className="icon-spinner hidden paw1 " />
+      <img id="paw2" src={paw} alt={"spnner"} className="icon-spinner hidden paw2 " />
+      <img id="paw3" src={paw} alt={"spnner"} className="icon-spinner hidden paw3 " />
+      <img id="paw4" src={paw} alt={"spnner"} className="icon-spinner hidden paw4 " />
+      <img id="paw5" src={paw} alt={"spnner"} className="icon-spinner hidden paw5 " />
+      <img id="paw6" src={paw} alt={"spnner"} className="icon-spinner hidden paw6 " />
+      <img id="paw7" src={paw} alt={"spnner"} className="icon-spinner hidden paw7 " />
+      <img id="paw8" src={paw} alt={"spnner"} className="icon-spinner hidden paw8 " />
+      <img id="paw9" src={paw} alt={"spnner"} className="icon-spinner hidden paw9 " />
+      <img id="paw10" src={paw} alt={"spnner"} className="icon-spinner hidden paw10 " />
+      <img id="paw11" src={paw} alt={"spnner"} className="icon-spinner hidden paw11 " />
+      <img id="paw12" src={paw} alt={"spnner"} className="icon-spinner hidden paw12 " />
+      <img id="paw13" src={paw} alt={"spnner"} className="icon-spinner hidden paw13 " />
+      <img id="paw14" src={paw} alt={"spnner"} className="icon-spinner hidden paw14 " />
+      <img id="paw15" src={paw} alt={"spnner"} className="icon-spinner hidden paw15 " />
+      <img id="paw16" src={paw} alt={"spnner"} className="icon-spinner hidden paw16 " />
+      <img id="paw17" src={paw} alt={"spnner"} className="icon-spinner hidden paw17 " />
     </div>
   );
 };

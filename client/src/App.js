@@ -9,8 +9,9 @@ import DashboardIndoors from './components/DashboardIndoors';
 import DashboardOutdoors from './components/DashboardOutdoors';
 import DashboardConfig from './components/DashboardConfig'
 import NodeConfig from './components/partials/NodeConfig';
-import DeviceConfig from './components/partials/DeviceConfig';
-import NodeShow from './components/partials/NodeShow'
+// import DeviceConfig from './components/partials/DeviceConfig';
+import NodeShow from './components/partials/NodeShow';
+import NodeIndex from './components/partials/NodeIndex';
 
 function App() {
   return (
@@ -24,10 +25,12 @@ function App() {
           <Route path="/DashboardHumidily" component={DashboardHumidily} />
           <Route path="/DashboardIndoors" component={DashboardIndoors} />
           <Route path="/DashboardOutdoors"  component = {DashboardOutdoors} />
-          <Route path="/DashboardConfig" exact component = {DashboardConfig} />
+          <Route path="/nodes/configure" exact component = {DashboardConfig} />
           <Route path="/DashboardConfig/node/new" component = {NodeConfig} />
-          <Route path="/DashboardConfig/node/:id/devices/new" component={DeviceConfig} />
+          {/* <Route path="/DashboardConfig/node/:id/devices/new" component={DeviceConfig} /> */}
           <Route path="/node/:id" component={NodeShow} />
+          <Route path="/nodes" component={NodeIndex} />
+
         </Switch>
       </Router>
     </div>

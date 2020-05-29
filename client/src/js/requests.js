@@ -124,7 +124,7 @@ const Controller = {
 }
 
 const Property = {
-  async create(info){
+  async create(info) {
     const res = await fetch(`${BASE_URL}/property/create`, {
       method: 'POST',
       headers: {

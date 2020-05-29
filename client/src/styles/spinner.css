@@ -4,9 +4,9 @@
 /* Spinner */
 .spinner-div {
   display: grid;
-  grid-template-columns: repeat(24, 30px);
+  grid-template-columns: repeat(26, 30px);
   grid-template-rows: repeat(12, 30px);
-  margin-left: 0.5em;
+  margin-left: 0.1em;
 }
 .icon-spinner {
   margin: 5px;
@@ -55,6 +55,30 @@
 .paw11 {
   grid-column: 16/18;
   grid-row: 6/8;
+}
+.paw12 {
+  grid-column: 17/19;
+  grid-row: 8/10;
+}
+.paw13 {
+  grid-column: 19/21;
+  grid-row: 7/9;
+}
+.paw14 {
+  grid-column: 20/22;
+  grid-row: 9/11;
+}
+.paw15 {
+  grid-column: 22/24;
+  grid-row: 8/10;
+}
+.paw16 {
+  grid-column: 23/25;
+  grid-row: 10/12;
+}
+.paw17 {
+  grid-column: 25/27;
+  grid-row: 9/11;
 }
 .spinner-text {
   grid-column: 9/20;

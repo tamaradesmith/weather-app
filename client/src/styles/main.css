@@ -13,12 +13,17 @@ body {
   color: var(--primary-colour);
   padding: 0.25em;
 }
-
+.App {
+  width: 800px;
+  height: 480px;
+  border: 1px solid var(--primary-colour);
+  background: var(--secondary-colour);
+}
 header {
   display: flex;
   flex-direction: row;
-  justify-content: space-evenly;
-  padding: 0.5em 0;
+  justify-content: space-between;
+  padding: 0.5em 0.5em;
   margin-bottom: 0.4em;
   font-size: 0.9em;
   border-bottom: 1px solid #050505;
@@ -30,12 +35,6 @@ input {
   font-size: 0.8em;
   border: 1px solid black;
   background: var(--input-colour);
-}
-.App {
-  width: 800px;
-  height: 480px;
-  border: 1px solid var(--primary-colour);
-  background: var(--secondary-colour);
 }
 .capitlize {
   text-transform: capitalize;
@@ -62,6 +61,16 @@ input {
 }
 .view {
   padding: 0.25em;
+}
+.nav-menu {
+  display: inline;
+  z-index: 99 !important;
+  border: 1px solid black;
+  background: ghostwhite;
+}
+.nav-menu-inner {
+  display: flex;
+  flex-direction: column;
 }
 /* TEMPERATURE  */
 .Temperature {
@@ -186,6 +195,7 @@ input {
   width: 100%;
   height: 100%;
 }
+
 /* config */
 .config-body {
   display: flex;
@@ -234,7 +244,7 @@ input {
   text-align: center;
   margin-bottom: 0.15em;
 }
-.config-main{
+.config-main {
   flex: 1;
 }
 .config-sensor-header {
@@ -264,7 +274,6 @@ input {
   height: 25px;
   width: 25px;
 }
-
 .config-cancel {
   grid-column: 2/3;
 }
@@ -386,7 +395,6 @@ input {
   overflow: hidden;
 }
 .show-detail-div {
-  /* max-height: 250px; */
   max-height: 100%;
 
   overflow-y: auto;
@@ -394,12 +402,14 @@ input {
 .show-node-check {
   width: 22px;
   height: 22px;
-  /* margin: 0px auto; */
 }
 .show-check {
   width: 22px;
   height: 22px;
   margin: 0px auto;
+}
+.index-view {
+  padding: 0.25em;
 }
 /* Warning */
 .warning {
@@ -408,26 +418,26 @@ input {
 .button-edit {
   margin-left: 0.25em;
 }
-.message-div{
+.message-div {
   position: absolute;
   top: 10%;
   left: 10%;
   z-index: 10;
   border: 1px solid black;
   background: ghostwhite;
-  padding: .5em;
+  padding: 0.5em;
   display: grid;
   grid-template-columns: 250px 100px 100px;
   grid-gap: 10px;
 }
-.message-text{
+.message-text {
   grid-column: 1/4;
 }
-.message-button1{
+.message-button1 {
   grid-row: 2/3;
   grid-column: 2/3;
 }
-.message-button2{
+.message-button2 {
   grid-row: 2/3;
   grid-column: 3/4;
 }
