@@ -2,7 +2,9 @@
 
 :root {
   --primary-colour: #050505;
-  --secondary-colour: #c9daea;
+  --secondary-colour: ##f8f8ff;
+  --highlight-colour: #c9daea;
+
   --hover-colour: #050505;
   --input-colour: #acc4da;
   --input-colour-hoover: #9fbdda;
@@ -18,6 +20,7 @@ body {
   height: 480px;
   border: 1px solid var(--primary-colour);
   background: var(--secondary-colour);
+  color: #f0f8ff;
 }
 header {
   display: flex;
@@ -66,18 +69,57 @@ input {
   display: inline;
   z-index: 99 !important;
   border: 1px solid black;
-  background: ghostwhite;
+  background: #f8f8ff;
 }
 .nav-menu-inner {
   display: flex;
   flex-direction: column;
 }
+
 /* TEMPERATURE  */
+
 .Temperature {
   display: flex;
   flex-direction: column;
   align-items: center;
+  color: var(--primary-colour);
 }
+.thermometer {
+  height: 300px;
+}
+.thermometer-div {
+  position: relative;
+}
+.thermometer-text {
+  position: absolute;
+  left: 60px;
+  font-size: 1em;
+  font-weight: 700;
+}
+.thermometer-labels {
+  position: absolute;
+  top: 150px;
+  left: -2px;
+  color: gray;
+  font-size: .8em;
+
+}
+.thermometer-labels-hight {
+  position: absolute;
+  top: 10px;
+  left: -15px;
+  color: gray;
+  font-size: .8em;
+}
+.thermometer-high {
+  position: absolute;
+  left: -23px;
+}
+.thermometer-low {
+  position: absolute;
+  left: -23px;
+}
+/* old temp */
 .temperature-label {
   text-align: center;
 }

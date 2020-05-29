@@ -7,11 +7,8 @@ import Spinner from './partials/Spinner';
 
 function DashboardConfig(props) {
 
-  const [currentView, setCurrentView] = useState(<Spinner />);
+  const [currentView, setCurrentView] = useState(<NodeIndex />);
 
-  async function getAllNodes() {
-    setCurrentView(<NodeIndex />)
-  }
 
   async function findLocalNodes() {
     setCurrentView(<Spinner />);
@@ -22,9 +19,9 @@ function DashboardConfig(props) {
     if (nodes.length === 0) {
       document.querySelector('#message').classList.remove('hidden');
       document.querySelector("#message").classList.add("message-div");
-    
+
     } else {
-      setCurrentView(<NodeConfig createNode={createNode} createDevice={createDevice} createSensor={createSensor} createController={createController} createProperty={createProperty} foundNodes={nodes} redirect={redirectToShow} cancel={handleCancel}  />);
+      setCurrentView(<NodeConfig createNode={createNode} createDevice={createDevice} createSensor={createSensor} createController={createController} createProperty={createProperty} foundNodes={nodes} redirect={redirectToShow} cancel={handleCancel} />);
     };
   };
 
@@ -72,7 +69,7 @@ function DashboardConfig(props) {
 
   return (
     <main className="ConfigNodes config">
-      {/* <button id="search-button" className="config-button config-link"  onClick={findLocalNodes}>Search For Nodes</button> */}
+      <button id="search-button" className="config-button config-link" onClick={findLocalNodes}>Search For Nodes</button>
 
       {currentView}
 
