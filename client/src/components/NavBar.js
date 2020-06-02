@@ -1,19 +1,17 @@
 import React from 'react';
 import { NavLink } from 'react-router-dom';
-// import configIcon from "../images/configIcon.png";
 import NavMenu from './NavMenu';
 
 function NavBar() {
   return (
 
-    <header>
+    <header className="nav-bar">
       <NavMenu />
-      {/* <NavLink to="/DashboardConfig"><img className="config-icon" src={configIcon} alt={"config"} /></NavLink> */}
-      <NavLink to="/DashboardTemperature"> Temperature</NavLink>
-      <NavLink to="/DashboardHumidily">Humidily</NavLink>
-      <NavLink to="/DashboardWind"> Wind</NavLink>
-      <NavLink to="/DashboardIndoors"> Indoors</NavLink>
-      <NavLink to="/DashboardOutdoors"> Outdoors</NavLink>
+      <NavLink to="/DashboardTemperature" className="header-item"> Temperature</NavLink>
+      <NavLink to="/DashboardHumidily" className="header-item">Humidily</NavLink>
+      <NavLink to="/DashboardWind" className="header-item"> Wind</NavLink>
+      <NavLink to="/DashboardIndoors" className="header-item"> Indoors</NavLink>
+      <NavLink to="/DashboardOutdoors" className="header-item"> Outdoors</NavLink>
     </header>
   );
 };

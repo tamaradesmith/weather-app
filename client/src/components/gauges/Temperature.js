@@ -40,7 +40,6 @@ function Temperature(props) {
 
   async function getHighsAndLows() {
     const highsAndLows = await Sensor.getHighsAndLows(sensor.id)
-    console.log("getHighsAndLows -> highsAndLows", highsAndLows);
     highsAndLows.low = highsAndLows.low.toFixed(0);
     highsAndLows.high = highsAndLows.high.toFixed(0);
     setHighLow((highsAndLows))
@@ -69,37 +68,45 @@ function Temperature(props) {
 
   useEffect(() => {
     getHighsAndLows()
-  }, [highLow === null])
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [highLow === null]);
 
   useEffect(() => {
     calulateHighLowLevels();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [highLow]);
 
   useEffect(() => {
     calulateLabel();
-  }, [temperature])
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [temperature]);
+  
   useEffect(() => {
     getLastReading();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [temperature === null])
 
   return (
 
     <div className="Temperature">
+
       <div className="thermometer-div">
         <p className="thermometer-labels"> 0- </p>
         <p className="thermometer-labels-hight"> 40- </p>
         <p className="thermometer-high" style={{ 'top': `${highLowLevel.high}px` }}>{highLow.high}- </p>
         <p className="thermometer-low" style={{ 'top': `${highLowLevel.low}px` }}>{highLow.low}-</p>
 
-
-
         <p className="thermometer-text" style={{ 'top': `${current}px` }}>-{temperature}</p>
-        <div>
+
+
+        <div >
+
           <img id="temp" src={thermometer} alt={"spnner"} className="thermometer" style={{ 'background': `linear-gradient(transparent 0%, transparent ${level.level}%, ${level.color} ${level.level}% ` }} />
         </div>
       </div>
+      <h4 className="gauge-header">{sensor.name}</h4>
+
     </div>
   )
 }
 export default Temperature;
-

@@ -17,9 +17,17 @@ const PropertyQuery = require('../db/queries/propertyQuery');
 const ConfigHelpers = require('./configHelpers')
 const NodeHelpers = require('./nodeHelper')
 
-
-
 // Node Routes
+
+
+// Search for nodes
+
+router.get('/search', async (req, res) => {
+  const nodes = await NodeHelpers.searchForNodes();
+  res.send(nodes);
+});
+
+
 
 // CRUD ROUTES
 
@@ -70,12 +78,7 @@ router.get('/:id/devices/config', async (req, res) => {
 
 
 
-// Search for nodes
 
-router.get('/search', async (req, res) => {
-  const nodes = await NodeHelpers.searchForNodes();
-  res.send(nodes);
-});
 
 
 router.get('/:id/devices', async (req, res) => {

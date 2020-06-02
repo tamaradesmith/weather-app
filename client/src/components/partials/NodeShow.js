@@ -2,11 +2,11 @@ import React, { useState, useEffect, useReducer } from "react";
 import { Node, Device } from "../../js/requests";
 
 
-import NodeDetails from './NodeDetails';
-import SensorDetails from './SensorDetails';
-import ControllerDetails from './ControllerDetails';
-import DeviceDetails from './DeviceDetails';
-import PropertyDetails from './PropertyDetails';
+import NodeDetails from './details/NodeDetails';
+import SensorDetails from './details/SensorDetails';
+import ControllerDetails from './details/ControllerDetails';
+import DeviceDetails from './details/DeviceDetails';
+import PropertyDetails from './details/PropertyDetails';
 
 function NodeShow(props) {
   const [node, setNode] = useState(null);
@@ -140,13 +140,13 @@ function NodeShow(props) {
 
     <main className="NodeShow  view">
       <h3 className="show-header" >Node: {node.name}</h3>
-      <div className="tab-buttons">
-        <button id="general" className="config-button tab-button active-tab" onClick={() => dispatch({ view: 'general' })}>General</button>
-        <button id="devices" className="config-button tab-button" onClick={() => dispatch({ view: 'devices' })}>Devices</button>
-        <button id="sensors" className="config-button tab-button" onClick={() => dispatch({ view: 'sensors' })}>Sensors</button>
-        <button id="controllers" className="config-button tab-button" onClick={() => dispatch({ view: 'controllers' })} >Controllers</button>
-        <button id="properties" className="config-button tab-button" onClick={() => dispatch({ view: 'properties' })} >Properties</button>
-        <button id="save" className="config-button tab-button" disabled={buttonDisabled} onClick={handleUpdate}> Save</button>
+      <div className="tab-buttons-div">
+        <button id="general" className="tab-button active-tab" onClick={() => dispatch({ view: 'general' })}>General</button>
+        <button id="devices" className=" tab-button" onClick={() => dispatch({ view: 'devices' })}>Devices</button>
+        <button id="sensors" className=" tab-button" onClick={() => dispatch({ view: 'sensors' })}>Sensors</button>
+        <button id="controllers" className="tab-button" onClick={() => dispatch({ view: 'controllers' })} >Controllers</button>
+        <button id="properties" className=" tab-button" onClick={() => dispatch({ view: 'properties' })} >Properties</button>
+        <button id="save" className=" tab-button" disabled={buttonDisabled} onClick={handleUpdate}> Save</button>
       </div>
 
       {state.view}

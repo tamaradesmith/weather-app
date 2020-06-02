@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Node, Device, Sensor, Controller, Property, User } from '../js/requests';
 
 import NodeIndex from './partials/NodeIndex'
-import NodeConfig from "./partials/NodeConfig";
+import NodeConfig from "./partials/configure/NodeConfig";
 import Spinner from './partials/Spinner';
 
 function DashboardConfig(props) {
@@ -69,7 +69,7 @@ function DashboardConfig(props) {
 
   return (
     <main className="ConfigNodes config">
-      <button id="search-button" className="config-button config-link" onClick={findLocalNodes}>Search For Nodes</button>
+      <button id="search-button" className="config-button" onClick={findLocalNodes}>Search For Nodes</button>
 
       {currentView}
 
@@ -77,7 +77,7 @@ function DashboardConfig(props) {
       <div id='message' className="hidden">
         <p> No nodes located</p>
         <button className="config-button message-button2" onClick={findLocalNodes}> Search </button>
-        <button className="config-button message-button1" onClick={handleCancel}> Cancel</button>
+        <button className="config-button config-button-cancel message-button1" onClick={handleCancel}> Cancel</button>
       </div>
 
     </main>

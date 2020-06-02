@@ -46,8 +46,8 @@ module.exports = {
     return devices;
   },
   // get Sensors by Type 
-  async getSensorsByType(type) {
-    const sensors = await knex('sensors').select("*").where({ type: type, active: true });
+  async getSensorsByType(type, site) {
+    const sensors = await knex('devices').join('nodes', 'nodes.id', "node_id").select("nodes.site", 'nodes.active', "devices.id").where({ site: site }).join('sensors', 'device_id', 'devices.id').select('sensors.type', "sensors.id", "sensors.location").where('sensors.type', type).where('sensors.active', true).where('sensors.location', 'outside').orWhere("sensors.location", "inside");
     return sensors;
   },
   // get Sensors by Type and Device Id
@@ -77,9 +77,9 @@ module.exports = {
   async activeByDeviceID(deviceId, activeState) {
     return await knex('sensors').where({ device_id: deviceId }).update({ active: activeState }).returning('id');
   },
-  async activeBySensorsId(sensors){
-    return await Promise.all(sensors.map(async sensor =>{
-     const result = await knex('sensors').where({id: sensor.id}).update({active: sensor.active}).returning('id');
+  async activeBySensorsId(sensors) {
+    return await Promise.all(sensors.map(async sensor => {
+      const result = await knex('sensors').where({ id: sensor.id }).update({ active: sensor.active }).returning('id');
       return result[0];
     }));
   },

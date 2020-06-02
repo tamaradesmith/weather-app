@@ -1,36 +1,37 @@
 @import url("./reset.css");
 
 :root {
+  --background-colour: #3e517a;
+  --backgroud-secondary: #fffcf2;
+
   --primary-colour: #050505;
-  --secondary-colour: ##f8f8ff;
-  --highlight-colour: #c9daea;
+  --secondary-colour: #fffcf2;
+
+  --highlight-colour: #f9c784;
+  --background-secondary-hover: #fff5d6;
+
+  --input-colour: #3e517a;
+  --input-colour-hoover: #f9c784;
 
   --hover-colour: #050505;
-  --input-colour: #acc4da;
-  --input-colour-hoover: #9fbdda;
   --active-colour: #75abdd;
 }
+
 body {
   font-size: 1.6em;
   color: var(--primary-colour);
   padding: 0.25em;
+  background: var(--backgroud-secondary);
 }
 .App {
   width: 800px;
   height: 480px;
   border: 1px solid var(--primary-colour);
   background: var(--secondary-colour);
-  color: #f0f8ff;
+  color: var(--primary-colour);
+  margin: 0 auto;
 }
-header {
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-  padding: 0.5em 0.5em;
-  margin-bottom: 0.4em;
-  font-size: 0.9em;
-  border-bottom: 1px solid #050505;
-}
+
 img {
   max-width: 100%;
 }
@@ -48,11 +49,17 @@ input {
   justify-content: space-evenly;
   align-items: stretch;
 }
+.dashboard-header{
+  display: flex;
+  justify-content: space-between;
+  padding: .1em 0.5em;
+}
 .gauge-header {
   margin: 0 auto;
   text-align: center;
   text-transform: capitalize;
   margin-bottom: 0.3em;
+  margin-top: 0.5em;
 }
 .header {
   text-transform: capitalize;
@@ -65,17 +72,56 @@ input {
 .view {
   padding: 0.25em;
 }
-.nav-menu {
-  display: inline;
-  z-index: 99 !important;
-  border: 1px solid black;
-  background: #f8f8ff;
+/* NAV BAR */
+.nav-bar {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  margin-bottom: 0.4em;
+  font-size: 0.9em;
+  background: var(--background-colour);
+  color: var(--backgroud-secondary);
+  height: 60px;
+}
+.nav-icon-div {
+  flex: 1;
+}
+.nav-icon {
+  padding: 0.5em;
+}
+.header-item {
+  text-decoration: none;
+  font-size: 1.2em;
+  color: var(--secondary-colour);
+  border-bottom: 5px solid var(--background-colour);
+  padding: 0.5em;
+}
+.header-item:hover {
+  color: var(--highlight-colour);
+  border-bottom: 5px solid var(--highlight-colour);
 }
 .nav-menu-inner {
+  background: var(--background-colour);
   display: flex;
+  margin-top: 0.1em;
   flex-direction: column;
+  padding-bottom: 0.5em;
+  z-index: 1;
+  position: relative;
+  min-width: 110px;
 }
-
+.nav-menu-item {
+  font-size: 1.1em;
+  color: var(--background-colour);
+  color: var(--secondary-colour);
+  text-decoration: none;
+  padding: 0.25em;
+  border-left: 5px solid transparent;
+}
+.nav-menu-item:hover {
+  color: var(--highlight-colour);
+  border-left: 5px solid var(--highlight-colour);
+}
 /* TEMPERATURE  */
 
 .Temperature {
@@ -83,6 +129,7 @@ input {
   flex-direction: column;
   align-items: center;
   color: var(--primary-colour);
+  padding-top: 1em;
 }
 .thermometer {
   height: 300px;
@@ -101,15 +148,14 @@ input {
   top: 150px;
   left: -2px;
   color: gray;
-  font-size: .8em;
-
+  font-size: 0.8em;
 }
 .thermometer-labels-hight {
   position: absolute;
   top: 10px;
   left: -15px;
   color: gray;
-  font-size: .8em;
+  font-size: 0.8em;
 }
 .thermometer-high {
   position: absolute;
@@ -119,6 +165,7 @@ input {
   position: absolute;
   left: -23px;
 }
+
 /* old temp */
 .temperature-label {
   text-align: center;
@@ -246,7 +293,7 @@ input {
 }
 .config-list {
   display: grid;
-  grid-template-columns: 150px 275px 175px 150px;
+  grid-template-columns: 150px 200px 150px 150px 90px;
   grid-gap: 0.25em;
   margin: 0.25em 0;
 }
@@ -259,12 +306,23 @@ input {
   height: 30px;
 }
 .config-button {
-  font-size: 0.8em;
-  border: 1px solid black;
+  font-size: 0.9em;
+  border: 1px solid var(--background-colour);
+  padding: 0.2em 0.5em;
+  color: var(--backgroud-secondary);
   background: var(--input-colour);
+  border-radius: 0.25em;
 }
 .config-button:hover {
-  background: var(--input-colour-hoover);
+  color: var(--input-colour-hoover);
+}
+.config-button-cancel {
+  background: var(--backgroud-secondary);
+  color: var(--background-colour);
+}
+.config-button-cancel:hover {
+  background: var(--background-secondary-hover);
+  color: var(--background-colour);
 }
 .config-link {
   color: var(--primary-colour);
@@ -422,15 +480,27 @@ input {
   font-weight: 600;
   font-size: 1em;
 }
-.tab-buttons {
+.tab-buttons-div {
   display: flex;
+  border-top: 1px solid var(--background-colour);
+  border-bottom: 1px solid var(--background-colour);
+  margin: 0.25em 0;
 }
 .tab-button {
-  margin: 0.25em;
+  font-size: 0.8em;
   padding: 0.1em 0.5em;
+  border: none;
+  border-bottom: 5px solid transparent;
+  border-top: 5px solid transparent;
+  background: transparent;
+}
+.tab-button:hover {
+  cursor: pointer;
+  border-bottom: 5px solid var(--background-colour);
 }
 .active-tab {
-  background: var(--active-colour);
+  background: var(--background-colour);
+  color: var(--backgroud-secondary);
 }
 .show-div {
   height: 275px;
@@ -463,10 +533,10 @@ input {
 .message-div {
   position: absolute;
   top: 10%;
-  left: 10%;
+  left: 25%;
   z-index: 10;
   border: 1px solid black;
-  background: ghostwhite;
+  background: var(--backgroud-secondary);
   padding: 0.5em;
   display: grid;
   grid-template-columns: 250px 100px 100px;

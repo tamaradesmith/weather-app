@@ -8,8 +8,7 @@ import DashboardHumidily from './components/DashboardHumidily';
 import DashboardIndoors from './components/DashboardIndoors';
 import DashboardOutdoors from './components/DashboardOutdoors';
 import DashboardConfig from './components/DashboardConfig'
-import NodeConfig from './components/partials/NodeConfig';
-// import DeviceConfig from './components/partials/DeviceConfig';
+import NodeConfig from './components/partials/configure/NodeConfig';
 import NodeShow from './components/partials/NodeShow';
 import NodeIndex from './components/partials/NodeIndex';
 

@@ -20,6 +20,7 @@ function NodeIndex(props) {
       <div className="config-list header">
         <h3>Node</h3>
         <h3>Description</h3>
+        <h3>Site</h3>
         <h3>Location</h3>
         <p> Status</p>
 
@@ -31,6 +32,7 @@ function NodeIndex(props) {
               <div key={index} className="config-list">
                 <Link to={`/node/${node.id}`}>{node.name}</Link>
                 <p>{node.description}</p>
+                <p>{node.site}</p>
                 <p>{node.location} </p>
                 <p>{node.active ? ("Actvie") : ("Disabled")}</p>
               </div>

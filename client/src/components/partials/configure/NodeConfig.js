@@ -1,11 +1,11 @@
 import React, { useState, useEffect, useReducer } from "react";
-import { Node, Device } from "../../js/requests";
+import { Node, Device } from "../../../js/requests";
 
 import DeviceConfig from './DeviceConfig';
 import SensorConfig from './SensorConfig'
 import ControllerConfig from "./ControllerConfig";
 import PropertyConfig from "./PropertyConfig";
-import Spinner from './Spinner'
+import Spinner from '../Spinner'
 
 function NodeConfig(props) {
 

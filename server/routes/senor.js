@@ -23,9 +23,10 @@ router.get('/', async (req, res) => {
 //   res.send(types);
 // });
 
-router.get('/type/:type', async (req, res) => {
-  const type = req.params.type
-  const sensors = (type != "temperature") ? await SensorQuery.getSensorsByType(type) : await SensorQuery.getTemperatureSensors();
+router.get('/site/:site/type/:type', async (req, res) => {
+  const {type, site} = req.params;
+  const sensors = await SensorQuery.getSensorsByType(type, site);
+  console.log("sensors", sensors);
   res.send(sensors);
 })
 
@@ -38,7 +39,6 @@ router.get('/locations', async (req, res) => {
 router.get('/:id/reading', async (req, res) => {
   const sensorId = req.params.id;
   const lastSensorReading = await SensorQuery.getLastReading(sensorId);
-  console.log("lastSensorReading", lastSensorReading);
   res.send(lastSensorReading);
 });
 

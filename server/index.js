@@ -7,7 +7,7 @@ const methodOverride = require('method-override');
 const app = express();
 
 //  Route files
-const weather = require('./routes/weather');
+const node = require('./routes/node');
 const auth = require('./routes/auth');
 const sensor = require('./routes/senor');
 const device = require('./routes/device');
@@ -38,7 +38,7 @@ app.use(cors());
 // ROUTES 
 
 app.use('/auth', auth);
-app.use('/nodes', weather);
+app.use('/nodes', node);
 app.use('/sensors', sensor);
 app.use('/devices', device);
 app.use('/controllers', controller);

@@ -79,8 +79,9 @@ const Sensor = {
     const res = await fetch(`${BASE_URL}/sensors/${sensorId}/reading`);
     return res.json();
   },
-  async getSensorsbyType(type) {
-    const res = await fetch(`${BASE_URL}/sensors/type/${type}`)
+  async getSensorsbyType(type, site) {
+    const res = await fetch(`${BASE_URL}/sensors/site/${site}/type/${type}`)
+    console.log("getSensorsbyType -> res", res);
     return res.json()
   },
   async getSensors() {
