@@ -3,19 +3,6 @@ const knex = require('../../client');
 // const axios = require('axios');
 
 module.exports = {
-  // async  saveSensorReading(params) {
-  //   const nodeData = await knex('nodes').select("*").where({ name: params.node });
-  //   const deviceData = await knex('devices').select("*").where({ name: params.device, node_id: nodeData[0].id });
-  //   const sensorData = await knex('sensors').select("*").where({ name: params.sensor, device_id: deviceData[0].id });
-  //   await knex('readings').insert([
-  //     {
-  //       value: params.value,
-  //       time: params.date,
-  //       sensor_id: sensorData[0].id,
-  //     }
-  //   ])
-  //   return "reading Saved";
-  // },
 
   async create(info) {
     const sensor = await knex("sensors").insert(info).returning("*");
@@ -47,7 +34,10 @@ module.exports = {
   },
   // get Sensors by Type 
   async getSensorsByType(type, site) {
-    const sensors = await knex('devices').join('nodes', 'nodes.id', "node_id").select("nodes.site", 'nodes.active', "devices.id").where({ site: site }).join('sensors', 'device_id', 'devices.id').select('sensors.type', "sensors.id", "sensors.location").where('sensors.type', type).where('sensors.active', true).where('sensors.location', 'outside').orWhere("sensors.location", "inside");
+    console.log("getSensorsByType -> type", type);
+    const sensors = await knex('devices').join('nodes', 'nodes.id', "node_id").select("nodes.site", "nodes.location", 'nodes.active', "devices.id").where({ site: site, location: "outside" }).orWhere({ site: site, location: "inside" }).join('sensors', 'device_id', 'devices.id').select('sensors.type', "sensors.id").andWhere('sensors.type', type).where('sensors.active', true)
+    console.log("getSensorsByType -> sensors", sensors);
+ 
     return sensors;
   },
   // get Sensors by Type and Device Id

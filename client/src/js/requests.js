@@ -14,7 +14,7 @@ const Node = {
     return res.json();
   },
   async create(info) {
-    const res = await fetch(`${BASE_URL}/nodes/create`, {
+    const res = await fetch(`${BASE_URL}/nodes`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
@@ -49,7 +49,7 @@ const Device = {
     return res.json();
   },
   async create(info) {
-    const res = await fetch(`${BASE_URL}/device/create`, {
+    const res = await fetch(`${BASE_URL}/devices`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
@@ -66,7 +66,7 @@ const Device = {
 
 const Sensor = {
   async create(info) {
-    const res = await fetch(`${BASE_URL}/sensors/create`, {
+    const res = await fetch(`${BASE_URL}/sensors`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -80,8 +80,8 @@ const Sensor = {
     return res.json();
   },
   async getSensorsbyType(type, site) {
+    console.log("getSensorsbyType -> type", type);
     const res = await fetch(`${BASE_URL}/sensors/site/${site}/type/${type}`)
-    console.log("getSensorsbyType -> res", res);
     return res.json()
   },
   async getSensors() {
@@ -113,7 +113,7 @@ const Sensor = {
 
 const Controller = {
   async create(info) {
-    const res = await fetch(`${BASE_URL}/controller/create`, {
+    const res = await fetch(`${BASE_URL}/controllers`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -126,7 +126,7 @@ const Controller = {
 
 const Property = {
   async create(info) {
-    const res = await fetch(`${BASE_URL}/property/create`, {
+    const res = await fetch(`${BASE_URL}/properties`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',

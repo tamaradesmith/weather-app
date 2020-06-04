@@ -7,6 +7,8 @@ function NavBar() {
 
     <header className="nav-bar">
       <NavMenu />
+      <NavLink to="/site" className="header-item"> Site</NavLink>
+
       <NavLink to="/DashboardTemperature" className="header-item"> Temperature</NavLink>
       <NavLink to="/DashboardHumidily" className="header-item">Humidily</NavLink>
       <NavLink to="/DashboardWind" className="header-item"> Wind</NavLink>

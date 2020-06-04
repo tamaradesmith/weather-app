@@ -145,6 +145,7 @@ function NodeConfig(props) {
       ipaddress: formData.get('ipAddress'),
       active: (formData.get(`active`) === "on") ? true : false
     };
+    console.log("getNodeInfo -> newNode", newNode);
     checkFields(newNode, inputs, nodeForm);
   };
 
@@ -173,7 +174,6 @@ function NodeConfig(props) {
       name: sensorInfo.name,
       type: sensorInfo.type,
       url: sensorInfo.url,
-      location: node.location,
       description: formData.get('description'),
       min: sensorInfo.min,
       max: sensorInfo.max,
@@ -191,7 +191,6 @@ function NodeConfig(props) {
     const newController = {
       device_id: device.id,
       url: controllerInfo.url,
-      location: node.location,
       name: controllerInfo.name,
       type: controllerInfo.type,
       description: formData.get("description"),
@@ -207,7 +206,6 @@ function NodeConfig(props) {
     const formData = new FormData(propertyForm);
     const newProperty = {
       device_id: device.id,
-      location: node.location,
       name: propertyInfo.name,
       type: propertyInfo.type,
       url: propertyInfo.url,
@@ -261,11 +259,11 @@ function NodeConfig(props) {
   // Create Functions
 
   async function createNode(info) {
-    setConfigView(<Spinner />);
     const nodeDB = await props.createNode(info);
     setNodeId(await nodeDB.id);
     const nodeInfo = await Node.getNode(nodeDB.id);
     setNode(nodeInfo);
+    console.log("createNode -> nodeDB.value", nodeDB.value);
     if (nodeDB.value === true) {
       document.querySelector('#message').classList.remove('hidden');
       document.querySelector("#message").classList.add("message-div");

@@ -1,10 +1,10 @@
 const axios = require('axios');
-const BASE_IP = '192.168.1.';
+const BASE_IP = '192.168.0.';
 const fields = ['description', 'location', 'type'];
 
 
 module.exports = {
-  async searchForNodes(count = 50, nodes = []) {
+  async searchForNodes(count = 160, nodes = []) {
     const index = [];
     for (let i = count; i <= count + 9; i++) {
       if (i < 256) {
@@ -24,7 +24,7 @@ module.exports = {
     })).catch(error => {
       console.log("searchForNodes Promise.all -> error", error)
     });
-    if (count + 9 > 100) {
+    if (count + 9 > 190) {
       return nodes;
     } else {
       return this.searchForNodes(count + 10, nodes)
@@ -38,6 +38,7 @@ module.exports = {
       try {
         const node = await axios.get(`http://${BASE_IP}${index}/rest/node/name`);
         const name = this.getValue(node.data)
+        console.log("search -> name", name);
         clearTimeout(timer);
         const nodeInfo = { ip: BASE_IP + index, name }
         if (node != null) {
@@ -63,7 +64,7 @@ module.exports = {
             res(nodeInfo);
           }
           catch (error) {
-            rej(error);
+            rej(error, nodeInfo.ip);
           };
         });
       }

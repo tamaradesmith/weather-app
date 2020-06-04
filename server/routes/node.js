@@ -23,6 +23,7 @@ const NodeHelpers = require('./nodeHelper')
 // Search for nodes
 
 router.get('/search', async (req, res) => {
+  console.log("searching")
   const nodes = await NodeHelpers.searchForNodes();
   res.send(nodes);
 });
