@@ -12,6 +12,7 @@ import DashboardConfig from './components/DashboardConfig'
 import NodeConfig from './components/partials/configure/NodeConfig';
 import NodeShow from './components/partials/NodeShow';
 import NodeIndex from './components/partials/NodeIndex';
+import Login from './components/Login';
 
 function App() {
   return (
@@ -31,6 +32,7 @@ function App() {
           {/* <Route path="/DashboardConfig/node/:id/devices/new" component={DeviceConfig} /> */}
           <Route path="/node/:id" component={NodeShow} />
           <Route path="/nodes" component={NodeIndex} />
+          <Route path="/login" component={Login} />
 
         </Switch>
       </Router>

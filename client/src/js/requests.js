@@ -137,10 +137,18 @@ const Property = {
   },
 }
 const User = {
-  async user() {
-    // const res = await fetch(`${BASE_URL}/user`)
-    // console.log("user -> res", res.text())
-
+  async login(user) {
+    const res = await fetch(`${BASE_URL}/auth/login`,{
+      method: "POST",
+      credentials: 'include',
+      headers:{
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(user)
+    }).catch(err=>{
+      console.log("this is a n error" , err)
+    });
+    return res.json();
   }
 }
 

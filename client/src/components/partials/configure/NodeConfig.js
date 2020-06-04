@@ -5,7 +5,6 @@ import DeviceConfig from './DeviceConfig';
 import SensorConfig from './SensorConfig'
 import ControllerConfig from "./ControllerConfig";
 import PropertyConfig from "./PropertyConfig";
-import Spinner from '../Spinner'
 
 function NodeConfig(props) {
 

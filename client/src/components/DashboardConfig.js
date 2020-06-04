@@ -62,10 +62,6 @@ function DashboardConfig(props) {
     return result;
   };
 
-  // function user() {
-  //   console.log("meow");
-  //   User.user();
-  // };
 
   return (
     <main className="ConfigNodes config">

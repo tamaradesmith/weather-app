@@ -26,13 +26,14 @@ app.use(methodOverride((req, res) => {
   };
 }));
 
-// app.use(express.urlencoded({ extended: true }));
-// app.use(express.json())
 app.use(logger('dev'));
 app.use(cookieParser('keyboard_cat'));
 // app.use(cookieParser(process.env.COOKIE_SECRET));
 // app.use(express.static(path.join(__dirname, 'public')));
-app.use(cors());
+app.use(cors({
+  origin: 'http://localhost:8181',
+  credentials: true,
+}));
 
 
 // ROUTES 

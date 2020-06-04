@@ -1,9 +1,11 @@
 const express = require('express');
 const bcrypt = require('bcrypt');
 const router = express.Router();
-const app = express();
-app.use(express.urlencoded({ extended: true }));
-app.use(express.json());
+
+
+// const app = express();
+// app.use(express.urlencoded({ extended: true }));
+// app.use(express.json());
 
 
 const User = require('../db/queries/userQuery')
@@ -15,6 +17,7 @@ function validUser(user) {
   const vaildPassword = typeof user.password == 'string' && user.email.trim() != "" && user.password.trim().length >= 6;
   return vaildEmail && vaildPassword;
 }
+
 
 router.get('/', (req, res) => {
   console.log("meow")
@@ -51,19 +54,17 @@ router.post('/login', async (req, res, next) => {
   if (validUser(req.body)) {
     User.GetOneByEmail(req.body.email)
       .then(user => {
-        console.log('user ', user);
         if (user) {
           bcrypt.compare(req.body.password, user.password)
             .then((result) => {
-              if(result) {
+              if (result) {
                 const isSecure = req.app.get('env') != 'development';
-                console.log("isSecure", isSecure)
                 res.cookie("user_id", user.id, {
                   httpOnly: true,
                   secure: isSecure,
                   signed: true
                 });
-                res.json({
+               return res.json({
                   result,
                   message: "Logging in!"
                 });
