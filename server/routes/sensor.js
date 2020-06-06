@@ -3,6 +3,7 @@ const router = express.Router();
 
 const SensorQuery = require('../db/queries/sensorQuery');
 
+const SensorHelpers = require('../controller/sensors');
 
 // SENSOR ROUTES
 
@@ -23,10 +24,28 @@ router.get('/', async (req, res) => {
 //   res.send(types);
 // });
 
+function sortTypes(sensors) {
+  const result = [];
+  const types = ["distance", "pressure", "temperature", "humidity", "ppm"];
+  sensors.forEach(sensor => {
+    if (types.includes(sensor.type)) {
+      result.push(sensor);
+    };
+  });
+  return result
+}
+
+router.get('/site/:site', async (req, res) => {
+  const { site } = req.params;
+  const sensors = await SensorQuery.getSensorsBySite(site);
+  // const sensorsSort = SensorHelpers.sortTypes(sensors)
+  const sensorsSort = sortTypes(sensors)
+  res.send(sensorsSort);
+})
+
 router.get('/site/:site/type/:type', async (req, res) => {
-  const {type, site} = req.params;
+  const { type, site } = req.params;
   const sensors = await SensorQuery.getSensorsByType(type, site);
-  console.log("sensors", sensors);
   res.send(sensors);
 })
 

@@ -4,12 +4,17 @@ const logger = require('morgan');
 const cookieParser = require('cookie-parser');
 const cors = require('cors');
 const methodOverride = require('method-override');
+
+const authMiddleware = require('./routes/middleware');
+
 const app = express();
+
+
 
 //  Route files
 const node = require('./routes/node');
 const auth = require('./routes/auth');
-const sensor = require('./routes/senor');
+const sensor = require('./routes/sensor');
 const device = require('./routes/device');
 const controller = require('./routes/controller');
 const proptery = require('./routes/proptery');
@@ -18,6 +23,10 @@ const proptery = require('./routes/proptery');
 
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
+
+
+
+
 
 app.use(methodOverride((req, res) => {
   if (req.body && req.body._method) {
@@ -39,11 +48,11 @@ app.use(cors({
 // ROUTES 
 
 app.use('/auth', auth);
-app.use('/nodes', node);
+app.use('/nodes',  node);
 app.use('/sensors', sensor);
 app.use('/devices', device);
 app.use('/controllers', controller);
-app.use('/propteries', proptery);
+app.use('/properties', proptery);
 
 
 // ERRORS

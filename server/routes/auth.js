@@ -64,6 +64,11 @@ router.post('/login', async (req, res, next) => {
                   secure: isSecure,
                   signed: true
                 });
+                res.cookie("site", user.site, {
+                  httpOnly: true,
+                  secure: isSecure,
+                  signed: true
+                });
                return res.json({
                   result,
                   message: "Logging in!"
@@ -80,5 +85,7 @@ router.post('/login', async (req, res, next) => {
     next(new Error('Invaild login'))
   }
 })
+
+
 
 module.exports = router;

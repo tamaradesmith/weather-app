@@ -23,6 +23,10 @@ const Node = {
     });
     return res.json();
   },
+  async getSites() {
+    const res = await fetch(`${BASE_URL}/nodes/sites`);
+    return res.json();
+  },
   async updateActiveStates(info) {
     const res = await fetch(`${BASE_URL}/nodes/active`, {
       method: 'PATCH',
@@ -92,6 +96,10 @@ const Sensor = {
     const res = await fetch(`${BASE_URL}/sensors/types`)
     return res.json();
   },
+  async getSensorsBySite(site){
+    const res = await fetch(`${BASE_URL}/sensors/site/${site}`);
+    return res.json();
+  },
   async getSensorsLocations() {
     const res = await fetch(`${BASE_URL}/sensors/locations`);
     return res.json();
@@ -138,16 +146,21 @@ const Property = {
 }
 const User = {
   async login(user) {
-    const res = await fetch(`${BASE_URL}/auth/login`,{
+    const res = await fetch(`${BASE_URL}/auth/login`, {
       method: "POST",
       credentials: 'include',
-      headers:{
+      headers: {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify(user)
-    }).catch(err=>{
-      console.log("this is a n error" , err)
+    }).catch(err => {
+      console.log("this is a n error", err)
     });
+    return res.json();
+  },
+  async user(id) {
+    console.log("user -> id", id);
+    const res = await fetch(`${BASE_URL}/nodes/users/${id}`);
     return res.json();
   }
 }

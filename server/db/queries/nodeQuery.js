@@ -54,11 +54,16 @@ module.exports = {
   async updateActive(node) {
     const result = await knex('nodes').where({ id: node.id }).update({ active: node.active }).returning('id');
     let devices
-      devices = await DeviceQuery.activeByNodeID(result[0], node.active);
+    devices = await DeviceQuery.activeByNodeID(result[0], node.active);
     return { node: result[0], devices };
   },
 
   // SPECIAL QUERIES
+  async getSites() {
+    const sites = await knex('nodes').distinct().pluck('site');
+    return sites;
+  },
+
   async getNodesBySite(site) {
     const nodes = await knex('nodes').select("*").where({ site });
     return nodes;

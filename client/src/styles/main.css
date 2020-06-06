@@ -122,6 +122,27 @@ input {
   color: var(--highlight-colour);
   border-left: 5px solid var(--highlight-colour);
 }
+
+/* SITE */
+
+.site{
+  display: grid;
+  grid-template-columns: repeat(3, 15%) auto auto auto;
+}
+
+.site-header{
+  font-size: 1.25em;
+  font-weight: 700;
+  grid-column: 1/7;
+  text-align: center;
+}
+.site-temperature{
+  display: flex;
+  grid-column: 1/4;
+}
+.site-item{
+  padding: .25em;
+}
 /* TEMPERATURE  */
 
 .Temperature {

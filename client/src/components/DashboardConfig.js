@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Node, Device, Sensor, Controller, Property, User } from '../js/requests';
+import { Node, Device, Sensor, Controller, Property } from '../js/requests';
 
 import NodeIndex from './partials/NodeIndex'
 import NodeConfig from "./partials/configure/NodeConfig";

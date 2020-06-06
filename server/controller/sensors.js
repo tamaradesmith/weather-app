@@ -17,6 +17,9 @@ async function getSensorsByTypeByNodeSite(site, type) {
   getReadingsforSensors(sensors);
 };
 
+//  TYPES
+
+
 
 // NODE FUNCTIONS
 
@@ -71,13 +74,15 @@ function getReadingsforSensors(sensors) {
 
 async function getReadingFromSensor(sensor) {
   const readingData = await axois.get(sensor.url).catch(err => {
-    console.log("getReadingFromSensor -> err", err);
-    console.log(`${sensor.id}: ${new Date()} error`);
+    // console.log(`${sensor.id}: ${new Date()} error`);
+    
   });
   if (readingData !== undefined && checkstatus(readingData.data).toLowerCase() === "ok") {
     const value = getValue(readingData.data);
     const reading = { value, sensor_id: sensor.id, time: new Date() }
-    await SensorQuery.createReading(reading)
+    const read = await SensorQuery.createReading(reading);
+    // console.log("getReadingFromSensor -> read", read);
+
   }
   return
 }
@@ -95,13 +100,13 @@ function getValue(data) {
 
 
 
-getSensorsByTypeByNodeSite("New Westminster", "temperature")
-setInterval(() => {
-  getSensorsByTypeByNodeSite("New Westminster")
-}, 15 * 60 * 1000);
+// getSensorsByTypeByNodeSite("New Westminster", "temperature")
+// setInterval(() => {
+//   getSensorsByTypeByNodeSite("New Westminster")
+// }, 10 * 1000);
 
-setInterval(() => {
-  getSensorsByTypeByNodeSite("New Westminster", "pressure")
+// setInterval(() => {
+//   getSensorsByTypeByNodeSite("New Westminster", "pressure")
 
-}, 15 * 60 * 1000);
+// }, 10 * 1000);
 

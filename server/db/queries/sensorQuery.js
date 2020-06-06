@@ -34,11 +34,27 @@ module.exports = {
   },
   // get Sensors by Type 
   async getSensorsByType(type, site) {
-    console.log("getSensorsByType -> type", type);
-    const sensors = await knex('devices').join('nodes', 'nodes.id', "node_id").select("nodes.site", "nodes.location", 'nodes.active', "devices.id").where({ site: site, location: "outside" }).orWhere({ site: site, location: "inside" }).join('sensors', 'device_id', 'devices.id').select('sensors.type', "sensors.id").andWhere('sensors.type', type).where('sensors.active', true)
-    console.log("getSensorsByType -> sensors", sensors);
- 
+    const sensors = await knex('devices')
+      .join('nodes', 'nodes.id', "node_id")
+      .select("nodes.site", "nodes.location", 'nodes.active', "devices.id")
+      .where({ site: site, location: "outside" })
+      .orWhere({ site: site, location: "inside" })
+      .join('sensors', 'device_id', 'devices.id')
+      .select('*')
+      .andWhere('sensors.type', type).where('sensors.active', true)
     return sensors;
+  },
+  async getSensorsBySite(site) {
+    const sensors = await knex('devices')
+      .join('nodes', 'nodes.id', 'node_id')
+      .join('sensors', 'device_id', 'devices.id')
+      .select("nodes.site", 'nodes.id as node_id', 'devices.id as device_id', "nodes.location", 'sensors.type', 'sensors.id as sensor_id', "sensors.max", "sensors.min", 'sensors.name', "sensors.active as sensor_active")
+      .where("devices.active", true).andWhere('sensors.active', true)
+      .andWhere({ site: site, location: 'outside' })
+      .orWhere({ site: site, location: 'inside' }).andWhere('sensors.active', true).andWhere("devices.active", true)
+    // .select()
+    console.log("getSensorsBySite -> sensors", sensors);
+    return sensors
   },
   // get Sensors by Type and Device Id
   async getSensorsByTypeAndDeviceId(type, deviceId) {
@@ -69,6 +85,7 @@ module.exports = {
   },
   async activeBySensorsId(sensors) {
     return await Promise.all(sensors.map(async sensor => {
+
       const result = await knex('sensors').where({ id: sensor.id }).update({ active: sensor.active }).returning('id');
       return result[0];
     }));
@@ -78,8 +95,9 @@ module.exports = {
   // READINGS QUERIES
 
   async createReading(info) {
-    info.value = info.value.toFixed(2);
+    // info.value = info.value.toFixed(2);
     const reading = knex('readings').insert(info).returning("*");
+    // console.log("createReading -> reading", reading);
     return reading;
   },
   // get High and Low 24 hours
