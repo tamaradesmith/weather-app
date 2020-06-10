@@ -35,13 +35,14 @@ module.exports = {
   // get Sensors by Type 
   async getSensorsByType(type, site) {
     const sensors = await knex('devices')
-      .join('nodes', 'nodes.id', "node_id")
-      .select("nodes.site", "nodes.location", 'nodes.active', "devices.id")
-      .where({ site: site, location: "outside" })
-      .orWhere({ site: site, location: "inside" })
-      .join('sensors', 'device_id', 'devices.id')
-      .select('*')
-      .andWhere('sensors.type', type).where('sensors.active', true)
+    .join('nodes', 'nodes.id', "node_id")
+    .select("nodes.site", "nodes.location", 'nodes.active', "devices.id")
+    .join('sensors', 'devices.id', 'device_id')
+    .select('*')
+      
+      .where({ site: site, location: "outside" }).andWhere('sensors.type', type).andWhere('sensors.active', true)
+    .orWhere({ site: site, location: "inside" })
+    .andWhere('sensors.type', type).andWhere('sensors.active', true)
     return sensors;
   },
   async getSensorsBySite(site) {
@@ -113,12 +114,8 @@ module.exports = {
     return reading[0]
   },
   async getSensorsLastReadings(sensors) {
-
     return await Promise.all(sensors.map(async (sensor) => {
       const reading = await this.getLastReading(sensor.sensor_id);
-    //  reading.value = (reading !== undefined) ? Math.round(reading.value * 10) / 10 : 0.0;
-    //  console.log("getSensorsLastReadings -> reading.value", reading.value);
-      // console.log("getSensorsLastReadings -> reading.value !== undefined", Math.round(reading.value * 10) / 10 )
       sensor.reading = reading;
       return sensor;
     }));

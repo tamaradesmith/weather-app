@@ -35,12 +35,12 @@ function sortTypes(sensors) {
   return result
 }
 
-router.get('/site/:site', async (req, res) => {
-  const { site } = req.params;
-  const sensors = await SensorQuery.getSensorsBySite(site);
-  const sensorsSort = sortTypes(sensors)
-  res.send(sensorsSort);
-})
+// router.get('/site/:site', async (req, res) => {
+//   const { site } = req.params;
+//   const sensors = await SensorQuery.getSensorsBySite(site);
+//   const sensorsSort = sortTypes(sensors)
+//   res.send(sensorsSort);
+// })
 
 router.get('/site/:site/readings', async (req, res) => {
   const { site } = req.params;
