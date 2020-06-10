@@ -52,8 +52,6 @@ module.exports = {
       .where("devices.active", true).andWhere('sensors.active', true)
       .andWhere({ site: site, location: 'outside' })
       .orWhere({ site: site, location: 'inside' }).andWhere('sensors.active', true).andWhere("devices.active", true)
-    // .select()
-    console.log("getSensorsBySite -> sensors", sensors);
     return sensors
   },
   // get Sensors by Type and Device Id
@@ -109,5 +107,20 @@ module.exports = {
   async getLast24ReadingsBySensor(sensorId) {
     const readings = await knex('readings').select("value", "time").where({ sensor_id: sensorId }).orderBy('time', "desc").limit(12);
     return readings
+  },
+  async getLastReading(sensorId) {
+    const reading = await knex('readings').select("value", 'time').where({ sensor_id: sensorId }).orderBy('time').limit(1);
+    return reading[0]
+  },
+  async getSensorsLastReadings(sensors) {
+
+    return await Promise.all(sensors.map(async (sensor) => {
+      const reading = await this.getLastReading(sensor.sensor_id);
+    //  reading.value = (reading !== undefined) ? Math.round(reading.value * 10) / 10 : 0.0;
+    //  console.log("getSensorsLastReadings -> reading.value", reading.value);
+      // console.log("getSensorsLastReadings -> reading.value !== undefined", Math.round(reading.value * 10) / 10 )
+      sensor.reading = reading;
+      return sensor;
+    }));
   },
 }

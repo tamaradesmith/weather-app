@@ -100,6 +100,10 @@ const Sensor = {
     const res = await fetch(`${BASE_URL}/sensors/site/${site}`);
     return res.json();
   },
+  async getSiteSensorsReading(site){
+    const res = await fetch(`${BASE_URL}/sensors/site/${site}/readings`);
+    return res.json();
+  },
   async getSensorsLocations() {
     const res = await fetch(`${BASE_URL}/sensors/locations`);
     return res.json();
