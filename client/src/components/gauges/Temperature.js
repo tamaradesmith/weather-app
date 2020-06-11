@@ -93,10 +93,10 @@ function Temperature(props) {
       <div className="thermometer-div">
         <p className="thermometer-labels"> 0- </p>
         <p className="thermometer-labels-hight"> 40- </p>
-        <p className="thermometer-high" style={{ 'top': `${highLowLevel.high}px` }}>{highLow.high}- </p>
-        <p className="thermometer-low" style={{ 'top': `${highLowLevel.low}px` }}>{highLow.low}-</p>
+        <p className="thermometer-high" style={{ 'top': `${highLowLevel.high}px` }}>{highLow.high}&#8594; </p>
+        <p className="thermometer-low" style={{ 'top': `${highLowLevel.low}px` }}>{highLow.low}&#8594;</p>
 
-        <p className="thermometer-text" style={{ 'top': `${current}px` }}>-{temperature}</p>
+        <p className="thermometer-text" style={{ 'top': `${current}px` }}>	&#8592;{temperature}</p>
 
 
         <div >

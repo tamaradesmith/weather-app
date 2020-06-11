@@ -9,7 +9,7 @@ function Dashboardwind() {
   const [windSensors, setWindSensors] = useState(null);
 
   async function getSensorsbyType(type) {
-    const sensors = await Sensor.getSensorsbyType(type);
+    const sensors = await Sensor.getSensorsbyTypeandSite(type, "New Westminster");
     setWindSensors(sensors);
   }
 

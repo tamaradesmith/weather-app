@@ -8,8 +8,7 @@ function DashboardTemperature() {
 
   async function getTemperatureSensors(type) {
     const site = "New Westminster";
-    const sensors = await Sensor.getSensorsbyType(type, site);
-    console.log("getTemperatureSensors -> sensors", sensors);
+    const sensors = await Sensor.getSensorsbyTypeandSite(type, site);
     setTemperatureSensors(sensors);
   }
 

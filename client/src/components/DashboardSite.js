@@ -27,7 +27,7 @@ function DashboardSite(props) {
         <h4 className="site-label">--Inside--</h4>
         <h4 className="site-label">--Outside--</h4>
         {sensors.map((sensor, index) => (
-          <>
+          <React.Fragment key={index}>
             {sensor.type === "temperature" && sensor.location === "inside" ? (
               <div key={index} className="column-1">
                 <p className="site-reading-value"> {Math.round(sensor.reading.value * 10) / 10}</p>
@@ -42,7 +42,7 @@ function DashboardSite(props) {
               </div>
             ) : (null)
             }
-          </>
+          </React.Fragment>
         ))}
 
 
@@ -52,7 +52,7 @@ function DashboardSite(props) {
         <h4 className="site-label">--Inside--</h4>
         <h4 className="site-label">--Outside--</h4>
         {sensors.map((sensor, index) => (
-          <>
+          <React.Fragment key={index}>
             {sensor.type === "humidity" && sensor.location === "inside" ? (
               <div key={index} className="column-1">
                 <p className="site-reading-value"> {Math.round(sensor.reading.value * 10) / 10}</p>
@@ -67,14 +67,14 @@ function DashboardSite(props) {
               </div>
             ) : (null)
             }
-          </>
+          </React.Fragment>
         ))}
       </div>
 
       <div className=" site-rain">
         <h3 className="site-sensor-header">Rain</h3>
         {sensors.map((sensor, index) => (
-          <>
+          <React.Fragment key={index}>
             {sensor.type === "distance" && sensor.location === "outside" ? (
               <div key={index} className="column-1">
                 <p className="site-reading-value"> {Math.round(sensor.reading.value * 10) / 10}</p>
@@ -82,7 +82,7 @@ function DashboardSite(props) {
               </div>
             ) : (null)
             }
-            </>
+          </React.Fragment>
         ))}
 
       </div>
@@ -91,7 +91,7 @@ function DashboardSite(props) {
       <div className=" site-cloud">
         <h3 className="site-sensor-header">Cloud Cover</h3>
         {sensors.map((sensor, index) => (
-          <>
+          <React.Fragment key={index}>
             {sensor.type === "distance" && sensor.location === "outside" ? (
               <div key={index} className="column-1">
                 <p className="site-reading-value"> {Math.round(sensor.reading.value * 10) / 10}</p>
@@ -99,7 +99,7 @@ function DashboardSite(props) {
               </div>
             ) : (null)
             }
-          </>
+          </React.Fragment>
         ))}
       </div>
 
@@ -109,7 +109,7 @@ function DashboardSite(props) {
         <h4 className="site-label">--Outside--</h4>
 
         {sensors.map((sensor, index) => (
-          <>
+          <React.Fragment key={index}>
             {sensor.type === "pressure" && sensor.location === "inside" ? (
               <div key={index} className="column-1">
                 <p className="site-reading-value"> {Math.round(sensor.reading.value * 10) / 10}</p>
@@ -124,7 +124,7 @@ function DashboardSite(props) {
               </div>
             ) : (null)
             }
-                    </>
+          </React.Fragment>
         ))}
       </div>
 
@@ -134,7 +134,7 @@ function DashboardSite(props) {
         <h4 className="site-label">--Direction--</h4>
 
         {sensors.map((sensor, index) => (
-          <>
+          <React.Fragment key={index}>
             {sensor.type === "pressure" && sensor.location === "inside" ? (
               <div key={index} className="column-1">
                 <p className="site-reading-value"> {Math.round(sensor.reading.value * 10) / 10}</p>
@@ -149,11 +149,11 @@ function DashboardSite(props) {
               </div>
             ) : (null)
             }
-          </>
+          </React.Fragment>
         ))}
       </div>
 
-    
+
     </main>
   );
 };

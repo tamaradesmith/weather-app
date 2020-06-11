@@ -12,8 +12,7 @@ function DashboardHumidily(props) {
 
   async function getSensorsbyType(type, state) {
     console.log("getSensorsbyType -> type", type);
-    const sensors = await Sensor.getSensorsbyType(type, "New Westminster");
-    console.log("getSensorsbyType -> sensors", sensors);
+    const sensors = await Sensor.getSensorsbyTypeandSite(type, "New Westminster");
     state(sensors);
   }
 

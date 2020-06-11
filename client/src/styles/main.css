@@ -253,30 +253,14 @@ input {
 }
 .thermometer-high {
   position: absolute;
-  left: -23px;
+  left: -35px;
 }
 .thermometer-low {
   position: absolute;
   left: -23px;
 }
 
-/* old temp */
-.temperature-label {
-  text-align: center;
-}
-.temperature-div {
-  display: grid;
-  grid-template-columns: auto auto;
-}
-.temperature-thermometer {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-}
-.temperature-range {
-  font-size: 0.8em;
-  text-align: center;
-}
+
 /* WIND  */
 .wind-div {
   display: flex;
