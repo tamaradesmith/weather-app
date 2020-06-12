@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useReducer } from "react";
-import { Node, Device } from "../../../js/requests";
+import { Node, Device, Site } from "../../../js/requests";
 
 import DeviceConfig from './DeviceConfig';
 import SensorConfig from './SensorConfig'
@@ -10,8 +10,13 @@ function NodeConfig(props) {
 
   const { foundNodes, cancel } = props
 
+  const [sites, setSites] = useState([]);
+  const [locations, setLocations] = useState([]);
+  const [location, setLocation] = useState();
+
   const [nodeId, setNodeId] = useState();
   const [node, setNode] = useState('');
+
   const [deviceList, setDeviceList] = useState(null);
   const [device, setDevice] = useState('');
   const [configView, setConfigView] = useState("")
@@ -29,6 +34,11 @@ function NodeConfig(props) {
     event.preventDefault();
     cancel();
   }
+
+  async function getSites() {
+    const result = await Site.getAllSites();
+    setSites(result);
+  };
 
   // Change modes
   function reducer(state, action) {
@@ -65,20 +75,49 @@ function NodeConfig(props) {
     }
   };
 
+  // NODE CONFIGURE
+
   function handlePickNode(event) {
     const { target } = event;
     foundNodes.forEach((node, index) => {
       if (target.value === node.name) {
+        document.querySelector('#nameNode').value = target.value;
         document.querySelector("#ipaddress").value = foundNodes[index].ip;
-        document.querySelector("#location").value = foundNodes[index].location;
         document.querySelector("#description").value = foundNodes[index].description;
         document.querySelector("#type").value = foundNodes[index].type;
       };
     });
+    document.querySelector('#site').classList.toggle('hidden');
+    document.querySelector('#siteLabel').classList.toggle('hidden');
+
+
+  };
+
+
+  async function handlePickSite(event) {
+    const { target } = event;
+    document.querySelector('#siteName').value = sites[target.value].name;
+    const result = await Site.getLocations(sites[target.value].id);
+    setLocations(result);
+    document.querySelector('#location').classList.toggle('hidden');
+    document.querySelector('#locationLabel').classList.toggle('hidden');
+  }
+
+  function handlePickLocation(event) {
+    const { target } = event;
+    document.querySelector("#locationName").value = locations[target.value].name;
+    setLocation(locations[target.value]);
     document.querySelector("#form").classList.remove("hidden");
     document.querySelector("#form").classList.add("config-form");
     document.querySelector("#next").disabled = false;
-  };
+
+    document.querySelector('#location').classList.toggle('hidden');
+    document.querySelector('#locationLabel').classList.toggle('hidden');
+    document.querySelector('#site').classList.toggle('hidden');
+    document.querySelector('#siteLabel').classList.toggle('hidden');
+    document.querySelector('#name').classList.toggle('hidden');
+    document.querySelector('#nameLabel').classList.toggle('hidden');
+  }
 
   async function checkFields(info, inputs, target) {
     let flag = true;
@@ -103,8 +142,8 @@ function NodeConfig(props) {
           return controllerNext(info);
         case 'property':
           return propertyNext(info);
-          default:
-            break;
+        default:
+          break;
       };
     };
   };
@@ -139,8 +178,7 @@ function NodeConfig(props) {
       name: formData.get("name"),
       description: formData.get("description"),
       type: formData.get('type'),
-      location: (formData.get('location') !== "other") ? formData.get('location') : formData.get("locationOther"),
-      site: formData.get('site'),
+      location_id: location.id,
       ipaddress: formData.get('ipAddress'),
       active: (formData.get(`active`) === "on") ? true : false
     };
@@ -169,15 +207,19 @@ function NodeConfig(props) {
     const sensorInfo = deviceList[deviceCount].sensors[sensorCount];
     const formData = new FormData(sensorForm);
     const newSensor = {
-      device_id: device.id,
-      name: sensorInfo.name,
+      sensor: {
+        device_id: device.id,
+        name: sensorInfo.name,
+        url: sensorInfo.url,
+        description: formData.get('description'),
+        active: (formData.get(`active`) === "on") ? true : false,
+      },
+      properties: {
+        min: sensorInfo.min,
+        max: sensorInfo.max,
+        unit: formData.get('unit'),
+      },
       type: sensorInfo.type,
-      url: sensorInfo.url,
-      description: formData.get('description'),
-      min: sensorInfo.min,
-      max: sensorInfo.max,
-      unit: formData.get('unit'),
-      active: (formData.get(`active`) === "on") ? true : false,
     }
     checkFields(newSensor, inputs, sensorForm)
   }
@@ -367,9 +409,14 @@ function NodeConfig(props) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [deviceCount]);
 
-  if (foundNodes === null) {
-    return "Searching..."
-  };
+  useEffect(() => {
+    getSites();
+  }, ([]));
+
+
+  // if (foundNodes === null) {
+  //   return "Searching..."
+  // };
 
 
   return (
@@ -380,7 +427,7 @@ function NodeConfig(props) {
         <form id="nodeForm" className="config-form" >
           <h3 className="config-header">Node Configure</h3>
 
-          <label htmlFor="name"> Name: </label>
+          <label htmlFor="name" id="nameLabel"> Name: </label>
           <select name="name" id='name' className="config-field config-select" onChange={handlePickNode}>
             <option value=""></option>
             {foundNodes.map((node, index) => (
@@ -388,18 +435,37 @@ function NodeConfig(props) {
             ))}
           </select>
 
+
+
+          <label htmlFor="site" id="siteLabel" className="hidden"> Site: </label>
+          <select name="site" id="site" className="hidden config-field config-select" onChange={handlePickSite}>
+            <option value=""></option>
+            {sites.map((site, index) => (
+              <option key={site.id} value={index}> {site.name} </option>
+            ))}
+          </select>
+
+          <label htmlFor="location" id="locationLabel" className="hidden"> Location: </label>
+          <select name="location" id="location" className="hidden config-field config-select" onChange={handlePickLocation}>
+            <option value=""></option>
+            {locations.map((location, index) => (
+              <option key={location.id} value={index}> {location.name} </option>
+            ))}
+          </select>
+
           <div id="form" className="hidden form-column">
+
+            <label htmlFor="name">Name</label>
+            <input type="text" name="name" id="nameNode" className="config-field" readOnly></input>
+
+            <label htmlFor="siteName">Site</label>
+            <input type="text" name="siteName" id="siteName" className="config-field" readOnly></input>
+
+            <label htmlFor="locationName">Location</label>
+            <input type="text" name="locationName" id="locationName" className="config-field" readOnly></input>
 
             <label htmlFor="description">Description</label>
             <input type="text" name="description" id="description" className="config-field" readOnly></input>
-
-            <label htmlFor="location">Location</label>
-            <input name="location" id="location" className="config-field" readOnly >
-            </input>
-
-            <label htmlFor="site">Site</label>
-            <input name="site" id="location" className="config-field"  >
-            </input>
 
             <label htmlFor="type">Type</label>
             <input type="text" name="type" id="type" placeholder="Enter node type" className="config-field" readOnly></input>

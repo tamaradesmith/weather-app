@@ -7,12 +7,12 @@ app.use(express.json());
 // QUERY
 
 const NodeQuery = require('../db/queries/nodeQuery.js');
-const DeviceQuery = require('../db/queries/deviceQuery');
-const SensorQuery = require('../db/queries/sensorQuery');
-const ControllerQuery = require('../db/queries/controllerQuery');
-const PropertyQuery = require('../db/queries/propertyQuery');
+// const DeviceQuery = require('../db/queries/deviceQuery');
+// const SensorQuery = require('../db/queries/sensorQuery');
+// const ControllerQuery = require('../db/queries/controllerQuery');
+// const PropertyQuery = require('../db/queries/propertyQuery');
 
-// Helpers
+// // Helpers
 
 const ConfigHelpers = require('./configHelpers')
 const NodeHelpers = require('./nodeHelper')
@@ -27,14 +27,10 @@ router.get('/search', async (req, res) => {
   res.send(nodes);
 });
 
-// GET ALL SITES
-router.get('/sites', async (req, res) =>{
-  const sites = await NodeQuery.getSites();
-  res.send(sites);
-})
 
 
-// CRUD ROUTES
+
+// // CRUD ROUTES
 
 router.get('/', async (req, res) => {
   const nodes = await NodeQuery.getNodes();
@@ -73,53 +69,43 @@ router.get('/:id/devices/config', async (req, res) => {
   res.send(devices);
 })
 
-// TESTING ROUTE DELATE LATER!!!! 
-// router.get('/:id/deviceList', async (req, res) => {
-//   const id = req.params.id;
-//   const devicesXML = await NodeQuery.getDeviceListOnNode(id);
-//   const devices = ConfigHelpers.getDevices(devicesXML);
-//   res.send(devices);
+
+// router.get('/:id/devices', async (req, res) => {
+//   const nodeId = req.params.id;
+//   const devices = await DeviceQuery.getDevicesByNodeId(nodeId);
+//   const devicesWithSensors = await SensorQuery.getAllSensorOnNodeByDevices(devices);
+//   const devicesWithController = await ControllerQuery.getAllControllersOnNodeByDevices(devicesWithSensors);
+//   const devicesWithProperties = await PropertyQuery.getAllPropertiesOnNodeByDevice(devicesWithController)
+//   res.send(devicesWithProperties)
 // })
 
+// router.get('/:id/devices/sensors', async (req, res) => {
+//   const nodeId = req.params.id;
+//   const devices = await DeviceQuery.getDevicseByNodeId(nodeId);
+//   const sensors = await SensorQuery.getAllSensorOnNodeByDevices(devices);
+//   res.send(sensors);
+// })
 
-
-
-router.get('/:id/devices', async (req, res) => {
-  const nodeId = req.params.id;
-  const devices = await DeviceQuery.getDevicesByNodeId(nodeId);
-  const devicesWithSensors = await SensorQuery.getAllSensorOnNodeByDevices(devices);
-  const devicesWithController = await ControllerQuery.getAllControllersOnNodeByDevices(devicesWithSensors);
-  const devicesWithProperties = await PropertyQuery.getAllPropertiesOnNodeByDevice(devicesWithController)
-  res.send(devicesWithProperties)
-})
-
-router.get('/:id/devices/sensors', async (req, res) => {
-  const nodeId = req.params.id;
-  const devices = await DeviceQuery.getDevicseByNodeId(nodeId);
-  const sensors = await SensorQuery.getAllSensorOnNodeByDevices(devices);
-  res.send(sensors);
-})
-
-router.patch('/active', async (req, res) => {
-  const info = req.body;
-  let result = {};
-  if (info.nodes) {
-    result = await NodeQuery.updateActive(info.nodes);
-  } else if (info.devices.length > 0) {
-    result = await DeviceQuery.activeByDevicesId(info.devices);
-  } else {
-    if (info.sensors.length > 0) {
-      result.sensors = await SensorQuery.activeBySensorsId(info.sensors);
-    };
-    if (info.controllers.length > 0) {
-      result.controllers = await ControllerQuery.activeByControllersId(info.controllers);
-    };
-    if (info.properties.length > 0) {
-      result.properties = await PropertyQuery.activeByPropertiesId(info.properties);
-    };
-  };
-  res.send(result);
-});
+// router.patch('/active', async (req, res) => {
+//   const info = req.body;
+//   let result = {};
+//   if (info.nodes) {
+//     result = await NodeQuery.updateActive(info.nodes);
+//   } else if (info.devices.length > 0) {
+//     result = await DeviceQuery.activeByDevicesId(info.devices);
+//   } else {
+//     if (info.sensors.length > 0) {
+//       result.sensors = await SensorQuery.activeBySensorsId(info.sensors);
+//     };
+//     if (info.controllers.length > 0) {
+//       result.controllers = await ControllerQuery.activeByControllersId(info.controllers);
+//     };
+//     if (info.properties.length > 0) {
+//       result.properties = await PropertyQuery.activeByPropertiesId(info.properties);
+//     };
+//   };
+//   res.send(result);
+// });
 
 
 

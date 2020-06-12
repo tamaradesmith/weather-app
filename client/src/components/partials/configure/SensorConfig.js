@@ -16,7 +16,6 @@ function SensorConfig(props) {
       <p className="config-label">Node: </p><p className="config-field-sensor"> {node.name} </p>
       <p className="config-label">Device:</p><p className="config-field-sensor"> {device.name} </p>
 
-
       <label htmlFor="name" className="config-label">Sensor:</label>
       <input type="text" name="name" id="name" className="config-field-sensor" value={sensorList[sensorCount].name} readOnly></input>
 
@@ -25,9 +24,6 @@ function SensorConfig(props) {
 
       <label htmlFor="type" className="config-label">Type:</label>
       <input type="text" name="type" id="type" className="config-field-sensor" value={sensorList[sensorCount].type} readOnly ></input>
-
-      <label htmlFor="location" className="config-label">Location:</label>
-      <input type="text" name="location" id="location" className="config-field-sensor" value={node.location} readOnly></input>
 
       <label htmlFor="min" className="config-label">Min Value:</label>
       <input type="text" name="min" id="min" value={parseFloat(sensorList[sensorCount].min).toFixed(2)} className="config-min" readOnly></input>

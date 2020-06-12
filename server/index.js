@@ -18,6 +18,7 @@ const sensor = require('./routes/sensor');
 const device = require('./routes/device');
 const controller = require('./routes/controller');
 const proptery = require('./routes/proptery');
+const site = require('./routes/site');
 
 
 
@@ -53,6 +54,7 @@ app.use('/sensors', sensor);
 app.use('/devices', device);
 app.use('/controllers', controller);
 app.use('/properties', proptery);
+app.use('/sites', site);
 
 
 // ERRORS

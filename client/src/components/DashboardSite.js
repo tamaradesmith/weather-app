@@ -8,15 +8,15 @@ function DashboardSite(props) {
   const [sensors, setSensors] = useState([]);
 
   async function getSensorsBySite() {
-    const getSensors = await Sensor.getSiteSensorsReading(site);
-    console.log("getSensorsBySite -> getSensors", getSensors);
-    setSensors(getSensors);
+    // const getSensors = await Sensor.getSiteSensorsReading(site);
+    // console.log("getSensorsBySite -> getSensors", getSensors);
+    // setSensors(getSensors);
   }
 
 
-  useEffect(() => {
-    getSensorsBySite();
-  }, []);
+  // useEffect(() => {
+  //   getSensorsBySite();
+  // }, []);
 
 
   return (

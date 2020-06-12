@@ -5,6 +5,7 @@ module.exports = {
 
   getDevices(XMLFile) {
     let devicesXml;
+    XMLFile =file;
     const devicesList = [];
     parseString(XMLFile, ((err, result) => {
       devicesXml = result.application.device
@@ -58,3 +59,149 @@ module.exports = {
     });
   },
 }
+
+
+const file = `<application>
+  < name > Device</name>
+    <version>Feb 14 2020 15:06:00</version>
+    <date>Feb 14 2020 15:06:00</date>
+    <device>
+      <name>BMP280</name>
+      <type>BMP280</type>
+      <sensors>
+        <sensor>
+          <name>Temperature</name>
+          <type>Temperature</type>
+          <url>rest/sensors/BMP280/Temperature</url>
+          <min>-40.000000</min>
+          <max>85.000000</max>
+          <unit>C</unit>
+        </sensor>
+        <sensor>
+          <name>Pressure</name>
+          <type>Pressure</type>
+          <url>rest/sensors/BMP280/Pressure</url>
+          <min>30000.000000</min>
+          <max>110000.000000</max>
+          <unit>kPa</unit>
+        </sensor>
+        <sensor>
+          <name>Altitude</name>
+          <type>Distance</type>
+          <url>rest/sensors/BMP280/Altitude</url>
+          <min>-500.000000</min>
+          <max>9000.000000</max>
+          <unit>M</unit>
+        </sensor>
+      </sensors>
+      <controllers />
+      <properties>
+        <property>
+          <name>SealLevelPressure</name>
+          <type>Pressure</type>
+          <url>rest/properties/BMP280/SealLevelPressure</url>
+          <min>30000.000000</min>
+          <max>110000.000000</max>
+          <unit>kPa</unit>
+        </property>
+      </properties>
+    </device>
+    <device>
+      <name>SGP30</name>
+      <type>SGP30</type>
+      <sensors>
+        <sensor>
+          <name>CO2</name>
+          <type>PPM</type>
+          <url>rest/sensors/SGP30/CO2</url>
+          <min>0.000000</min>
+          <max>100000.000000</max>
+          <unit> </unit>
+        </sensor>
+        <sensor>
+          <name>Raw H2</name>
+          <type>Range</type>
+          <url>rest/sensors/SGP30/Raw H2</url>
+          <min>0.000000</min>
+          <max>100000.000000</max>
+          <unit> </unit>
+        </sensor>
+        <sensor>
+          <name>Raw Ethanol</name>
+          <type>Range</type>
+          <url>rest/sensors/SGP30/Raw Ethanol</url>
+          <min>0.000000</min>
+          <max>100000.000000</max>
+          <unit> </unit>
+        </sensor>
+      </sensors>
+      <controllers />
+      <properties>
+        <property>
+          <name>eCO2Baseline</name>
+          <type>Range</type>
+          <url>rest/properties/SGP30/eCO2Baseline</url>
+          <min>0.000000</min>
+          <max>65535.000000</max>
+          <unit> </unit>
+        </property>
+        <property>
+          <name>eTvocBaseline</name>
+          <type>Range</type>
+          <url>rest/properties/SGP30/eTvocBaseline</url>
+          <min>0.000000</min>
+          <max>65535.000000</max>
+          <unit> </unit>
+        </property>
+      </properties>
+    </device>
+    <device>
+      <name>ESP</name>
+      <type>Motherboard</type>
+      <sensors>
+        <sensor>
+          <name>Analog</name>
+          <type>Percent</type>
+          <url>rest/sensors/ESP/Analog</url>
+          <min>0.000000</min>
+          <max>1.000000</max>
+          <unit>%</unit>
+        </sensor>
+      </sensors>
+      <controllers>
+        <controller>
+          <name>GPIO0</name>
+          <type>Percent</type>
+          <url>rest/controllers/ESP/GPIO0</url>
+          <min>0.000000</min>
+          <max>1.000000</max>
+          <unit>%</unit>
+        </controller>
+        <controller>
+          <name>GPIO2</name>
+          <type>Percent</type>
+          <url>rest/controllers/ESP/GPIO2</url>
+          <min>0.000000</min>
+          <max>1.000000</max>
+          <unit>%</unit>
+        </controller>
+        <controller>
+          <name>GPIO12</name>
+          <type>Boolean</type>
+          <url>rest/controllers/ESP/GPIO12</url>
+          <true>Black</true>
+          <false>Red</false>
+          <unit> </unit>
+        </controller>
+        <controller>
+          <name>GPIO15</name>
+          <type>Boolean</type>
+          <url>rest/controllers/ESP/GPIO15</url>
+          <true>OFF</true>
+          <false>ON</false>
+          <unit> </unit>
+        </controller>
+      </controllers>
+      <properties />
+    </device>
+</application >`
