@@ -230,12 +230,14 @@ function NodeConfig(props) {
     const controllerInfo = deviceList[deviceCount].controllers[controllerCount];
     const formData = new FormData(controllerForm);
     const newController = {
-      device_id: device.id,
-      url: controllerInfo.url,
-      name: controllerInfo.name,
+      controller: {
+        device_id: device.id,
+        url: controllerInfo.url,
+        name: controllerInfo.name,
+        description: formData.get("description"),
+        active: (formData.get(`active`) === "on") ? true : false,
+      },
       type: controllerInfo.type,
-      description: formData.get("description"),
-      active: (formData.get(`active`) === "on") ? true : false,
     };
     checkFields(newController, inputs, controllerForm)
   }
@@ -246,16 +248,21 @@ function NodeConfig(props) {
     const propertyInfo = deviceList[deviceCount].properties[propertyCount];
     const formData = new FormData(propertyForm);
     const newProperty = {
-      device_id: device.id,
-      name: propertyInfo.name,
+      properties: {
+        device_id: device.id,
+        name: propertyInfo.name,
+        url: propertyInfo.url,
+        description: formData.get("description"),
+        active: (formData.get(`active`) === "on") ? true : false,
+
+      },
       type: propertyInfo.type,
-      url: propertyInfo.url,
-      members: (propertyInfo.members) ? propertyInfo.members : "n/a",
-      min: (propertyInfo.min) ? propertyInfo.min : 0,
-      max: (propertyInfo.max) ? propertyInfo.max : 0,
-      unit: (propertyInfo.unit) ? formData.get('unit') : "n/a",
-      description: formData.get("description"),
-      active: (formData.get(`active`) === "on") ? true : false,
+      property_properties: {
+        members: (propertyInfo.members) ? propertyInfo.members : "none",
+        min: (propertyInfo.min) ? propertyInfo.min : "none",
+        max: (propertyInfo.max) ? propertyInfo.max : "none",
+        unit: (propertyInfo.unit) ? formData.get('unit') : "none",
+      }
     };
     checkFields(newProperty, inputs, propertyForm)
   }

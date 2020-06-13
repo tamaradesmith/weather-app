@@ -27,8 +27,6 @@ function PropertyConfig(props) {
       <label htmlFor="type" className="config-label">Type:</label>
       <input type="text" name="type" id="type" className="config-field-sensor" value={propertyList[propertyCount].type} readOnly ></input>
 
-      <label htmlFor="location" className="config-label">Location:</label>
-      <input type="text" name="location" id="location" className="config-field-sensor" value={node.location} readOnly></input>
       {propertyList[propertyCount].max ? (
         <>
           <label htmlFor="min" className="config-label">Min Value:</label>

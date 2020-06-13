@@ -23,7 +23,12 @@ module.exports = {
     return nodes;
   },
   async getNodeById(id) {
-    const node = await knex("nodes").select("*").where({ id });
+    const node = await knex("nodes")
+    .select('nodes.id', 'nodes.type', 'nodes.description', 'nodes.active', 'sites.name as site', 'locations.name as location')
+      .join('locations', 'locations.id', 'location_id')
+      .select()
+      .where('nodes.id', id)
+      .join('sites', 'sites.id', "site_id")
     return node[0]
   },
 

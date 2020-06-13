@@ -126,7 +126,6 @@ module.exports = {
   // TYPE QUERIES
 
   async getTypeId(type) {
-    console.log("getTypeId -> type", type);
     return await knex("sensor_types").select('id').where({ type });
   },
 

@@ -9,6 +9,8 @@ import DeviceDetails from './details/DeviceDetails';
 import PropertyDetails from './details/PropertyDetails';
 
 function NodeShow(props) {
+
+  
   const [node, setNode] = useState(null);
   const [devices, setDevices] = useState(null);
   const [updateNode, setUpdateNode] = useState(null)
@@ -60,7 +62,7 @@ function NodeShow(props) {
   }
 
   async function getDevicesByNodeId() {
-    const allDevices = (node != null) ? await Device.getDeivcesByNodeId(node.id) : '';
+    const allDevices = (node != null) ? await Node.getDeivcesByNodeId(node.id) : '';
     setDevices(allDevices);
   }
 

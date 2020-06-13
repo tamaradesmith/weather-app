@@ -14,11 +14,10 @@ router.get('/', async (req, res) => {
 
 router.post('/', async (req, res) => {
   const info = req.body;
-  const type = await SensorQuery.getTypeId(info.type);
+  const type = await SensorQuery.getTypeId(info.type.toLowerCase());
   info.sensor.type_id= type[0].id;
   const sensor = await SensorQuery.create(info.sensor);
   const properties = await SensorQuery.createProperties(info.properties, sensor.id);
-  console.log("properties", properties);
   res.send(sensor)
 });
 

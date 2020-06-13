@@ -7,10 +7,10 @@ app.use(express.json());
 // QUERY
 
 const NodeQuery = require('../db/queries/nodeQuery.js');
-// const DeviceQuery = require('../db/queries/deviceQuery');
-// const SensorQuery = require('../db/queries/sensorQuery');
-// const ControllerQuery = require('../db/queries/controllerQuery');
-// const PropertyQuery = require('../db/queries/propertyQuery');
+const DeviceQuery = require('../db/queries/deviceQuery');
+const SensorQuery = require('../db/queries/sensorQuery');
+const ControllerQuery = require('../db/queries/controllerQuery');
+const PropertyQuery = require('../db/queries/propertyQuery');
 
 // // Helpers
 
@@ -61,7 +61,8 @@ router.get('/:id', async (req, res) => {
 
 // Special ROUTES
 
-// get Config Devices 
+// get  DEVICE XML FILE
+
 router.get('/:id/devices/config', async (req, res) => {
   const id = req.params.id;
   const devicesXML = await NodeQuery.getDeviceListOnNode(id);
@@ -69,15 +70,17 @@ router.get('/:id/devices/config', async (req, res) => {
   res.send(devices);
 })
 
+// GET EVERY THING ON NODE
 
-// router.get('/:id/devices', async (req, res) => {
-//   const nodeId = req.params.id;
-//   const devices = await DeviceQuery.getDevicesByNodeId(nodeId);
-//   const devicesWithSensors = await SensorQuery.getAllSensorOnNodeByDevices(devices);
-//   const devicesWithController = await ControllerQuery.getAllControllersOnNodeByDevices(devicesWithSensors);
-//   const devicesWithProperties = await PropertyQuery.getAllPropertiesOnNodeByDevice(devicesWithController)
-//   res.send(devicesWithProperties)
-// })
+router.get('/:id/devices', async (req, res) => {
+  const nodeId = req.params.id;
+  const devices = await DeviceQuery.getAllDeviceDependentByNodeId(nodeId);
+  // const devicesWithDependents = await DeviceQuery.getDevicesDepentents(devices)
+  // const devicesWithSensors = await SensorQuery.getAllSensorOnNodeByDevices(devices);
+  // const devicesWithController = await ControllerQuery.getAllControllersOnNodeByDevices(devicesWithSensors);
+  // const devicesWithProperties = await PropertyQuery.getAllPropertiesOnNodeByDevice(devicesWithController)
+  res.send(devices)
+})
 
 // router.get('/:id/devices/sensors', async (req, res) => {
 //   const nodeId = req.params.id;

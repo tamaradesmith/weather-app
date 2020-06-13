@@ -46,6 +46,10 @@ const Node = {
     const res = await fetch(`${BASE_URL}/nodes/search`);
     return res.json();
   },
+  async getDeivcesByNodeId(nodeId) {
+    const res = await fetch(`${BASE_URL}/nodes/${nodeId}/devices`);
+    return res.json();
+  },
 }
 
 const Device = {
@@ -57,10 +61,6 @@ const Device = {
     const res = await fetch(`${BASE_URL}/nodes/${nodeId}/devices/config`);
     return res.json();
   },
-  // async getDeivcesByNodeId(nodeId) {
-  //   const res = await fetch(`${BASE_URL}/nodes/${nodeId}/devices`);
-  //   return res.json();
-  // },
   async create(info) {
     const res = await fetch(`${BASE_URL}/devices`, {
       method: 'POST',

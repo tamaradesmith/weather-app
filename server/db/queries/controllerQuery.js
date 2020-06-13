@@ -2,10 +2,10 @@ const knex = require('../../client');
 
 module.exports = {
   // CRUD
-  // async create(info) {
-  //   const controller = await knex("controllers").insert(info).returning("*");
-  //   return controller[0];
-  // },
+  async create(info) {
+    const controller = await knex("controllers").insert(info).returning("*");
+    return controller[0];
+  },
 
   // // SPECIAL QUERIES
 
@@ -29,4 +29,20 @@ module.exports = {
   //     return result[0]; 
   //   }))
   // },
+
+  //  CONTROLLER TYPE
+  async getTypeId(type) {
+    return await knex('controller_types').select('id').where({ type });
+  },
+
+  // CONTROLLER PROPERTY
+  async createProperties(properties, controllerId) {
+    if (properties !== undefined) {
+      const keys = Object.keys(properties);
+      return await Promise.all(keys.map(async (key) => {
+        return await knex('controller_properties').insert({ controller_id: controllerId, name: key, value: properties[key] });
+      }));
+    };
+    return;
+  },
 };
