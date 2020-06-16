@@ -21,23 +21,26 @@ module.exports = {
   //   return devices
   // },
 
-  // // UPDATE ACTIVE 
 
-  // async activeByDeviceID(id, activeState) {
-  //   return await knex('properties').where({ device_id: id }).update({ active: activeState }).returning('id');
-  // },
+  // UPDATE ACTIVE 
 
-  // async activeByPropertiesId(properties) {
-  //   return await Promise.all(properties.map(async property => {
-  //     const result = await knex('properties').where({ id: property.id }).update({ active: property.active }).returning('id');
-  //     return result[0]
-  //   }));
-  // },
+  async activeByDeviceID(id, activeState) {
+    return await knex('properties').where({ device_id: id }).update({ active: activeState }).returning('id');
+  },
+  async activeByPropertiesId(properties) {
+    return await Promise.all(properties.map(async property => {
+      const result = await knex('properties').where({ id: property.id }).update({ active: property.active }).returning('id');
+      return result[0]
+    }));
+  },
+
+
   // PROPERTY TYPE
   async getTypeId(type) {
     const typeId = await knex('property_types').select('id').where({ type: type });
     return typeId[0];
   },
+  
   // PROPERTY_PROPERTY
   async createProperties(properties, propertyId) {
     const keys = Object.keys(properties);

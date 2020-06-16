@@ -1,7 +1,7 @@
 const knex = require("../../client");
 const axios = require('axios');
 
-// const DeviceQuery = require('./deviceQuery')
+const DeviceQuery = require('./deviceQuery');
 // const SensorQuery = require('./sensorQuery');
 // const ControllerQuery = require('./controllerQuery');
 // const PropertyQuery = require('./propertyQuery');
@@ -9,22 +9,25 @@ const axios = require('axios');
 module.exports = {
   // // CRUD
   // async create(info) {
-  //   const nodeinfo = await knex(`nodes`).insert([
-  //     info
-  //   ]).returning("*");
-  //   return nodeinfo[0];
+  //       const newNode = await knex("nodes").insert(node).returning('id')
+  // .catch(error => { error });
+  // return { value: false, id: newNode[0] };
   // },
   // async update(type, info, id) {
   //   const item = await knex(`${type}`).where({ id: id }).update(info).returning('name');
   //   return item;
   // },
   async getNodes() {
-    const nodes = await knex("nodes").select("*")
+    const nodes = await knex("nodes")
+      .select('nodes.id', 'nodes.type', 'nodes.name', 'nodes.description', 'nodes.active', 'sites.name as site', 'locations.name as location')
+      .join('locations', 'locations.id', 'location_id')
+      .join('sites', 'sites.id', 'site_id')
+      .orderBy("nodes.createdAt")
     return nodes;
   },
   async getNodeById(id) {
     const node = await knex("nodes")
-    .select('nodes.id', 'nodes.type', 'nodes.description', 'nodes.active', 'sites.name as site', 'locations.name as location')
+      .select('nodes.id', 'nodes.type', 'nodes.name', 'nodes.description', 'nodes.active', 'sites.name as site', 'locations.name as location')
       .join('locations', 'locations.id', 'location_id')
       .select()
       .where('nodes.id', id)
@@ -56,12 +59,14 @@ module.exports = {
 
   // // UPDATE ACTIVE
 
-  // async updateActive(node) {
-  //   const result = await knex('nodes').where({ id: node.id }).update({ active: node.active }).returning('id');
-  //   let devices
-  //   devices = await DeviceQuery.activeByNodeID(result[0], node.active);
-  //   return { node: result[0], devices };
-  // },
+  async updateActive(node) {
+    const result = await knex('nodes').where({ id: node.id })
+    .update({ active: node.active })
+    .returning('id');
+    let devices
+    devices = await DeviceQuery.activeByNodeID(result[0], node.active);
+    return { node: result[0], devices };
+  },
 
   // // SPECIAL QUERIES
   // async getSites() {

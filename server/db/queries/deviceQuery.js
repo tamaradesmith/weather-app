@@ -53,27 +53,26 @@ module.exports = {
     )
     return devices;
   },
-  // // UPDATE ACTIVE
-  // async activeByNodeID(nodeId, activeState) {
-  //   const devicesId = await knex("devices").where({ node_id: nodeId }).update({ active: activeState }).returning('id');
-  //   const ids = await Promise.all(devicesId.map(async (id) => {
-  //     const dependents = this.activeDeviceDepenedent(id, activeState);
-  //     return dependents;
-  //   }));
-  //   return ids
-  // },
-  // async activeByDevicesId(devices) {
-  //   return await Promise.all(devices.map(async device => {
-  //     const deviceId = await knex("devices").where({ id: device.id }).update({ active: device.active }).returning('id');
-  //     const dependents = await this.activeDeviceDepenedent(device.id, device.active);
-  //     return { deviceId,  dependents };
-  //   }));
-  // },
-
-  // async activeDeviceDepenedent(id, activeState) {
-  //   const sensors = await SensorQuery.activeByDeviceID(id, activeState)
-  //   const controllers = await ControllerQuery.activeByDeviceID(id, activeState);
-  //   const properties = await PropertyQuery.activeByDeviceID(id, activeState);
-  //   return { device: id, dependents: { sensors, controllers, properties } }
-  // }
+  // UPDATE ACTIVE
+  async activeByNodeID(nodeId, activeState) {
+    const devicesId = await knex("devices").where({ node_id: nodeId }).update({ active: activeState }).returning('id');
+    const ids = await Promise.all(devicesId.map(async (id) => {
+      const dependents = this.activeDeviceDepenedent(id, activeState);
+      return dependents;
+    }));
+    return ids
+  },
+  async activeByDevicesId(devices) {
+    return await Promise.all(devices.map(async device => {
+      const deviceId = await knex("devices").where({ id: device.id }).update({ active: device.active }).returning('id');
+      const dependents = await this.activeDeviceDepenedent(device.id, device.active);
+      return { deviceId, dependents };
+    }));
+  },
+  async activeDeviceDepenedent(id, activeState) {
+    const sensors = await SensorQuery.activeByDeviceID(id, activeState)
+    const controllers = await ControllerQuery.activeByDeviceID(id, activeState);
+    const properties = await PropertyQuery.activeByDeviceID(id, activeState);
+    return { device: id, dependents: { sensors, controllers, properties } }
+  },
 };

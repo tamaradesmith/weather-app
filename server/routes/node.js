@@ -75,12 +75,8 @@ router.get('/:id/devices/config', async (req, res) => {
 router.get('/:id/devices', async (req, res) => {
   const nodeId = req.params.id;
   const devices = await DeviceQuery.getAllDeviceDependentByNodeId(nodeId);
-  // const devicesWithDependents = await DeviceQuery.getDevicesDepentents(devices)
-  // const devicesWithSensors = await SensorQuery.getAllSensorOnNodeByDevices(devices);
-  // const devicesWithController = await ControllerQuery.getAllControllersOnNodeByDevices(devicesWithSensors);
-  // const devicesWithProperties = await PropertyQuery.getAllPropertiesOnNodeByDevice(devicesWithController)
-  res.send(devices)
-})
+  res.send(devices);
+});
 
 // router.get('/:id/devices/sensors', async (req, res) => {
 //   const nodeId = req.params.id;
@@ -89,26 +85,26 @@ router.get('/:id/devices', async (req, res) => {
 //   res.send(sensors);
 // })
 
-// router.patch('/active', async (req, res) => {
-//   const info = req.body;
-//   let result = {};
-//   if (info.nodes) {
-//     result = await NodeQuery.updateActive(info.nodes);
-//   } else if (info.devices.length > 0) {
-//     result = await DeviceQuery.activeByDevicesId(info.devices);
-//   } else {
-//     if (info.sensors.length > 0) {
-//       result.sensors = await SensorQuery.activeBySensorsId(info.sensors);
-//     };
-//     if (info.controllers.length > 0) {
-//       result.controllers = await ControllerQuery.activeByControllersId(info.controllers);
-//     };
-//     if (info.properties.length > 0) {
-//       result.properties = await PropertyQuery.activeByPropertiesId(info.properties);
-//     };
-//   };
-//   res.send(result);
-// });
+router.patch('/active', async (req, res) => {
+  const info = req.body;
+  let result = {};
+  if (info.nodes) {
+    result = await NodeQuery.updateActive(info.nodes);
+  } else if (info.devices.length > 0) {
+    result = await DeviceQuery.activeByDevicesId(info.devices);
+  } else {
+    if (info.sensors.length > 0) {
+      result.sensors = await SensorQuery.activeBySensorsId(info.sensors);
+    };
+    if (info.controllers.length > 0) {
+      result.controllers = await ControllerQuery.activeByControllersId(info.controllers);
+    };
+    if (info.properties.length > 0) {
+      result.properties = await PropertyQuery.activeByPropertiesId(info.properties);
+    };
+  };
+  res.send(result);
+});
 
 
 

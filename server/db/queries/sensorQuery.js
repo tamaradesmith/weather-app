@@ -71,18 +71,17 @@ module.exports = {
   // },
 
 
-  // // ACTIVE UPDATES
+  // ACTIVE UPDATES
 
-  // async activeByDeviceID(deviceId, activeState) {
-  //   return await knex('sensors').where({ device_id: deviceId }).update({ active: activeState }).returning('id');
-  // },
-  // async activeBySensorsId(sensors) {
-  //   return await Promise.all(sensors.map(async sensor => {
-
-  //     const result = await knex('sensors').where({ id: sensor.id }).update({ active: sensor.active }).returning('id');
-  //     return result[0];
-  //   }));
-  // },
+  async activeByDeviceID(deviceId, activeState) {
+    return await knex('sensors').where({ device_id: deviceId }).update({ active: activeState }).returning('id');
+  },
+  async activeBySensorsId(sensors) {
+    return await Promise.all(sensors.map(async sensor => {
+      const result = await knex('sensors').where({ id: sensor.id }).update({ active: sensor.active }).returning('id');
+      return result[0];
+    }));
+  },
 
 
   // // READINGS QUERIES

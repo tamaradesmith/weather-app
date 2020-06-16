@@ -18,17 +18,17 @@ module.exports = {
   //   return devices;
   // },
 
-  // // UPDATE ACTIVE
+  // UPDATE ACTIVE
 
-  // async activeByDeviceID(id, activeState) {
-  //   return await knex('controllers').where({ device_id: id }).update({ active: activeState }).returning('id');
-  // },
-  // async activeByControllersId(controllers) {
-  //   return await Promise.all(controllers.map(async controller => {
-  //     const result = await knex('controllers').where({ id: controller.id }).update({ active: controller.active }).returning('id');
-  //     return result[0]; 
-  //   }))
-  // },
+  async activeByDeviceID(id, activeState) {
+    return await knex('controllers').where({ device_id: id }).update({ active: activeState }).returning('id');
+  },
+  async activeByControllersId(controllers) {
+    return await Promise.all(controllers.map(async controller => {
+      const result = await knex('controllers').where({ id: controller.id }).update({ active: controller.active }).returning('id');
+      return result[0]; 
+    }))
+  },
 
   //  CONTROLLER TYPE
   async getTypeId(type) {
