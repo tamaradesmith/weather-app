@@ -13,9 +13,9 @@ const User = require('../db/queries/userQuery')
 
 
 function validUser(user) {
-  const vaildEmail = typeof user.email == 'string' && user.email.trim() != "";
-  const vaildPassword = typeof user.password == 'string' && user.email.trim() != "" && user.password.trim().length >= 6;
-  return vaildEmail && vaildPassword;
+  // const vaildEmail = typeof user.email == 'string'// && user.email.trim() != "";
+  const vaildPassword = typeof user.password == 'string'  && user.password.trim().length >= 6;  //&& user.email.trim() != ""
+  return vaildPassword;  //vaildEmail && 
 }
 
 
@@ -26,12 +26,12 @@ router.get('/', (req, res) => {
 
 router.post('/signup', async (req, res, next) => {
   if (validUser(req.body)) {
-    const user = await User.GetOneByEmail(req.body.email);
+    const user = await User.GetByUsername(req.body.username);
     if (!user) {
       bcrypt.hash(req.body.password, 10)
         .then((hash) => {
           const newUser = {
-            email: req.body.email,
+            site_id: req.body.site,
             username: req.body.username,
             password: hash
           }

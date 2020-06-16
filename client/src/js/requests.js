@@ -32,16 +32,19 @@ const Node = {
     return res.json();
   },
 
-  // async updateActiveStates(info) {
-  //   const res = await fetch(`${BASE_URL}/nodes/active`, {
-  //     method: 'PATCH',
-  //     headers: {
-  //       'Content-Type': 'application/json'
-  //     },
-  //     body: JSON.stringify(info)
-  //   });
-  //   return res.json();
-  // },
+  async updateActiveStates(info) {
+    const res = await fetch(`${BASE_URL}/nodes/active`, {
+      method: 'PATCH',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(info)
+    })
+    .catch(error => {
+      console.log(error)
+    });
+    return res.json();
+  },
     async searchForNodes() {
     const res = await fetch(`${BASE_URL}/nodes/search`);
     return res.json();
@@ -175,6 +178,12 @@ const User = {
   //   const res = await fetch(`${BASE_URL}/nodes/users/${id}`);
   //   return res.json();
   // },
+};
+const Display ={
+  async getDisplaySensors(display, user){
+    const res = await fetch(`${BASE_URL}/display/${display}/${user}`);
+    return res.json();
+  }
 }
 
-export { Site, Sensor, Node, Device, Controller, Property, User };
+export { Site, Sensor, Node, Device, Controller, Property, User, Display };

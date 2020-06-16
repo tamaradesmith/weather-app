@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useReducer } from "react";
-import { Node, Device } from "../../js/requests";
+import { Node } from "../../js/requests";
 
 
 import NodeDetails from './details/NodeDetails';
@@ -10,9 +10,9 @@ import PropertyDetails from './details/PropertyDetails';
 
 function NodeShow(props) {
 
-  
-  const [node, setNode] = useState(null);
-  const [devices, setDevices] = useState(null);
+
+  const [node, setNode] = useState([]);
+  const [devices, setDevices] = useState([]);
   const [updateNode, setUpdateNode] = useState(null)
   const [updateDevice, setUpdateDevice] = useState([]);
   const [updateSensor, setUpdateSensor] = useState([]);
@@ -20,13 +20,14 @@ function NodeShow(props) {
   const [updateProperty, setUpdateProperty] = useState([]);
   const [buttonDisabled, setButtonDisabled] = useState(true);
 
-  const initialState = { view: '' }
+  const initialState = { view: '' };
+
   const [state, dispatch] = useReducer(reducer, initialState);
 
   function reducer(state, action) {
     switch (action.view) {
-      case 'general':
-        updateButtonClass('general');
+      case 'node':
+        updateButtonClass('node');
         return { view: <NodeDetails node={node} activeUpdate={changeActive} /> };
       case 'devices':
         updateButtonClass('devices');
@@ -42,8 +43,8 @@ function NodeShow(props) {
         return { view: <PropertyDetails devices={devices} activeUpdate={changeActive} /> };
       default:
         throw new Error();
-    }
-  }
+    };
+  };
 
   function updateButtonClass(id) {
     document.querySelectorAll('.tab-button').forEach(button => {
@@ -58,13 +59,15 @@ function NodeShow(props) {
   async function getNodeInfo() {
     const node = await Node.getNode(props.match.params.id);
     setNode(node);
-    dispatch({ view: 'general' });
-  }
+    if (state.view === "") {
+      dispatch({ view: 'node' });
+    };
+  };
 
   async function getDevicesByNodeId() {
-    const allDevices = (node != null) ? await Node.getDeivcesByNodeId(node.id) : '';
+    const allDevices = (node.id !== undefined) ? await Node.getDeivcesByNodeId(node.id) : '';
     setDevices(allDevices);
-  }
+  };
 
   function changeActive(type, id, active, deviceIndex, typeIndex) {
     const item = { type, id, active };
@@ -101,13 +104,14 @@ function NodeShow(props) {
 
   async function handleUpdate() {
     const body = { nodes: updateNode, devices: updateDevice, sensors: updateSensor, controllers: updateController, properties: updateProperty };
-    await Node.updateActiveStates(body);
+    const result = await Node.updateActiveStates(body);
     setUpdateNode(null);
     setUpdateDevice([]);
     setUpdateSensor([]);
     setUpdateController([]);
     setUpdateProperty([]);
     getNodeInfo();
+    setButtonDisabled(true);
   };
 
   function checkIfExistsInUpdate(newItem, existing) {
@@ -127,23 +131,20 @@ function NodeShow(props) {
   useEffect(() => {
     getNodeInfo();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
+  }, []);
 
   useEffect(() => {
     getDevicesByNodeId();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [node])
+  }, [node]);
 
-  if (node === null) {
-    return "loading ...";
-  };
 
   return (
 
     <main className="NodeShow  view">
       <h3 className="show-header" >Node: {node.name}</h3>
       <div className="tab-buttons-div">
-        <button id="general" className="tab-button active-tab" onClick={() => dispatch({ view: 'general' })}>General</button>
+        <button id="node" className="tab-button active-tab" onClick={() => dispatch({ view: 'node' })}>Node</button>
         <button id="devices" className=" tab-button" onClick={() => dispatch({ view: 'devices' })}>Devices</button>
         <button id="sensors" className=" tab-button" onClick={() => dispatch({ view: 'sensors' })}>Sensors</button>
         <button id="controllers" className="tab-button" onClick={() => dispatch({ view: 'controllers' })} >Controllers</button>

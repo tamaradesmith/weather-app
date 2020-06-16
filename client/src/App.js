@@ -6,8 +6,8 @@ import DashboardSite from './components/DashboardSite';
 import DashboardTemperature from './components/DashboardTemperature';
 import DashboardWind from './components/DashboardWind';
 import DashboardHumidily from './components/DashboardHumidily';
-import DashboardIndoors from './components/DashboardIndoors';
-import DashboardOutdoors from './components/DashboardOutdoors';
+import DashboardInside from './components/DashboardInside';
+import DashboardOutside from './components/DashboardOutside';
 import DashboardConfig from './components/DashboardConfig'
 import NodeConfig from './components/partials/configure/NodeConfig';
 import NodeShow from './components/partials/NodeShow';
@@ -22,14 +22,14 @@ function App() {
         <Switch>
           <Route path="/" exact component={DashboardSite} />
           <Route path="/Site" component={DashboardSite} />
-          <Route path="/DashboardTemperature" component={DashboardTemperature} />
-          <Route path="/DashboardWind"  component = {DashboardWind} />
-          <Route path="/DashboardHumidily" component={DashboardHumidily} />
-          <Route path="/DashboardIndoors" component={DashboardIndoors} />
-          <Route path="/DashboardOutdoors"  component = {DashboardOutdoors} />
+          <Route path="/temperature" component={DashboardTemperature} />
+          <Route path="/wind"  component = {DashboardWind} />
+          <Route path="/humidily" component={DashboardHumidily} />
+          <Route path="/inside" component={DashboardInside} />
+          <Route path="/outside"  component = {DashboardOutside} />
           <Route path="/nodes/configure" exact component = {DashboardConfig} />
-          <Route path="/DashboardConfig/node/new" component = {NodeConfig} />
-          {/* <Route path="/DashboardConfig/node/:id/devices/new" component={DeviceConfig} /> */}
+          <Route path="/nodes/configure/new" component = {NodeConfig} />
+      
           <Route path="/node/:id" component={NodeShow} />
           <Route path="/nodes" component={NodeIndex} />
           <Route path="/login" component={Login} />

@@ -29,13 +29,12 @@ function NodeIndex(props) {
         <div className="show-detail-div">
           {
             nodes.map((node, index) => (
-              <div key={index} className="config-list">
-                <Link to={`/node/${node.id}`}>{node.name}</Link>
+                <Link to={`/node/${node.id}`} key={index} className="config-list">{node.name}
                 <p>{node.description}</p>
                 <p>{node.site}</p>
                 <p>{node.location} </p>
                 <p>{node.active ? ("Actvie") : ("Disabled")}</p>
-              </div>
+               </Link>
             ))
           }
         </div>

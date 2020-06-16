@@ -1,156 +1,85 @@
 import React, { useEffect, useState } from "react";
 
-import { Sensor } from '../js/requests';
+import { Display } from '../js/requests';
+
+import Temperature from './gauges/Temperature'
 
 function DashboardSite(props) {
 
   const [site, setSite] = useState('New Westminster');
-  const [sensors, setSensors] = useState([]);
+  const [dashboardSensors, setDashboardSensors] = useState([]);
 
-  async function getSensorsBySite() {
-    // const getSensors = await Sensor.getSiteSensorsReading(site);
-    // console.log("getSensorsBySite -> getSensors", getSensors);
-    // setSensors(getSensors);
+  // sensors
+// const [temperatureInside, setTemperatureInside] = useState('');
+
+  async function getDashboardSensors() {
+    const user = 1
+    const getSensors = await Display.getDisplaySensors('site', user);
+    setDashboardSensors(getSensors);
+  };
+
+ function populatePage(){
+    dashboardSensors.forEach(sensor =>{
+  const doc = document.querySelector(`#${sensor.html_id}`)
+  console.log("populatePage -> doc", doc);
+    })
   }
 
+  useEffect(() => {
+    getDashboardSensors();
+  }, []);
 
-  // useEffect(() => {
-  //   getSensorsBySite();
-  // }, []);
-
+  useEffect(()=>{
+    populatePage()
+  })
 
   return (
     <main className="DashboardSite site">
       <h1 className="site-header ">{site}</h1>
-      <div className="site-temperature ">
+      <div className="site-temperature border">
         <h3 className="site-sensor-header">Temperature</h3>
+        <div id="temperture-inside" className="column-1">
+          <Temperature  sensor={temperature-inside} />
+
+          sensor Inside </div>
         <h4 className="site-label">--Inside--</h4>
+        <div id="temperture-outside" className="column-2">sensor outside </div>
         <h4 className="site-label">--Outside--</h4>
-        {sensors.map((sensor, index) => (
-          <React.Fragment key={index}>
-            {sensor.type === "temperature" && sensor.location === "inside" ? (
-              <div key={index} className="column-1">
-                <p className="site-reading-value"> {Math.round(sensor.reading.value * 10) / 10}</p>
-                <p>{sensor.name}</p>
-              </div>
-            ) : (null)
-            }
-            {sensor.type === "temperature" && sensor.location === "outside" ? (
-              <div key={index} className="column-2">
-                <p id={sensor.id} className="site-reading-value">{Math.round(sensor.reading.value * 10) / 10}</p>
-                <p>{sensor.name}</p>
-              </div>
-            ) : (null)
-            }
-          </React.Fragment>
-        ))}
+
 
 
       </div>
-      <div className=" site-humidily">
+      <div className=" site-humidily border">
         <h3 className="site-sensor-header">Humidily</h3>
+        <div>sensor humidily </div>
+
         <h4 className="site-label">--Inside--</h4>
+        <div>sensor humidily </div>
         <h4 className="site-label">--Outside--</h4>
-        {sensors.map((sensor, index) => (
-          <React.Fragment key={index}>
-            {sensor.type === "humidity" && sensor.location === "inside" ? (
-              <div key={index} className="column-1">
-                <p className="site-reading-value"> {Math.round(sensor.reading.value * 10) / 10}</p>
-                <p>{sensor.name}</p>
-              </div>
-            ) : (null)
-            }
-            {sensor.type === "humidity" && sensor.location === "outside" ? (
-              <div key={index} className="column-2">
-                <p id={sensor.id} className="site-reading-value">{Math.round(sensor.reading.value * 10) / 10}</p>
-                <p>{sensor.name}</p>
-              </div>
-            ) : (null)
-            }
-          </React.Fragment>
-        ))}
+
       </div>
 
-      <div className=" site-rain">
+      <div className=" site-rain border">
         <h3 className="site-sensor-header">Rain</h3>
-        {sensors.map((sensor, index) => (
-          <React.Fragment key={index}>
-            {sensor.type === "distance" && sensor.location === "outside" ? (
-              <div key={index} className="column-1">
-                <p className="site-reading-value"> {Math.round(sensor.reading.value * 10) / 10}</p>
-                <p>{sensor.name}</p>
-              </div>
-            ) : (null)
-            }
-          </React.Fragment>
-        ))}
+
+        <div>sensor rainfall </div>
 
       </div>
 
-
-      <div className=" site-cloud">
-        <h3 className="site-sensor-header">Cloud Cover</h3>
-        {sensors.map((sensor, index) => (
-          <React.Fragment key={index}>
-            {sensor.type === "distance" && sensor.location === "outside" ? (
-              <div key={index} className="column-1">
-                <p className="site-reading-value"> {Math.round(sensor.reading.value * 10) / 10}</p>
-                <p>{sensor.name}</p>
-              </div>
-            ) : (null)
-            }
-          </React.Fragment>
-        ))}
-      </div>
-
-      <div className=" site-pressure">
+      <div className=" site-pressure border">
         <h3 className="site-sensor-header">Pressure</h3>
-        <h4 className="site-label">--Inside--</h4>
-        <h4 className="site-label">--Outside--</h4>
-
-        {sensors.map((sensor, index) => (
-          <React.Fragment key={index}>
-            {sensor.type === "pressure" && sensor.location === "inside" ? (
-              <div key={index} className="column-1">
-                <p className="site-reading-value"> {Math.round(sensor.reading.value * 10) / 10}</p>
-                <p>{sensor.name}</p>
-              </div>
-            ) : (null)
-            }
-            {sensor.type === "pressure" && sensor.location === "outside" ? (
-              <div key={index} className="column-2">
-                <p className="site-reading-value"> {Math.round(sensor.reading.value * 10) / 10}</p>
-                <p>{sensor.name}</p>
-              </div>
-            ) : (null)
-            }
-          </React.Fragment>
-        ))}
+        <div>sensor presure </div>
       </div>
 
-      <div className=" site-wind">
+      <div className=" site-wind border">
         <h3 className="site-sensor-header">Wind</h3>
+        <div>sensor wind </div>
+
         <h4 className="site-label">--Speed--</h4>
+        <div>sensor Direction </div>
+
         <h4 className="site-label">--Direction--</h4>
 
-        {sensors.map((sensor, index) => (
-          <React.Fragment key={index}>
-            {sensor.type === "pressure" && sensor.location === "inside" ? (
-              <div key={index} className="column-1">
-                <p className="site-reading-value"> {Math.round(sensor.reading.value * 10) / 10}</p>
-                <p>{sensor.name}</p>
-              </div>
-            ) : (null)
-            }
-            {sensor.type === "pressure" && sensor.location === "outside" ? (
-              <div key={index} className="column-2">
-                <p className="site-reading-value"> {Math.round(sensor.reading.value * 10) / 10}</p>
-                <p>{sensor.name}</p>
-              </div>
-            ) : (null)
-            }
-          </React.Fragment>
-        ))}
       </div>
 
 

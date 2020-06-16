@@ -19,7 +19,7 @@ const device = require('./routes/device');
 const controller = require('./routes/controller');
 const proptery = require('./routes/proptery');
 const site = require('./routes/site');
-
+const display = require('./routes/display');
 
 
 app.use(express.urlencoded({ extended: true }));
@@ -55,7 +55,7 @@ app.use('/devices', device);
 app.use('/controllers', controller);
 app.use('/properties', proptery);
 app.use('/sites', site);
-
+app.use('/display', display);
 
 // ERRORS
 

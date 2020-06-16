@@ -151,11 +151,9 @@ input {
 }
 .site-item {
   padding: 0.25em;
-
-  
 }
 .site-label{
-  grid-row: 2/3;
+  grid-row: 3/4;
   padding-bottom: .1em;
   font-size: .8em;
 }
