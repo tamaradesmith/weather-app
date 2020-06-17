@@ -91,14 +91,19 @@ const Sensor = {
     })
     return res.json()
   },
+  async getSensor(id){
+    const res = await fetch(`${BASE_URL}/sensors/${id}`)
+    return res.json();
+  },
+
   // async getSensors() {
   //   const res = await fetch(`${BASE_URL}/sensors`);
   //   return res.json();
   // },
-  // async getLastReading(sensorId) {
-  //   const res = await fetch(`${BASE_URL}/sensors/${sensorId}/reading`);
-  //   return res.json();
-  // },
+  async getLastReading(sensorId) {
+    const res = await fetch(`${BASE_URL}/sensors/${sensorId}/reading`);
+    return res.json();
+  },
   // async getSensorsbyTypeandSite(type, site) {
   //   const res = await fetch(`${BASE_URL}/sensors/site/${site}/type/${type}`)
   //   return res.json()
@@ -123,11 +128,11 @@ const Sensor = {
   //   const res = await fetch(`${BASE_URL}/node/${nodeId}/devices/sensors`);
   //   return res.json();
   // },
-  // // temperature  
-  // async getHighsAndLows(sensorId) {
-  //   const res = await fetch(`${BASE_URL}/sensors/${sensorId}/highslows`);
-  //   return res.json();
-  // },
+  // temperature  
+  async getHighsAndLows(sensorId) {
+    const res = await fetch(`${BASE_URL}/sensors/${sensorId}/highslows`);
+    return res.json();
+  },
   // async getLast24Readings(sensorId) {
   //   const res = await fetch(`${BASE_URL}/sensors/${sensorId}/24`)
   //   return res.json();

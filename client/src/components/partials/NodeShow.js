@@ -104,7 +104,7 @@ function NodeShow(props) {
 
   async function handleUpdate() {
     const body = { nodes: updateNode, devices: updateDevice, sensors: updateSensor, controllers: updateController, properties: updateProperty };
-    const result = await Node.updateActiveStates(body);
+    await Node.updateActiveStates(body);
     setUpdateNode(null);
     setUpdateDevice([]);
     setUpdateSensor([]);

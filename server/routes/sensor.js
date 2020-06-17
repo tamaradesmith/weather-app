@@ -18,9 +18,15 @@ router.post('/', async (req, res) => {
   info.sensor.type_id= type[0].id;
   const sensor = await SensorQuery.create(info.sensor);
   const properties = await SensorQuery.createProperties(info.properties, sensor.id);
-  res.send(sensor)
+  res.send(sensor);
 });
 
+router.get('/:id', async (req,res) =>{
+
+  const id = req.params.id;
+  const sensor = await SensorQuery.getSensor(id);
+  res.send(sensor[0]);
+});
 
 // // ******* need checking may 27 *******
 // // router.get('/types', async (req, res) => {
@@ -65,21 +71,22 @@ router.post('/', async (req, res) => {
 //   res.send(locations)
 // })
 
-// // get last reading
-// router.get('/:id/reading', async (req, res) => {
-//   const sensorId = req.params.id;
-//   const lastSensorReading = await SensorQuery.getLastReading(sensorId);
-//   res.send(lastSensorReading);
-// });
+// get last reading
+router.get('/:id/reading', async (req, res) => {
+  const sensorId = req.params.id;
+  const lastSensorReading = await SensorQuery.getLastReading(sensorId);
+  res.send(lastSensorReading);
+});
 
 
-// // Get Hightest and Lowest reading 
+// Get Hightest and Lowest reading 
 
-// router.get('/:id/highslows', async (req, res) => {
-//   const sensorId = req.params.id;
-//   const highslows = await SensorQuery.getHighsAndLows(sensorId);
-//   res.send(highslows);
-// });
+router.get('/:id/highslows', async (req, res) => {
+  const sensorId = req.params.id;
+  const highslows = await SensorQuery.getHighsAndLows(sensorId);
+  res.send(highslows);
+});
+
 // // get last 24 readings
 // router.get('/:id/24', async (req, res) => {
 //   const sensorId = req.params.id;

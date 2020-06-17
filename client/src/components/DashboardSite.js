@@ -1,49 +1,59 @@
 import React, { useEffect, useState } from "react";
 
-import { Display } from '../js/requests';
+import { Display, Sensor } from '../js/requests';
 
-import Temperature from './gauges/Temperature'
+import Temperature from './gauges/Temperature';
+import Humidily from './gauges/Humidity';
 
 function DashboardSite(props) {
 
   const [site, setSite] = useState('New Westminster');
   const [dashboardSensors, setDashboardSensors] = useState([]);
 
-  // sensors
-// const [temperatureInside, setTemperatureInside] = useState('');
+  const [pressure, setPresure] = useState();
+  const [rainfall, setRainfall] = useState();
+  // const [humidily, setHumidily]
 
   async function getDashboardSensors() {
-    const user = 1
+    const user = 1;
     const getSensors = await Display.getDisplaySensors('site', user);
+    console.log("getDashboardSensors -> getSensors", getSensors);
     setDashboardSensors(getSensors);
   };
 
- function populatePage(){
-    dashboardSensors.forEach(sensor =>{
-  const doc = document.querySelector(`#${sensor.html_id}`)
-  console.log("populatePage -> doc", doc);
-    })
-  }
+  async function getPresureReading() {
+    const reading = await Sensor.getLastReading(dashboardSensors.pressureSensor);
+    setPresure(reading.value);
+  };
+
+  async function getRainfallReading() {
+    const reading = await Sensor.getLastReading(dashboardSensors.rainfallSensor);
+    setRainfall(reading.value);
+  };
 
   useEffect(() => {
     getDashboardSensors();
+    ;
   }, []);
 
-  useEffect(()=>{
-    populatePage()
-  })
+  useEffect(() => {
+    if (dashboardSensors.pressureSensor !== undefined) { getPresureReading() };
+    if (dashboardSensors.rainfallSensor !== undefined) { getRainfallReading() };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [dashboardSensors])
 
   return (
     <main className="DashboardSite site">
       <h1 className="site-header ">{site}</h1>
       <div className="site-temperature border">
         <h3 className="site-sensor-header">Temperature</h3>
-        <div id="temperture-inside" className="column-1">
-          <Temperature  sensor={temperature-inside} />
-
-          sensor Inside </div>
+        <div id="tempertureInside" className="column-1">
+          <Temperature sensorId={dashboardSensors.tempertureInside} />
+        </div>
         <h4 className="site-label">--Inside--</h4>
-        <div id="temperture-outside" className="column-2">sensor outside </div>
+        <div id="temperture-outside" className="column-2">
+          <Temperature sensorId={dashboardSensors.tempertureOutside} />
+        </div>
         <h4 className="site-label">--Outside--</h4>
 
 
@@ -61,14 +71,12 @@ function DashboardSite(props) {
 
       <div className=" site-rain border">
         <h3 className="site-sensor-header">Rain</h3>
-
-        <div>sensor rainfall </div>
-
+        <p> {rainfall}</p>
       </div>
 
       <div className=" site-pressure border">
         <h3 className="site-sensor-header">Pressure</h3>
-        <div>sensor presure </div>
+        <p >{pressure} </p>
       </div>
 
       <div className=" site-wind border">

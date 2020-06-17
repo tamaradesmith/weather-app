@@ -1,13 +1,13 @@
 import React, { useState } from "react";
 import { Sensor } from "../../js/requests";
-import JqxLinearGauge from 'jqwidgets-scripts/jqwidgets-react-tsx/jqxlineargauge'
+// import JqxLinearGauge from 'jqwidgets-scripts/jqwidgets-react-tsx/jqxlineargauge'
 
 function Pressure(props) {
   const { sensorId } = props;
   const [pressure, setPressure] = useState(null);
 
   async function getLastReading() {
-    const reading = await Sensor.getLastReading(sensorId);
+    const reading = await Sensor.getLastReading(sensor.id);
     console.log("getLastReading -> reading", reading);
     setPressure(reading.value);
   }
@@ -20,7 +20,7 @@ function Pressure(props) {
 
   return (
     <div className="Pressure">
-      <h4 className="gauge-header">sensor.name</h4>
+      <h4 className="gauge-header">{sensor.name}</h4>
       {pressure !== "none" ? (
 <>
       <JqxLinearGauge value={pressure} ranges={ranges} style={{ margin: '0 auto', float: 'left', fontSize: "1em" }}

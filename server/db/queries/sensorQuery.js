@@ -14,6 +14,11 @@ module.exports = {
     return sensors;
   },
 
+  // get sensor by id;
+  async getSensor(id) {
+    console.log("getSensor -> id", id);
+    return await knex('sensors').select("*").where({ id: id })
+  },
 
   // SPECIAL QUERIES
 
@@ -100,12 +105,12 @@ module.exports = {
   //   // console.log("createReading -> reading", reading);
   //   return reading;
   // },
-  // // get High and Low 24 hours
-  // async getHighsAndLows(sensorId) {
-  //   const reading = await knex("readings").select("value").where({ sensor_id: sensorId }).orderBy('value');
-  //   const readings = { high: reading[reading.length - 1].value, low: reading[0].value }
-  //   return readings
-  // },
+  // get High and Low 24 hours
+  async getHighsAndLows(sensorId) {
+    const reading = await knex("readings").select("value").where({ sensor_id: sensorId }).orderBy('value');
+    const readings = { high: reading[reading.length - 1].value, low: reading[0].value }
+    return readings
+  },
   // async getLast24ReadingsBySensor(sensorId) {
   //   const readings = await knex('readings').select("value", "time").where({ sensor_id: sensorId }).orderBy('time', "desc").limit(12);
   //   return readings
