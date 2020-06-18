@@ -1,30 +1,36 @@
-import React, { useState} from "react";
+import React, { useState, useEffect } from "react";
 import { Sensor } from "../../js/requests";
+
 import humidityIcon from '../../images/humidityIcon.png'
 
 
 function Humidity(props) {
-  const { sensor } = props;
-  const [humidityLevel, setHumidityLevel] = useState(null);
+  const { sensorId, size } = props;
+  console.log("Humidity -> sensorId", sensorId);
+  const [humidity, setHumidity] = useState();
 
   async function getHumidityReading() {
-    const humidity = await Sensor.getLastReading(sensor.id)
-    setHumidityLevel(humidity.value);
-  }
-
-  if (humidityLevel === null) {
-    getHumidityReading()
+    const reading = await Sensor.getLastReading(sensorId)
+    console.log("getHumidityReading -> reading", reading);
+    setHumidity(reading.value);
   };
+
+  useEffect(() => {
+    if (sensorId) {
+      console.log('hi')
+
+      getHumidityReading();
+    };
+  }, [sensorId]);
 
   return (
     <div className="Humidily humidity-div">
-      <h4 className="gauge-header">{sensor.name}</h4>
+      <p className="humidity-text"> {humidity}%</p>
       <div id="humidity" className="humidity-gauge" style={{
-        'backgroundImage': `linear-gradient(transparent 0%, transparent ${100 - (humidityLevel)}%, #2C7CB0 ${100 - (humidityLevel)}% ,#2C7CB0 100%)`
+        'backgroundImage': `linear-gradient(transparent 0%, transparent ${100 - (humidity)}%, #2C7CB0 ${100 - (humidity)}% ,#2C7CB0 100%)`, 'width': size, 'height': size
       }}>
-        <img src={humidityIcon} alt={"logo"} className='humidity-img' />
+        <img src={humidityIcon} alt={"logo"} className='humidity-img' style={{ 'width': size, 'height': size }} />
       </div>
-      <p className="humidity-text" >Humidily Level: {humidityLevel}%</p>
 
     </div>
   )

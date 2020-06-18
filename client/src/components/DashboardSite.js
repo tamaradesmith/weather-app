@@ -4,6 +4,8 @@ import { Display, Sensor } from '../js/requests';
 
 import Temperature from './gauges/Temperature';
 import Humidily from './gauges/Humidity';
+import WindDirection from './gauges/WindDirection';
+// import WindSpeed from './gauges/WindSpeed';
 
 function DashboardSite(props) {
 
@@ -12,7 +14,6 @@ function DashboardSite(props) {
 
   const [pressure, setPresure] = useState();
   const [rainfall, setRainfall] = useState();
-  // const [humidily, setHumidily]
 
   async function getDashboardSensors() {
     const user = 1;
@@ -45,7 +46,7 @@ function DashboardSite(props) {
   return (
     <main className="DashboardSite site">
       <h1 className="site-header ">{site}</h1>
-      <div className="site-temperature border">
+      <div className="site-temperature ">
         <h3 className="site-sensor-header">Temperature</h3>
         <div id="tempertureInside" className="column-1">
           <Temperature sensorId={dashboardSensors.tempertureInside} />
@@ -59,12 +60,15 @@ function DashboardSite(props) {
 
 
       </div>
-      <div className=" site-humidily border">
+      <div className=" site-humidily">
         <h3 className="site-sensor-header">Humidily</h3>
-        <div>sensor humidily </div>
-
+        <div className="site-humidily-gauge">
+          <Humidily sensorId={dashboardSensors.humidilyInside} size={"60px"} />
+        </div>
         <h4 className="site-label">--Inside--</h4>
-        <div>sensor humidily </div>
+        <div className="site-humidily-gauge">
+          <Humidily sensorId={dashboardSensors.humidilyOutside} size={"60px"} />
+        </div>
         <h4 className="site-label">--Outside--</h4>
 
       </div>
@@ -79,14 +83,13 @@ function DashboardSite(props) {
         <p >{pressure} </p>
       </div>
 
-      <div className=" site-wind border">
+      <div className=" site-wind border" style={{'width': "300px"}}>
         <h3 className="site-sensor-header">Wind</h3>
-        <div>sensor wind </div>
+        <WindDirection sensorId={dashboardSensors.windDirection} />
+        {/* <h4 className="site-label">--Speed--</h4> */}
+        {/* <div>sensor Direction </div>
 
-        <h4 className="site-label">--Speed--</h4>
-        <div>sensor Direction </div>
-
-        <h4 className="site-label">--Direction--</h4>
+        <h4 className="site-label">--Direction--</h4> */}
 
       </div>
 
