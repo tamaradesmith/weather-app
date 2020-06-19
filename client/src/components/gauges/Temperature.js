@@ -3,7 +3,9 @@ import React, { useState, useEffect } from 'react';
 import thermometer from "../../images/thermometer.png"
 import { Sensor } from '../../js/requests';
 
+// const colours = ["#22AED1", "#B8F3FF", "#DEFFFC", "#FFF07C", '#FDCA40', '#F79824', "#FF7700", "##E55812", "#BA2D0B", "#A30000"]
 
+const colours = ["#57C4E5", "#B8F3FF", "#DEFFFC", "#F4F1BB", "#FFF07C", "#F5BB00", "#EC9F05", "#D76A03", '#BF3100', "#A30000"]
 function Temperature(props) {
 
   const { sensorId } = props;
@@ -22,26 +24,43 @@ function Temperature(props) {
 
 
   function calulateLabel() {
+    let colour = colours[3];
     if (temperature < 0) {
       setCurrent(60 - (Math.round(temperature * 1.375)));
-      setLevel({ level: 70 + (1.45 * temperature), color: "blue" });
+      if (temperature < -15) {
+        colour = colours[0];
+      } else if (temperature < -5) {
+        colour = colours[1];
+      } else {
+        colour = colours[2];
+      }
+      setLevel({ level: 70 + (1.45 * temperature), color: colour });
     } else if (temperature > 0) {
       setCurrent(60 - (Math.round(temperature * 1.375)));
-      if (temperature < 15) {
-        setLevel({ level: 70 - (1.45 * temperature), color: "yellow" });
-      } else {
-        setLevel({ level: 70 - (1.45 * temperature), color: "red" });
+      if (temperature < 5) {
+        colour = colours[3];
+      } else if (temperature < 10) {
+        colour = colours[4];
+      } else if (temperature < 15) {
+        colour = colours[5];
+      } else if (temperature < 20) {
+        colour = colours[6];
+      } else if (temperature < 25) {
+        colour = colours[7];
+      } else if (temperature < 30) {
+        colour = colours[8];
       };
+      setLevel({ level: 70 - (1.45 * temperature), color: colour });
     } else {
       setCurrent(60);
-      setLevel({ level: 70, color: "lightblue" });
+      setLevel({ level: 70, color: colours[3] });
     };
   };
 
   async function getHighsAndLows() {
     const highsAndLows = await Sensor.getHighsAndLows(sensorId);
     highsAndLows.low = highsAndLows.low.toFixed(0);
-    highsAndLows.low= ('0' + highsAndLows.low).slice(-2);
+    highsAndLows.low = ('0' + highsAndLows.low).slice(-2);
     highsAndLows.high = highsAndLows.high.toFixed(0);
     highsAndLows.high = ('0' + highsAndLows.high).slice(-2);
     setHighLow((highsAndLows))

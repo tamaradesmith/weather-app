@@ -6,19 +6,15 @@ import humidityIcon from '../../images/humidityIcon.png'
 
 function Humidity(props) {
   const { sensorId, size } = props;
-  console.log("Humidity -> sensorId", sensorId);
   const [humidity, setHumidity] = useState();
 
   async function getHumidityReading() {
     const reading = await Sensor.getLastReading(sensorId)
-    console.log("getHumidityReading -> reading", reading);
     setHumidity(reading.value);
   };
 
   useEffect(() => {
     if (sensorId) {
-      console.log('hi')
-
       getHumidityReading();
     };
   }, [sensorId]);
