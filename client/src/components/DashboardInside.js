@@ -4,6 +4,7 @@ import { Display } from '../js/requests';
 
 import Temperature from "./gauges/Temperature";
 import Humidily from './gauges/Humidity';
+import AirQuality from './gauges/AirQuality';
 
 function DashboardInside(props) {
 
@@ -41,10 +42,21 @@ function DashboardInside(props) {
       <div className="inside-humidily">
         <h3 className="site-sensor-header">Humidily</h3>
         <div className="site-humidily-gauge">
-          <Humidily sensorId={displaySensors.humidily} size={"200px"} />
+          <Humidily sensorId={displaySensors.humidily} size={"150px"} />
         </div>
         <h4 className="site-label">--Inside--</h4>
       </div>
+
+
+      <div className="inside-air-quality">
+        <h3 className="site-sensor-header">Air Quality</h3>
+
+        <AirQuality sensorId={displaySensors.co} />
+        <h4 className="site-label">--CO--</h4>
+        <AirQuality sensorId={displaySensors.particule} />
+        <h4 className="site-label">--Particule--</h4>
+      </div>
+
     </main>
   );
 };
