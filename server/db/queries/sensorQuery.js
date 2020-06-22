@@ -16,7 +16,6 @@ module.exports = {
 
   // get sensor by id;
   async getSensor(id) {
-    console.log("getSensor -> id", id);
     return await knex('sensors').select("*").where({ id: id })
   },
 
@@ -101,7 +100,13 @@ module.exports = {
     const result = (reading[0] === undefined) ? { value: "none" } : reading[0];
     return result;
   },
-
+  // async getSensorsReadings(sensors){
+  //   return await Promise.all(sensors.map(async(sensor)=>{
+  //     const reading = await this.getLastReading(sensor);
+  //     console.log("getSensorsReadings -> reading", reading);
+  //     return {reading, sensorId: sensor};
+  //   }));
+  // },
   // async createReading(info) {
   //   // info.value = info.value.toFixed(2);
   //   const reading = knex('readings').insert(info).returning("*");

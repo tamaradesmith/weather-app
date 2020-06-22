@@ -1,28 +1,53 @@
 import React, { useState, useEffect } from 'react';
 
-import { Display } from '../js/requests';
+import { Display, Sensor } from '../js/requests';
 
 import Temperature from './gauges/Temperature';
 import Humidily from './gauges/Humidity';
 import Wind from './gauges/Wind';
 import Rainfall from './gauges/Rainfall';
+import SkyColour from './gauges/SkyColour';
+
 
 function DashboardOutside() {
 
   const [site, setSite] = useState('New Westminster');
   const [displaySensors, setDisplaySensors] = useState([]);
 
+  const [rainAmount, SetRainAmount] = useState({});
+
   async function getDisplaySensors() {
     const user = 1;
     const sensors = await Display.getDisplaySensors('outside', user)
-    console.log("getDisplaySensors -> sensors", sensors);
     setDisplaySensors(sensors);
   };
 
+  async function getRainReadings() {
+    const reading = await Sensor.getLastReading(displaySensors.rainfallSensor);
+    const dailyRain = await getTotalDaily()
+    SetRainAmount({ hourly: reading.value, daily: dailyRain });
+  }
+
+  async function getTotalDaily() {
+    const readings = await Sensor.getLast24Readings(displaySensors.rainfallSensor);
+    let total = 0;
+    readings.forEach(reading => {
+      total += reading.value
+    });
+    return total;
+  };
+
+
 
   useEffect(() => {
-    getDisplaySensors()
+    getDisplaySensors();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  useEffect(() => {
+    getRainReadings();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [displaySensors]);
 
   return (
     <main className='DashboardOutside site'>
@@ -53,19 +78,23 @@ function DashboardOutside() {
         <div className="site-humidily-gauge">
           <Humidily sensorId={displaySensors.humidily} size={"70px"} />
         </div>
-        {/* <h4 className="site-label">--Inside--</h4> */}
-      </div>
-
-      <div className="outside-sky-colour">
-        <h3 className="site-sensor-header">Sky Colour</h3>
-        <div className="site-humidily-gauge">
-          {/* <Humidily sensorId={displaySensors.humidily} size={"70px"} /> */}
-        </div>
       </div>
 
       <div className="outside-rain">
         <h3 className="site-sensor-header">Rain</h3>
-      <Rainfall sensorId={displaySensors.rainfallSensor} />
+        <div className="column-1">
+          <Rainfall amount={rainAmount.hourly} label={30} size={'70px'} />
+        </div>
+        <h4 className="site-label">--Hourly--</h4>
+        <div className="column-2">
+          <Rainfall amount={rainAmount.daily} label={60 * 2} size={'70px'} />
+        </div>
+        <h4 className="site-label">--Daily--</h4>
+      </div>
+
+      <div className="outside-sky-colour">
+        <h3 className="site-sensor-header">Sky Colour</h3>
+        <SkyColour sensors={[{ red: displaySensors.skyRed }, { green: displaySensors.skyGreen }, { blue: displaySensors.skyBlue }]} />
       </div>
 
     </main>

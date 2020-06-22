@@ -11,7 +11,6 @@ const rating = [{ level: 'Hazardous', colour: "#6B0F1A", background: '#6b0f1a80'
 function AirQuality(props) {
 
   const { sensorId } = props;
-  console.log("AirQuality -> sensorId", sensorId);
 
   const [airQuality, setAirQuality] = useState('');
   const [level, setLevel] = useState(rating[0]);
@@ -39,11 +38,13 @@ function AirQuality(props) {
     if (sensorId) {
       getAirQualityReading();
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [sensorId]);
 
   useEffect(() => {
     setLevelInfo();
-  }, [airQuality])
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [airQuality]);
 
   return (
     <div className="AirQuality air-quality-icon" style={{ 'borderColor': level.colour, 'background': level.background }}>

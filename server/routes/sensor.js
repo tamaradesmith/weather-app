@@ -78,6 +78,14 @@ router.get('/:id/reading', async (req, res) => {
   res.send(lastSensorReading);
 });
 
+// Get Sensors Readings
+
+// router.get(`/:sensors/readings`, async (req, res)=>{
+//   const sensors = req.params.sensors;
+//   console.log("sensors losd", sensors);
+//   // const readings = await SensorQuery.getSensorsReadings(sensors);
+//   // res.send(readings);
+// })
 
 // Get Hightest and Lowest reading 
 
@@ -91,7 +99,6 @@ router.get('/:id/highslows', async (req, res) => {
 router.get('/:id/24', async (req, res) => {
   const sensorId = req.params.id;
   const readings = await SensorQuery.getLast24ReadingsBySensor(sensorId);
-  console.log("readings", readings);
   res.send(readings)
 })
 

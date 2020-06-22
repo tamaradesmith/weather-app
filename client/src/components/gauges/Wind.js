@@ -19,6 +19,7 @@ function Wind(props) {
 
   useEffect(() => {
     if (sensorSpeed && sensorDirection) { getWindReading(); };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [sensorSpeed]);
 
   return (

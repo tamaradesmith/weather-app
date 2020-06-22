@@ -1,7 +1,5 @@
 import React, { useState } from 'react';
-import WindDirection from "./gauges/WindDirection";
-import WindSpeed from './gauges/WindSpeed'
-import WindSpeedLinear from './gauges/WindSpeedLinear'
+import Wind from './gauges/Wind';
 import { Sensor } from "../js/requests"
 
 function Dashboardwind() {
@@ -22,15 +20,12 @@ function Dashboardwind() {
     <main className="DashboardWind dashboard">
       {windSensors.map(sensor => (
         <div key={sensor.id}>
-          {sensor.name === "wind direction" ? (
-            <WindDirection sensor={sensor} />
-          ) : (
-              <div className="wind-group">
-           
-                <WindSpeed sensor={sensor} />
-                <WindSpeedLinear sensor={sensor} />
-              </div>
-            )}
+
+          <div className="wind-group">
+
+            <Wind sensor={sensor} />
+          </div>
+
         </div>
       ))}
     </main>

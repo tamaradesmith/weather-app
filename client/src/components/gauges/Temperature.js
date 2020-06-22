@@ -133,7 +133,7 @@ function Temperature(props) {
         <p className="thermometer-text" style={{ 'top': `${current}%` }}>	&larr;{temperature}</p>
 
         <div >
-          <img id="temp" src={thermometer} alt={"spnner"} className="thermometer" style={{ 'background': `linear-gradient(transparent 0%, transparent ${level.level}%, ${level.color} ${level.level}% ` }} />
+          <img id="temp" src={thermometer} alt={"thermometer Icon"} className="thermometer" style={{ 'background': `linear-gradient(transparent 0%, transparent ${level.level}%, ${level.color} ${level.level}% ` }} />
         </div>
       </div>
     </div>

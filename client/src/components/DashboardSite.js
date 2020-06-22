@@ -5,7 +5,8 @@ import { Display, Sensor } from '../js/requests';
 import Temperature from './gauges/Temperature';
 import Humidily from './gauges/Humidity';
 import Wind from './gauges/Wind';
-
+import Rainfall from './gauges/Rainfall'
+import Pressure from './gauges/Pressure';
 
 function DashboardSite(props) {
 
@@ -71,21 +72,23 @@ function DashboardSite(props) {
 
 
 
-      <div className="site-wind" style={{"width": "300px", "height": '300px'}}>
+      <div className="site-wind" style={{ "width": "300px", "height": '300px' }}>
         <h3 className="site-sensor-header">Wind</h3>
         <div>
-        <Wind sensorDirection={dashboardSensors.windDirection} sensorSpeed={dashboardSensors.windSpeed} size={'270px'} />
+          <Wind sensorDirection={dashboardSensors.windDirection} sensorSpeed={dashboardSensors.windSpeed} size={'200px'} />
         </div>
       </div>
 
       <div className=" site-rain">
-        <h3 className="site-sensor-header">Rain</h3>
-        <p> {rainfall}</p>
+        <h3 className="site-sensor-header site-label-header">Rain</h3>
+        <Rainfall amount={rainfall} label={30} size={'70px'} />
+
       </div>
 
       <div className=" site-pressure">
-        <h3 className="site-sensor-header">Pressure</h3>
-        <p >{pressure} </p>
+        <h3 className="site-sensor-header site-label-header">Air Pressure</h3>
+        <Pressure sensorId={dashboardSensors.pressureSensor} size={"100px"} />
+        {/* <p >{pressure} </p> */}
       </div>
 
 

@@ -17,6 +17,7 @@ function Humidity(props) {
     if (sensorId) {
       getHumidityReading();
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [sensorId]);
 
   return (
