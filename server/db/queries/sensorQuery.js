@@ -23,7 +23,7 @@ module.exports = {
   // SPECIAL QUERIES
 
   // Group sensor by Devices
-  async  getAllSensorOnNodeByDevices(devices) {
+  async getAllSensorOnNodeByDevices(devices) {
     await Promise.all(devices.map(async device => {
       const sensor = await knex('sensors').select('*').where({ device_id: device.id });
       device.sensors = sensor;
@@ -38,7 +38,6 @@ module.exports = {
   //   .select("nodes.site", "nodes.location", 'nodes.active', "devices.id")
   //   .join('sensors', 'devices.id', 'device_id')
   //   .select('*')
-
   //     .where({ site: site, location: "outside" }).andWhere('sensors.type', type).andWhere('sensors.active', true)
   //   .orWhere({ site: site, location: "inside" })
   //   .andWhere('sensors.type', type).andWhere('sensors.active', true)
@@ -95,10 +94,10 @@ module.exports = {
   // get last reading one sensor
   async getLastReading(sensorId) {
     const reading = await knex('readings')
-    .select('value')
-    .where({ sensor_id: sensorId })
-    .orderBy('time', "desc")
-    .limit(1);
+      .select('value')
+      .where({ sensor_id: sensorId })
+      .orderBy('time', "desc")
+      .limit(1);
     const result = (reading[0] === undefined) ? { value: "none" } : reading[0];
     return result;
   },
@@ -115,10 +114,10 @@ module.exports = {
     const readings = { high: reading[reading.length - 1].value, low: reading[0].value }
     return readings
   },
-  // async getLast24ReadingsBySensor(sensorId) {
-  //   const readings = await knex('readings').select("value", "time").where({ sensor_id: sensorId }).orderBy('time', "desc").limit(12);
-  //   return readings
-  // },
+  async getLast24ReadingsBySensor(sensorId) {
+    const readings = await knex('readings').select("value", "time").where({ sensor_id: sensorId }).orderBy('time', "desc").limit(12);
+    return readings
+  },
   // async getLastReading(sensorId) {
   //   const reading = await knex('readings').select("value", 'time').where({ sensor_id: sensorId }).orderBy('time').limit(1);
   //   return reading[0]

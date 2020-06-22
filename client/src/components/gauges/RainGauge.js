@@ -2,9 +2,10 @@ import React from "react";
 import rain from '../../images/rainfall.png'
 
 function RainGauge(props) {
-  const { amount, label } = props
-  return (
+  
+  const { amount, label } = props;
 
+  return (
     <div className="rain-div">
       <div id="hour" className="rain-gauge" style={{
         'backgroundImage': `linear-gradient(transparent 0%, transparent ${100 - ((amount / label[1]) * 100)}%, #2C7CB0 ${100 - ((amount / label[1]) * 100)}% ,#2C7CB0 100%)`

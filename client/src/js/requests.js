@@ -133,10 +133,10 @@ const Sensor = {
     const res = await fetch(`${BASE_URL}/sensors/${sensorId}/highslows`);
     return res.json();
   },
-  // async getLast24Readings(sensorId) {
-  //   const res = await fetch(`${BASE_URL}/sensors/${sensorId}/24`)
-  //   return res.json();
-  // },
+  async getLast24Readings(sensorId) {
+    const res = await fetch(`${BASE_URL}/sensors/${sensorId}/24`)
+    return res.json();
+  },
 };
 
 const Controller = {

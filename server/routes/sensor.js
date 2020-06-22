@@ -87,12 +87,13 @@ router.get('/:id/highslows', async (req, res) => {
   res.send(highslows);
 });
 
-// // get last 24 readings
-// router.get('/:id/24', async (req, res) => {
-//   const sensorId = req.params.id;
-//   const readings = await SensorQuery.getLast24ReadingsBySensor(sensorId);
-//   res.send(readings)
-// })
+// get last 24 readings
+router.get('/:id/24', async (req, res) => {
+  const sensorId = req.params.id;
+  const readings = await SensorQuery.getLast24ReadingsBySensor(sensorId);
+  console.log("readings", readings);
+  res.send(readings)
+})
 
 // // Save Reading to DB
 

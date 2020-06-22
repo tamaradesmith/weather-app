@@ -19,14 +19,16 @@ function Temperature(props) {
 
   async function getReading() {
     const reading = await Sensor.getLastReading(sensorId);
-    setTemperature((reading.value).toFixed(0));
+    if (typeof (reading.value) === 'number') {
+      setTemperature((reading.value).toFixed(0));
+    }
   }
 
 
   function calulateLabel() {
     let colour = colours[3];
     if (temperature < 0) {
-      setCurrent(60 - (Math.round(temperature * 1.375)));
+      setCurrent(60 - (Math.round(temperature * 1)));
       if (temperature < -15) {
         colour = colours[0];
       } else if (temperature < -5) {
@@ -34,7 +36,8 @@ function Temperature(props) {
       } else {
         colour = colours[2];
       }
-      setLevel({ level: 70 + (1.45 * temperature), color: colour });
+      setLevel({ level: 70 - (1 * temperature), color: colour });
+
     } else if (temperature > 0) {
       setCurrent(60 - (Math.round(temperature * 1.375)));
       if (temperature < 5) {
@@ -59,10 +62,18 @@ function Temperature(props) {
 
   async function getHighsAndLows() {
     const highsAndLows = await Sensor.getHighsAndLows(sensorId);
-    highsAndLows.low = highsAndLows.low.toFixed(0);
-    highsAndLows.low = ('0' + highsAndLows.low).slice(-2);
-    highsAndLows.high = highsAndLows.high.toFixed(0);
-    highsAndLows.high = ('0' + highsAndLows.high).slice(-2);
+    if (highsAndLows.low > 0) {
+      highsAndLows.low = highsAndLows.low.toFixed(0);
+      highsAndLows.low = ('0' + highsAndLows.low).slice(-2);
+    } else {
+      highsAndLows.low = highsAndLows.low.toFixed(0);
+    }
+    if (highsAndLows.high > 0) {
+      highsAndLows.high = highsAndLows.high.toFixed(0);
+      highsAndLows.high = ('0' + highsAndLows.high).slice(-2);
+    } else {
+      highsAndLows.high = highsAndLows.high.toFixed(0);
+    }
     setHighLow((highsAndLows))
   };
 
@@ -71,7 +82,7 @@ function Temperature(props) {
     const result = {}
 
     if (low < 0) {
-      result.low = 60 + (Math.round(low * 1.375));
+      result.low = 60 - (Math.round(low * 1));
     } else if (low > 0) {
       result.low = 60 - (Math.round(low * 1.375));
     } else {
@@ -79,7 +90,7 @@ function Temperature(props) {
     };
 
     if (high < 0) {
-      result.high = 60 + (Math.round(high * 1.375));
+      result.high = 60 - (Math.round(high * 1));
     } else if (high > 0) {
       result.high = 60 - (Math.round(high * 1.375));
     } else {
@@ -121,14 +132,10 @@ function Temperature(props) {
         <p className="thermometer-low" style={{ 'top': `${highLowLevel.low}%` }}>{highLow.low}&#8594;</p>
         <p className="thermometer-text" style={{ 'top': `${current}%` }}>	&larr;{temperature}</p>
 
-
         <div >
-
           <img id="temp" src={thermometer} alt={"spnner"} className="thermometer" style={{ 'background': `linear-gradient(transparent 0%, transparent ${level.level}%, ${level.color} ${level.level}% ` }} />
         </div>
       </div>
-      {/* <h4 className="gauge-header">{sensor.name}</h4> */}
-
     </div>
   )
 }

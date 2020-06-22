@@ -15,7 +15,6 @@ function DashboardInside(props) {
   async function getDisplaySensors() {
     const user = 1;
     const sensors = await Display.getDisplaySensors('inside', user)
-    console.log("getDisplaySensors -> sensors", sensors);
     setDisplaySensors(sensors);
   };
 
@@ -27,7 +26,7 @@ function DashboardInside(props) {
     <main className="DashboardInside site">
       <h1 className="site-header">{site}: Inside</h1>
 
-      <div className="site-temperature ">
+      <div className="site-temperature">
         <h3 className="site-sensor-header">Temperature</h3>
         <div id="temperatureInside" className="column-1">
           <Temperature sensorId={displaySensors.temperatureMain} />
