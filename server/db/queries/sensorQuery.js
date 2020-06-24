@@ -100,17 +100,9 @@ module.exports = {
     const result = (reading[0] === undefined) ? { value: "none" } : reading[0];
     return result;
   },
-  // async getSensorsReadings(sensors){
-  //   return await Promise.all(sensors.map(async(sensor)=>{
-  //     const reading = await this.getLastReading(sensor);
-  //     console.log("getSensorsReadings -> reading", reading);
-  //     return {reading, sensorId: sensor};
-  //   }));
-  // },
   // async createReading(info) {
   //   // info.value = info.value.toFixed(2);
   //   const reading = knex('readings').insert(info).returning("*");
-  //   // console.log("createReading -> reading", reading);
   //   return reading;
   // },
   // get High and Low 24 hours
@@ -123,30 +115,17 @@ module.exports = {
     const readings = await knex('readings').select("value", "time").where({ sensor_id: sensorId }).orderBy('time', "desc").limit(12);
     return readings
   },
-  // async getLastReading(sensorId) {
-  //   const reading = await knex('readings').select("value", 'time').where({ sensor_id: sensorId }).orderBy('time').limit(1);
-  //   return reading[0]
-  // },
-  // async getSensorsLastReadings(sensors) {
-  //   return await Promise.all(sensors.map(async (sensor) => {
-  //     const reading = await this.getLastReading(sensor.sensor_id);
-  //     sensor.reading = reading;
-  //     return sensor;
-  //   }));
-  // },
 
   // TYPE QUERIES
-
   async getTypeId(type) {
     return await knex("sensor_types").select('id').where({ type });
   },
-
 
   // PROPERTIES QUERIES
   async createProperties(properties, sensorId) {
     const keys = Object.keys(properties)
     return await Promise.all(keys.map(async (key) => {
       return knex('sensor_properties').insert({ sensor_id: sensorId, name: key, value: properties[key] }).returning('*');
-    }))
-  }
-}
+    }));
+  },
+};

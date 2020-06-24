@@ -21,6 +21,7 @@ function NavMenu(props) {
         <div className="nav-menu-inner">
           <NavLink to="/nodes" className="nav-menu-item" onClick={handleClick}>Nodes </NavLink>
           <NavLink to="/nodes/configure" className="nav-menu-item" onClick={handleClick}> Add Node</NavLink>
+          <NavLink to='/Login' className="nav-menu-item"  onClick={handleClick}> Log In</NavLink>
         </div>
 
       </div>

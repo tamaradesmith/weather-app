@@ -2,30 +2,15 @@ const express = require('express');
 const bcrypt = require('bcrypt');
 const router = express.Router();
 
-
-// const app = express();
-// app.use(express.urlencoded({ extended: true }));
-// app.use(express.json());
-
-
-const User = require('../db/queries/userQuery')
-
-
-
-function validUser(user) {
-  // const vaildEmail = typeof user.email == 'string'// && user.email.trim() != "";
-  const vaildPassword = typeof user.password == 'string'  && user.password.trim().length >= 6;  //&& user.email.trim() != ""
-  return vaildPassword;  //vaildEmail && 
-}
-
+const User = require('../db/queries/userQuery');
+const Model = require('../model/auth')
 
 router.get('/', (req, res) => {
-  console.log("meow")
-  res.send("meow");
+  res.send("sign in");
 });
 
 router.post('/signup', async (req, res, next) => {
-  if (validUser(req.body)) {
+  if (Model.validUser(req.body)) {
     const user = await User.GetByUsername(req.body.username);
     if (!user) {
       bcrypt.hash(req.body.password, 10)
@@ -34,28 +19,29 @@ router.post('/signup', async (req, res, next) => {
             site_id: req.body.site,
             username: req.body.username,
             password: hash
-          }
+          };
           User.create(newUser).then(id => {
             res.json({
               id,
-              message: 'Good Kitten'
+              message: 'New user created'
             });
-          })
+          });
         });
     } else {
-      next(new Error('Email in Use'));
-    }
+      next(new Error('Username in use'));
+    };
   } else {
     next(new Error('Invaild user'))
-  }
-})
+  };
+});
 
 router.post('/login', async (req, res, next) => {
-  if (validUser(req.body)) {
-    User.GetOneByEmail(req.body.email)
+  if (Model.validUser(req.body)) {
+    User.GetByUsername(req.body.username)
       .then(user => {
         if (user) {
-          bcrypt.compare(req.body.password, user.password)
+          console.log("user", user);
+          bcrypt.compare(req.body.password, user.password).catch(error => console.log(error.message))
             .then((result) => {
               if (result) {
                 const isSecure = req.app.get('env') != 'development';
@@ -69,7 +55,7 @@ router.post('/login', async (req, res, next) => {
                   secure: isSecure,
                   signed: true
                 });
-               return res.json({
+                return res.json({
                   result,
                   message: "Logging in!"
                 });
@@ -80,6 +66,8 @@ router.post('/login', async (req, res, next) => {
         } else {
           next(new Error("Invaild login"))
         }
+      }).catch(error=>{
+        console.log(error.message)
       });
   } else {
     next(new Error('Invaild login'))

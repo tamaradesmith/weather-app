@@ -1,0 +1,27 @@
+:root {
+  --background-colour: #3e517a;
+  --background-secondary: #fffcf2;
+}
+
+.login-form {
+  display: grid;
+  grid-template-columns: 200px 500px;
+  grid-gap: 0.25em;
+  margin: 0 auto;
+  width: 700px;
+}
+
+.login-button {
+  grid-column: 2/3;
+  width: 200px;
+  justify-self: right;
+  font-size: 0.9em;
+  padding: 0.2em 0.5em;
+  border-radius: 0.25em;
+  color: var(--background-secondary);
+  border: 1px solid var(--background-colour);
+  background: var(--background-colour);
+}
+.login-button:hover {
+  color: var(--highlight-colour);
+}

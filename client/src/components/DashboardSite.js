@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-
 import { Display, Sensor } from '../js/requests';
 
 import Temperature from './gauges/Temperature';
@@ -13,18 +12,13 @@ function DashboardSite(props) {
   const [site, setSite] = useState('New Westminster');
   const [dashboardSensors, setDashboardSensors] = useState([]);
 
-  const [pressure, setPresure] = useState();
+  
   const [rainfall, setRainfall] = useState();
 
   async function getDashboardSensors() {
     const user = 1;
     const getSensors = await Display.getDisplaySensors('site', user);
     setDashboardSensors(getSensors);
-  };
-
-  async function getPresureReading() {
-    const reading = await Sensor.getLastReading(dashboardSensors.pressureSensor);
-    setPresure(reading.value);
   };
 
   async function getRainfallReading() {
@@ -38,7 +32,7 @@ function DashboardSite(props) {
   }, []);
 
   useEffect(() => {
-    if (dashboardSensors.pressureSensor !== undefined) { getPresureReading() };
+   
     if (dashboardSensors.rainfallSensor !== undefined) { getRainfallReading() };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [dashboardSensors])

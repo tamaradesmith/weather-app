@@ -10,6 +10,9 @@ const authMiddleware = require('./routes/middleware');
 const app = express();
 
 
+const dotenv = require('dotenv');
+dotenv.config();
+
 
 //  Route files
 const node = require('./routes/node');
@@ -37,9 +40,8 @@ app.use(methodOverride((req, res) => {
 }));
 
 app.use(logger('dev'));
-app.use(cookieParser('keyboard_cat'));
-// app.use(cookieParser(process.env.COOKIE_SECRET));
-// app.use(express.static(path.join(__dirname, 'public')));
+// app.use(cookieParser('keyboard_cat'));
+app.use(cookieParser(process.env.COOKIE_SECRET));
 app.use(cors({
   origin: 'http://localhost:8181',
   credentials: true,
@@ -65,6 +67,7 @@ app.use(function (res, res, next) {
   console.log("err.status", err.status)
   next(err);
 })
+
 app.use(function (err, req, res, next) {
   res.status(err.status || 500);
   res.json({

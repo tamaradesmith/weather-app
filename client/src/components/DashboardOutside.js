@@ -24,8 +24,8 @@ function DashboardOutside() {
 
   async function getRainReadings() {
     const reading = await Sensor.getLastReading(displaySensors.rainfallSensor);
-    const dailyRain = await getTotalDaily()
-    SetRainAmount({ hourly: reading.value, daily: dailyRain });
+    const dailyRain = await getTotalDaily();
+      SetRainAmount({ hourly: reading.value, daily: dailyRain });
   }
 
   async function getTotalDaily() {
@@ -45,7 +45,7 @@ function DashboardOutside() {
   }, []);
 
   useEffect(() => {
-    getRainReadings();
+    if (displaySensors.rainfallSensor) { getRainReadings();}
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [displaySensors]);
 

@@ -1,12 +1,17 @@
 const BASE_URL = 'http://localhost:4000';
 
 
-const Site ={
+const Site = {
   async getAllSites() {
-    const res = await fetch(`${BASE_URL}/sites`);
-    return res.json();
+    try {
+      const res = await fetch(`${BASE_URL}/sites`);
+      return res.json();
+    }
+    catch (error) {
+      console.log(error);
+    }
   },
-  async getLocations(siteId){
+  async getLocations(siteId) {
     const res = await fetch(`${BASE_URL}/sites/${siteId}/locations`);
     return res.json();
   }
@@ -40,12 +45,12 @@ const Node = {
       },
       body: JSON.stringify(info)
     })
-    .catch(error => {
-      console.log(error)
-    });
+      .catch(error => {
+        console.log(error)
+      });
     return res.json();
   },
-    async searchForNodes() {
+  async searchForNodes() {
     const res = await fetch(`${BASE_URL}/nodes/search`);
     return res.json();
   },
@@ -81,19 +86,29 @@ const Device = {
 }
 
 const Sensor = {
+
   async create(info) {
-    const res = await fetch(`${BASE_URL}/sensors`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(info),
-    })
-    return res.json()
+    try {
+      const res = await fetch(`${BASE_URL}/sensors`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(info),
+      })
+      return res.json();
+    } catch (error) {
+      console.log(error.message);
+    }
+
   },
-  async getSensor(id){
-    const res = await fetch(`${BASE_URL}/sensors/${id}`)
-    return res.json();
+  async getSensor(id) {
+    try {
+      const res = await fetch(`${BASE_URL}/sensors/${id}`)
+      return res.json();
+    } catch (error) {
+      console.log(error.message)
+    }
   },
 
   // async getSensors() {
@@ -101,13 +116,20 @@ const Sensor = {
   //   return res.json();
   // },
   async getLastReading(sensorId) {
-    const res = await fetch(`${BASE_URL}/sensors/${sensorId}/reading`);
-    return res.json();
+    try {
+      const res = await fetch(`${BASE_URL}/sensors/${sensorId}/reading`);
+      return res.json();
+    } catch (error) {
+      console.log(error.message)
+    }
   },
-  async getSensorsReadings(sensors){
-    console.log("getSensorsReadings -> sensors", sensors);
-    const res = await fetch(`${BASE_URL}/sensors/${sensors}/readings`);
-    return res.json();
+  async getSensorsReadings(sensors) {
+    try {
+      const res = await fetch(`${BASE_URL}/sensors/${sensors}/readings`);
+      return res.json();
+    } catch (error) {
+      console.log(error.message);
+    }
   },
   // async getSensorsbyTypeandSite(type, site) {
   //   const res = await fetch(`${BASE_URL}/sensors/site/${site}/type/${type}`)
@@ -135,12 +157,21 @@ const Sensor = {
   // },
   // temperature  
   async getHighsAndLows(sensorId) {
-    const res = await fetch(`${BASE_URL}/sensors/${sensorId}/highslows`);
-    return res.json();
+    try {
+      const res = await fetch(`${BASE_URL}/sensors/${sensorId}/highslows`);
+      return res.json();
+    } catch (error) {
+      console.log(error.message);
+
+    }
   },
   async getLast24Readings(sensorId) {
-    const res = await fetch(`${BASE_URL}/sensors/${sensorId}/24`)
-    return res.json();
+    try {
+      const res = await fetch(`${BASE_URL}/sensors/${sensorId}/24`)
+      return res.json();
+    } catch (error) {
+      console.log(error.message);
+    }
   },
 };
 
@@ -168,32 +199,34 @@ const Property = {
     })
     return res.json()
   },
-}
+};
+
+const Display = {
+  async getDisplaySensors(display, user) {
+    const res = await fetch(`${BASE_URL}/display/${display}/${user}`);
+    return res.json();
+  },
+};
+
 const User = {
-  // async login(user) {
-  //   const res = await fetch(`${BASE_URL}/auth/login`, {
-  //     method: "POST",
-  //     credentials: 'include',
-  //     headers: {
-  //       'Content-Type': 'application/json',
-  //     },
-  //     body: JSON.stringify(user)
-  //   }).catch(err => {
-  //     console.log("this is a n error", err)
-  //   });
-  //   return res.json();
-  // },
+  async login(user) {
+    const res = await fetch(`${BASE_URL}/auth/login`, {
+      method: "POST",
+      credentials: 'include',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(user)
+    }).catch(err => {
+      console.log("this is an error", err)
+    });
+    return res.json();
+  },
   // async user(id) {
   //   console.log("user -> id", id);
   //   const res = await fetch(`${BASE_URL}/nodes/users/${id}`);
   //   return res.json();
   // },
 };
-const Display ={
-  async getDisplaySensors(display, user){
-    const res = await fetch(`${BASE_URL}/display/${display}/${user}`);
-    return res.json();
-  }
-}
 
 export { Site, Sensor, Node, Device, Controller, Property, User, Display };

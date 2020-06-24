@@ -18,7 +18,7 @@
     production: {
       client: 'pg',
       connection: {
-        database: 'weather_app',
+        database: process.env.DATABASE_URL,
         username: 'tamara',
         password: 'tamara'
       },

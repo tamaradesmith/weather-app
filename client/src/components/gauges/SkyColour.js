@@ -17,7 +17,7 @@ function SkyColour(props) {
   };
 
   useEffect(() => {
-    if (sensors !== undefined) { getColourReadings(); };
+    if (sensors.SkyRed) { getColourReadings(); };
    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [sensors]);
 

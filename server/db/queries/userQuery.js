@@ -5,7 +5,11 @@ module.exports = {
     return knex('users').where({ id: id })
   },
   async GetByUsername(username) {
-    const user = await knex('users').where({ username: username })
+    const user = await knex('users')
+    .join('sites', 'site_id', 'sites.id')
+    .where({ username: username })
+    .select('users.*', 'sites.name as site')
+
     return user[0]
   },
   async create(user) {
