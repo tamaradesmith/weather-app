@@ -1,7 +1,7 @@
 import React from "react";
 
 function PropertyDetails(props) {
-  const { devices } = props;
+  const { devices, admin } = props;
 
   function handleChange(event) {
     const target = event.target
@@ -29,7 +29,14 @@ function PropertyDetails(props) {
                       <p>{property.name}</p>
                       <p>{property.type}</p>
                       <p>{property.description}</p>
-                      <input type="checkbox" id={property.id} data-device={index} data-property={i} defaultChecked={property.active === true ? true : false} className="show-check" onChange={handleChange} />
+
+                      {admin ? (
+                        <input type="checkbox" id={property.id} data-device={index} data-property={i} defaultChecked={property.active === true ? true : false} className="show-check" onChange={handleChange} />
+                      ) : (
+                          <p>
+                            {property.active ? ("Actvie") : ("Disabled")}
+                          </p>
+                        )}
                     </div>
                   ))}
                 </>

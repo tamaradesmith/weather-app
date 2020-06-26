@@ -7,8 +7,8 @@ function NodeIndex(props) {
   const [nodes, setNodes] = useState([]);
 
   async function getAllNodes() {
-    const getNodes = await Node.getNodes()
-    console.log("getAllNodes -> getNodes", getNodes);
+    const getNodes = await Node.getNodes();
+
     (getNodes.message) ? setNodes([]) : setNodes(getNodes);
   }
 

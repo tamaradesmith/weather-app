@@ -1,12 +1,11 @@
 import React from 'react';
 
 import '../styles/user.css';
-import { Redirect } from 'react-router-dom';
-
+import { User } from '../js/requests'
+import { Link, useHistory } from "react-router-dom";
 
 function Login(props) {
-
-  console.log("Login -> props", props);
+  const history = useHistory();
 
   async function handle(event) {
     event.preventDefault()
@@ -16,13 +15,14 @@ function Login(props) {
       username: formData.get('username'),
       password: formData.get('current_password'),
     }
-    const result = await props.handleLogin(user);
-    console.log("handle -> result", result);
+    const result = await User.login(user);
     if (!result.result) {
       document.querySelector("#error").innerText = result.message;
       document.querySelector("#error").classList.remove('hidden');
-      // } else {
-      //   return <Redirect to='/site' />
+    } else {
+      props.setAdmin();
+      history.push( `/site`)
+
     }
   }
 

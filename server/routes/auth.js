@@ -8,7 +8,7 @@ const Model = require('../model/auth')
 router.get('/',  async (req, res) => {
   const id = req.signedCookies.user || await UserQuery.getDefaultUser();
   const user = await UserQuery.getOne(id);
-  res.send(user);
+  res.send(user[0]);
 
 });
 

@@ -91,8 +91,6 @@ function NodeConfig(props) {
     });
     document.querySelector('#site').classList.toggle('hidden');
     document.querySelector('#siteLabel').classList.toggle('hidden');
-
-
   };
 
 

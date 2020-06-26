@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useReducer } from "react";
-import { Node } from "../../js/requests";
+import { Node, User } from "../../js/requests";
 
 
 import NodeDetails from './details/NodeDetails';
@@ -9,6 +9,8 @@ import DeviceDetails from './details/DeviceDetails';
 import PropertyDetails from './details/PropertyDetails';
 
 function NodeShow(props) {
+
+  const [admin, setAdmin] = useState(false);
 
 
   const [node, setNode] = useState([]);
@@ -22,25 +24,26 @@ function NodeShow(props) {
 
   const initialState = { view: '' };
 
+
   const [state, dispatch] = useReducer(reducer, initialState);
 
   function reducer(state, action) {
     switch (action.view) {
       case 'node':
         updateButtonClass('node');
-        return { view: <NodeDetails node={node} activeUpdate={changeActive} /> };
+        return { view: <NodeDetails node={node} activeUpdate={changeActive} admin={admin} /> };
       case 'devices':
         updateButtonClass('devices');
-        return { view: <DeviceDetails devices={devices} activeUpdate={changeActive} /> };
+        return { view: <DeviceDetails devices={devices} activeUpdate={changeActive} admin={admin} /> };
       case 'sensors':
         updateButtonClass('sensors');
-        return { view: <SensorDetails devices={devices} activeUpdate={changeActive} /> };
+        return { view: <SensorDetails devices={devices} activeUpdate={changeActive} admin={admin} /> };
       case 'controllers':
         updateButtonClass('controllers');
-        return { view: <ControllerDetails devices={devices} activeUpdate={changeActive} /> };
+        return { view: <ControllerDetails devices={devices} activeUpdate={changeActive} admin={admin} /> };
       case 'properties':
         updateButtonClass('properties');
-        return { view: <PropertyDetails devices={devices} activeUpdate={changeActive} /> };
+        return { view: <PropertyDetails devices={devices} activeUpdate={changeActive} admin={admin} /> };
       default:
         throw new Error();
     };
@@ -128,8 +131,14 @@ function NodeShow(props) {
     return existing;
   };
 
+  async function checkAdmin() {
+    const user = await User.getUser();
+    setAdmin(user.is_admin);
+  };
+
   useEffect(() => {
     getNodeInfo();
+    checkAdmin();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -138,7 +147,7 @@ function NodeShow(props) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [node]);
 
-
+console.log(admin)
   return (
 
     <main className="NodeShow  view">
@@ -149,9 +158,12 @@ function NodeShow(props) {
         <button id="sensors" className=" tab-button" onClick={() => dispatch({ view: 'sensors' })}>Sensors</button>
         <button id="controllers" className="tab-button" onClick={() => dispatch({ view: 'controllers' })} >Controllers</button>
         <button id="properties" className=" tab-button" onClick={() => dispatch({ view: 'properties' })} >Properties</button>
-        <button id="save" className=" tab-button" disabled={buttonDisabled} onClick={handleUpdate}> Save</button>
-      </div>
 
+        {admin ? (
+          <button id="save" className=" tab-button" disabled={buttonDisabled} onClick={handleUpdate}> Save</button>
+        ) : null
+        }
+      </div>
       {state.view}
     </main>
 

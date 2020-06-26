@@ -16,32 +16,25 @@ import Login from './components/Login';
 
 import { User } from './js/requests'
 
-function App() {
+function App(props) {
 
   const [admin, setAdmin] = useState(false);
 
-
-  async function handleLogin(user) {
-    const result = await User.login(user)
-     return <Redirect to='/site' />
-    return result
-   
-  }
-
-  ••••••async function checkAdmin() {
-    const user = await User.getUser;
+  async function checkAdmin() {
+    const user = await User.getUser();
     setAdmin(user.is_admin);
-  }
+    return user;
+  };
 
   useEffect(() => {
-    checkAdmin()
-  }, [])
+    checkAdmin();
+  }, []);
 
   return (
     <div className="App">
 
       <Router>
-        <NavBar />
+        <NavBar admin={admin} />
         <Switch>
           <Route path="/" exact component={DashboardSite} />
           <Route path="/Site" component={DashboardSite} />
@@ -59,7 +52,7 @@ function App() {
           <Route path="/node/:id" component={NodeShow} />
           <Route path="/nodes" component={NodeIndex} />
           <Route path="/login" render={(routeProps => (
-            <Login handleLogin={handleLogin} />))} />
+            <Login setAdmin={checkAdmin} />))} />
 
         </Switch>
       </Router>

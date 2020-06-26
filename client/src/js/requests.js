@@ -26,10 +26,9 @@ const Node = {
       credentials: 'include',
     });
     if (res.ok){
-      console.log("res.ok", res.ok);
       return res.json();
     } else {
-     return res.ok //.catch(error => {console.log(error)});
+     return res.ok;
     } 
   },
   async getNode(NodeId) {

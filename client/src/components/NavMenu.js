@@ -3,8 +3,6 @@ import { NavLink } from 'react-router-dom'
 
 import configIcon from "../images/configIcon.png"
 
-
-
 function NavMenu(props) {
 
   function handleClick() {
@@ -20,8 +18,10 @@ function NavMenu(props) {
 
         <div className="nav-menu-inner">
           <NavLink to="/nodes" className="nav-menu-item" onClick={handleClick}>Nodes </NavLink>
-          <NavLink to="/nodes/configure" className="nav-menu-item" onClick={handleClick}> Add Node</NavLink>
-          <NavLink to='/Login' className="nav-menu-item"  onClick={handleClick}> Log In</NavLink>
+          {props.admin ? (
+            <NavLink to="/nodes/configure" className="nav-menu-item" onClick={handleClick}> Add Node</NavLink>
+          ) : null}
+          <NavLink to='/Login' className="nav-menu-item" onClick={handleClick}> Log In</NavLink>
         </div>
 
       </div>

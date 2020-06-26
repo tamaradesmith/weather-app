@@ -1,7 +1,7 @@
 import React from 'react';
 
 function SensorDetails(props) {
-  const { devices } = props;
+  const { devices, admin } = props;
 
   function handleChange(event) {
     const target = event.target;
@@ -30,7 +30,12 @@ function SensorDetails(props) {
                       <p> {sensor.name} </p>
                       <p> {sensor.type} </p>
                       <p> {sensor.description} </p>
-                      <input type="checkbox" id={sensor.id} data-device={index} data-sensor={i} defaultChecked={sensor.active === true ? true : false} className="show-check" onChange={handleChange} />
+                      {admin ? (
+
+                        <input type="checkbox" id={sensor.id} data-device={index} data-sensor={i} defaultChecked={sensor.active === true ? true : false} className="show-check" onChange={handleChange} />
+                      ) : (
+                          <p> {sensor.active ? ('Active') : ('Disabled')} </p>
+                        )}
                     </div>
                   ))}
                 </>

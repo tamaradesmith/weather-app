@@ -1,7 +1,7 @@
 import React from 'react';
 
 function ControllerDetails(props) {
-  const { devices } = props;
+  const { devices, admin } = props;
 
   function handleChange(event) {
 
@@ -31,7 +31,13 @@ function ControllerDetails(props) {
                         <p> {controller.name} </p>
                         <p> {controller.type} </p>
                         <p> {controller.description} </p>
+
+                        {admin ? (
+
                         <input type="checkbox" id={controller.id} data-device={index} data-controller={i} defaultChecked={controller.active === true ? true : false} className="show-check" onChange={handleChange} />
+                        ) : (
+                            <p> {controller.active ? ('Active') : ('Disabled')} </p>
+                          )}
                       </>
                     </div>
                   ))}

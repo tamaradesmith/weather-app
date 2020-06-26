@@ -3,7 +3,7 @@ import React from 'react';
 
 function DeviceDeatails(props) {
 
-  const { devices } = props;
+  const { devices, admin } = props;
 
   function handleChange(event) {
     const target = event.target;
@@ -33,8 +33,12 @@ function DeviceDeatails(props) {
               <p>
                 {device.description}
               </p>
-              <input type="checkbox" id={device.id} data-id={index} defaultChecked={device.active === true ? true : false} className="show-check" onChange={handleChange} />
-
+              {admin ? (
+                <input type="checkbox" id={device.id} data-id={index} defaultChecked={device.active === true ? true : false} className="show-check" onChange={handleChange} />
+              ) : (<p>
+                {device.active ? ("Actvie") : ("Disabled")}
+              </p>
+                )}
             </div>
           ))}
         </div>

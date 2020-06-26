@@ -63,28 +63,24 @@ function DashboardConfig(props) {
     return result;
   };
 
-  console.log("DashboardConfig -> props.admin", props.admin);
+  if (props.admin) {
 
+    return (
+      <main className="ConfigNodes config">
+        <button id="search-button" className="config-button" onClick={findLocalNodes}>Search For Nodes</button>
 
-    if (props.admin) {
+        {currentView}
 
-      return (
-        <main className="ConfigNodes config">
-          <button id="search-button" className="config-button" onClick={findLocalNodes}>Search For Nodes</button>
+        <div id='message' className="hidden">
+          <p> No nodes located</p>
+          <button className="config-button message-button2" onClick={findLocalNodes}> Search </button>
+          <button className="config-button config-button-cancel message-button1" onClick={handleCancel}> Cancel</button>
+        </div>
 
-          {currentView}
-
-
-          <div id='message' className="hidden">
-            <p> No nodes located</p>
-            <button className="config-button message-button2" onClick={findLocalNodes}> Search </button>
-            <button className="config-button config-button-cancel message-button1" onClick={handleCancel}> Cancel</button>
-          </div>
-
-        </main>
-      )
-    } else {
-      return <Redirect to='/nodes' />
-    }
-}
+      </main>
+    )
+  } else {
+    return <Redirect to='/nodes' />;
+  };
+};
 export default DashboardConfig
