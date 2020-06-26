@@ -8,9 +8,7 @@ import AirQuality from './gauges/AirQuality';
 
 function DashboardInside(props) {
 
-  const [site, setSite] = useState('New Westminster');
   const [displaySensors, setDisplaySensors] = useState([]);
-
 
   async function getDisplaySensors() {
     const user = 1;
@@ -24,7 +22,7 @@ function DashboardInside(props) {
 
   return (
     <main className="DashboardInside site">
-      <h1 className="site-header">{site}: Inside</h1>
+      <h1 className="site-header">{displaySensors.site}: Inside</h1>
 
       <div className="site-temperature">
         <h3 className="site-sensor-header">Temperature</h3>

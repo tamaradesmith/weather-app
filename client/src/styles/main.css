@@ -139,6 +139,7 @@ a{
   grid-column: 1/5;
   text-align: center;
   font-weight: 700;
+  text-transform: capitalize;
   text-decoration: underline;
 }
 .site-sensor-header {

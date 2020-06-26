@@ -90,6 +90,4 @@ router.post('/reading', (req, res) => {
 
 });
 
-
-
 module.exports = router;

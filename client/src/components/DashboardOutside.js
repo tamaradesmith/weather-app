@@ -11,10 +11,9 @@ import SkyColour from './gauges/SkyColour';
 
 function DashboardOutside() {
 
-  const [site, setSite] = useState('New Westminster');
   const [displaySensors, setDisplaySensors] = useState([]);
-
   const [rainAmount, SetRainAmount] = useState({});
+
 
   async function getDisplaySensors() {
     const user = 1;
@@ -38,9 +37,9 @@ function DashboardOutside() {
   };
 
 
-
   useEffect(() => {
     getDisplaySensors();
+    // getSiteFromCookies();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -51,7 +50,7 @@ function DashboardOutside() {
 
   return (
     <main className='DashboardOutside site'>
-      <h1 className='site-header'>{site}: Outside </h1>
+      <h1 className='site-header'>{displaySensors.site}: Outside </h1>
 
 
       <div className="site-temperature">

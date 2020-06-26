@@ -9,10 +9,7 @@ import Pressure from './gauges/Pressure';
 
 function DashboardSite(props) {
 
-  const [site, setSite] = useState('New Westminster');
   const [dashboardSensors, setDashboardSensors] = useState([]);
-
-  
   const [rainfall, setRainfall] = useState();
 
   async function getDashboardSensors() {
@@ -26,20 +23,19 @@ function DashboardSite(props) {
     setRainfall(reading.value);
   };
 
+  
   useEffect(() => {
     getDashboardSensors();
-    ;
   }, []);
 
   useEffect(() => {
-   
     if (dashboardSensors.rainfallSensor !== undefined) { getRainfallReading() };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [dashboardSensors])
 
   return (
     <main className="DashboardSite site">
-      <h1 className="site-header ">{site}</h1>
+      <h1 className="site-header ">{dashboardSensors.site}</h1>
       <div className="site-temperature ">
         <h3 className="site-sensor-header">Temperature</h3>
         <div id="temperatureInside" className="column-1">

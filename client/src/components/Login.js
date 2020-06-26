@@ -1,12 +1,14 @@
 import React from 'react';
 
 import '../styles/user.css';
+import { Redirect } from 'react-router-dom';
 
-import { User } from "../js/requests";
 
 function Login(props) {
 
-  async function handleLogin(event) {
+  console.log("Login -> props", props);
+
+  async function handle(event) {
     event.preventDefault()
     const form = document.querySelector("#login");
     const formData = new FormData(form);
@@ -14,38 +16,29 @@ function Login(props) {
       username: formData.get('username'),
       password: formData.get('current_password'),
     }
-    console.log("handleLogin -> user", user);
-    const result = await User.login(user)
+    const result = await props.handleLogin(user);
+    console.log("handle -> result", result);
     if (!result.result) {
       document.querySelector("#error").innerText = result.message;
       document.querySelector("#error").classList.remove('hidden');
-    } else {
-      console.log('login in')
-      props.history.push(`/site`)
+      // } else {
+      //   return <Redirect to='/site' />
     }
-  }
-
- async function handle(event){
-    event.preventDefault()
-
-    const result =  await User.user(2);
-    console.log("handle -> result", result);
-    
   }
 
   return (
     <div className='Login'>
 
-    <form id="login" className='login-form'>
       <p id="error" className="hidden"></p>
-      <label htmlFor="username" >Username</label>
-      <input type="text" name="username" placeholder="Enter your username"></input>
+      <form id="login" className='login-form'>
+        <label htmlFor="username" >Username</label>
+        <input type="text" name="username" placeholder="Enter your username"></input>
 
 
-      <label htmlFor="password">Password</label>
-      <input type="password" name="current_password"></input>
-      <button type="submit" onClick={handleLogin} className="login-button">Login</button>
-    </form>
+        <label htmlFor="password">Password</label>
+        <input type="password" name="current_password"></input>
+        <button type="submit" onClick={handle} className="login-button">Login</button>
+      </form>
     </div>
   );
 };

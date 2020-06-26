@@ -2,16 +2,19 @@ const express = require('express');
 const bcrypt = require('bcrypt');
 const router = express.Router();
 
-const User = require('../db/queries/userQuery');
+const UserQuery = require('../db/queries/userQuery');
 const Model = require('../model/auth')
 
-router.get('/', (req, res) => {
-  res.send("sign in");
+router.get('/',  async (req, res) => {
+  const id = req.signedCookies.user || await UserQuery.getDefaultUser();
+  const user = await UserQuery.getOne(id);
+  res.send(user);
+
 });
 
 router.post('/signup', async (req, res, next) => {
   if (Model.validUser(req.body)) {
-    const user = await User.GetByUsername(req.body.username);
+    const user = await UserQuery.GetByUsername(req.body.username);
     if (!user) {
       bcrypt.hash(req.body.password, 10)
         .then((hash) => {
@@ -20,7 +23,7 @@ router.post('/signup', async (req, res, next) => {
             username: req.body.username,
             password: hash
           };
-          User.create(newUser).then(id => {
+          UserQuery.create(newUser).then(id => {
             res.json({
               id,
               message: 'New user created'
@@ -37,7 +40,7 @@ router.post('/signup', async (req, res, next) => {
 
 router.post('/login', async (req, res, next) => {
   if (Model.validUser(req.body)) {
-    User.GetByUsername(req.body.username)
+    UserQuery.GetByUsername(req.body.username)
       .then(user => {
         if (user) {
           console.log("user", user);
@@ -45,15 +48,23 @@ router.post('/login', async (req, res, next) => {
             .then((result) => {
               if (result) {
                 const isSecure = req.app.get('env') != 'development';
-                res.cookie("user_id", user.id, {
+                res.cookie("user", user.id, {
                   httpOnly: true,
                   secure: isSecure,
-                  signed: true
+                  signed: true,
+                  SameSite: 'None',
                 });
                 res.cookie("site", user.site, {
+                  // httpOnly: true,
+                  // secure: isSecure,
+                  // signed: true
+                });
+                console.log("user.is_admin", user.is_admin);
+                res.cookie("admin", user.is_admin, {
                   httpOnly: true,
                   secure: isSecure,
-                  signed: true
+                  signed: true,
+                  SameSite: 'None',
                 });
                 return res.json({
                   result,

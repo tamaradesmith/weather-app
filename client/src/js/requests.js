@@ -1,10 +1,11 @@
 const BASE_URL = 'http://localhost:4000';
 
-
 const Site = {
   async getAllSites() {
     try {
-      const res = await fetch(`${BASE_URL}/sites`);
+      const res = await fetch(`${BASE_URL}/sites`, {
+        credentials: 'include',
+      });
       return res.json();
     }
     catch (error) {
@@ -12,23 +13,35 @@ const Site = {
     }
   },
   async getLocations(siteId) {
-    const res = await fetch(`${BASE_URL}/sites/${siteId}/locations`);
+    const res = await fetch(`${BASE_URL}/sites/${siteId}/locations`, {
+      credentials: 'include',
+    });
     return res.json();
   }
 }
 const Node = {
 
   async getNodes() {
-    const res = await fetch(`${BASE_URL}/nodes`);
-    return res.json();
+    const res = await fetch(`${BASE_URL}/nodes`, {
+      credentials: 'include',
+    });
+    if (res.ok){
+      console.log("res.ok", res.ok);
+      return res.json();
+    } else {
+     return res.ok //.catch(error => {console.log(error)});
+    } 
   },
   async getNode(NodeId) {
-    const res = await fetch(`${BASE_URL}/nodes/${NodeId}`);
+    const res = await fetch(`${BASE_URL}/nodes/${NodeId}`, {
+      credentials: 'include',
+    });
     return res.json();
   },
   async create(info) {
     const res = await fetch(`${BASE_URL}/nodes`, {
       method: 'POST',
+      credentials: 'include',
       headers: {
         'Content-Type': 'application/json'
       },
@@ -40,6 +53,7 @@ const Node = {
   async updateActiveStates(info) {
     const res = await fetch(`${BASE_URL}/nodes/active`, {
       method: 'PATCH',
+      credentials: 'include',
       headers: {
         'Content-Type': 'application/json'
       },
@@ -51,11 +65,15 @@ const Node = {
     return res.json();
   },
   async searchForNodes() {
-    const res = await fetch(`${BASE_URL}/nodes/search`);
+    const res = await fetch(`${BASE_URL}/nodes/search`, {
+      credentials: 'include',
+    });
     return res.json();
   },
   async getDeivcesByNodeId(nodeId) {
-    const res = await fetch(`${BASE_URL}/nodes/${nodeId}/devices`);
+    const res = await fetch(`${BASE_URL}/nodes/${nodeId}/devices`, {
+      credentials: 'include',
+    });
     return res.json();
   },
 }
@@ -66,12 +84,15 @@ const Device = {
   //   return res.json();
   // },
   async getDevicesFromNodeById(nodeId) {
-    const res = await fetch(`${BASE_URL}/nodes/${nodeId}/devices/config`);
+    const res = await fetch(`${BASE_URL}/nodes/${nodeId}/devices/config`, {
+      credentials: 'include',
+    });
     return res.json();
   },
   async create(info) {
     const res = await fetch(`${BASE_URL}/devices`, {
       method: 'POST',
+      credentials: 'include',
       headers: {
         'Content-Type': 'application/json'
       },
@@ -91,6 +112,7 @@ const Sensor = {
     try {
       const res = await fetch(`${BASE_URL}/sensors`, {
         method: 'POST',
+        credentials: 'include',
         headers: {
           'Content-Type': 'application/json',
         },
@@ -104,7 +126,9 @@ const Sensor = {
   },
   async getSensor(id) {
     try {
-      const res = await fetch(`${BASE_URL}/sensors/${id}`)
+      const res = await fetch(`${BASE_URL}/sensors/${id}`, {
+        credentials: 'include',
+      })
       return res.json();
     } catch (error) {
       console.log(error.message)
@@ -117,7 +141,9 @@ const Sensor = {
   // },
   async getLastReading(sensorId) {
     try {
-      const res = await fetch(`${BASE_URL}/sensors/${sensorId}/reading`);
+      const res = await fetch(`${BASE_URL}/sensors/${sensorId}/reading`, {
+        credentials: 'include',
+      });
       return res.json();
     } catch (error) {
       console.log(error.message)
@@ -125,40 +151,20 @@ const Sensor = {
   },
   async getSensorsReadings(sensors) {
     try {
-      const res = await fetch(`${BASE_URL}/sensors/${sensors}/readings`);
+      const res = await fetch(`${BASE_URL}/sensors/${sensors}/readings`, {
+        credentials: 'include',
+      });
       return res.json();
     } catch (error) {
       console.log(error.message);
     }
   },
-  // async getSensorsbyTypeandSite(type, site) {
-  //   const res = await fetch(`${BASE_URL}/sensors/site/${site}/type/${type}`)
-  //   return res.json()
-  // },
-  // async getSensorsTypes() {
-  //   const res = await fetch(`${BASE_URL}/sensors/types`)
-  //   return res.json();
-  // },
-  // async getSensorsBySite(site){
-  //   const res = await fetch(`${BASE_URL}/sensors/site/${site}`);
-  //   return res.json();
-  // },
-  // async getSiteSensorsReading(site){
-  //   const res = await fetch(`${BASE_URL}/sensors/site/${site}/readings`);
-  //   return res.json();
-  // },
-  // async getSensorsLocations() {
-  //   const res = await fetch(`${BASE_URL}/sensors/locations`);
-  //   return res.json();
-  // },
-  // async getSensorGroupedbyDeviceByNodeId(nodeId) {
-  //   const res = await fetch(`${BASE_URL}/node/${nodeId}/devices/sensors`);
-  //   return res.json();
-  // },
   // temperature  
   async getHighsAndLows(sensorId) {
     try {
-      const res = await fetch(`${BASE_URL}/sensors/${sensorId}/highslows`);
+      const res = await fetch(`${BASE_URL}/sensors/${sensorId}/highslows`, {
+        credentials: 'include',
+      });
       return res.json();
     } catch (error) {
       console.log(error.message);
@@ -167,7 +173,9 @@ const Sensor = {
   },
   async getLast24Readings(sensorId) {
     try {
-      const res = await fetch(`${BASE_URL}/sensors/${sensorId}/24`)
+      const res = await fetch(`${BASE_URL}/sensors/${sensorId}/24`, {
+        credentials: 'include',
+      })
       return res.json();
     } catch (error) {
       console.log(error.message);
@@ -179,6 +187,7 @@ const Controller = {
   async create(info) {
     const res = await fetch(`${BASE_URL}/controllers`, {
       method: 'POST',
+      credentials: 'include',
       headers: {
         'Content-Type': 'application/json',
       },
@@ -192,6 +201,7 @@ const Property = {
   async create(info) {
     const res = await fetch(`${BASE_URL}/properties`, {
       method: 'POST',
+      credentials: 'include',
       headers: {
         'Content-Type': 'application/json',
       },
@@ -202,8 +212,10 @@ const Property = {
 };
 
 const Display = {
-  async getDisplaySensors(display, user) {
-    const res = await fetch(`${BASE_URL}/display/${display}/${user}`);
+  async getDisplaySensors(display) {
+    const res = await fetch(`${BASE_URL}/display/${display}`, {
+      credentials: 'include',
+    });
     return res.json();
   },
 };
@@ -222,11 +234,13 @@ const User = {
     });
     return res.json();
   },
-  // async user(id) {
-  //   console.log("user -> id", id);
-  //   const res = await fetch(`${BASE_URL}/nodes/users/${id}`);
-  //   return res.json();
-  // },
+  async getUser(){
+    const res = await fetch(`${BASE_URL}/auth/`,{
+      credentials: 'include',
+      })
+      return res.json();
+    
+  },
 };
 
 export { Site, Sensor, Node, Device, Controller, Property, User, Display };

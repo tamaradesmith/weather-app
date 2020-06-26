@@ -29,9 +29,6 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
 
-
-
-
 app.use(methodOverride((req, res) => {
   if (req.body && req.body._method) {
     const method = req.body._method;
@@ -51,7 +48,7 @@ app.use(cors({
 // ROUTES 
 
 app.use('/auth', auth);
-app.use('/nodes',  node);
+app.use('/nodes', node);
 app.use('/sensors', sensor);
 app.use('/devices', device);
 app.use('/controllers', controller);
@@ -64,23 +61,28 @@ app.use('/display', display);
 app.use(function (res, res, next) {
   const err = new Error('Not Found');
   err.status = 404;
-  console.log("err.status", err.status)
   next(err);
-})
+});
 
 app.use(function (err, req, res, next) {
+  res.locals.message = err.message;
+  res.locals.error = req.app.get('env') === 'development' ? err : {};
+  // console.log(" res.locals.error",  res.locals.error);
+
+  // render the error page
   res.status(err.status || 500);
   res.json({
     message: err.message,
     error: req.app.get('env') === 'development' ? err : {}
-  })
-})
+  });
+  
+});
 
 // SERVER
 
 const PORT = 4000;
-const ADDRESS = '0.0.0.0';
+// const ADDRESS = '0.0.0.0';
 
-app.listen(PORT, ADDRESS, () => {
-  console.log(`Listening => Port: ${PORT} Address: ${ADDRESS}`)
+app.listen(PORT, () => {
+  console.log(`Listening => Port: ${PORT}`)
 });

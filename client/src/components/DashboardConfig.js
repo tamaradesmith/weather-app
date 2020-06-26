@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { Redirect } from 'react-router-dom'
 import { Node, Device, Sensor, Controller, Property } from '../js/requests';
 
 import NodeIndex from './partials/NodeIndex'
@@ -62,21 +63,28 @@ function DashboardConfig(props) {
     return result;
   };
 
-
-  return (
-    <main className="ConfigNodes config">
-      <button id="search-button" className="config-button" onClick={findLocalNodes}>Search For Nodes</button>
-
-      {currentView}
+  console.log("DashboardConfig -> props.admin", props.admin);
 
 
-      <div id='message' className="hidden">
-        <p> No nodes located</p>
-        <button className="config-button message-button2" onClick={findLocalNodes}> Search </button>
-        <button className="config-button config-button-cancel message-button1" onClick={handleCancel}> Cancel</button>
-      </div>
+    if (props.admin) {
 
-    </main>
-  )
+      return (
+        <main className="ConfigNodes config">
+          <button id="search-button" className="config-button" onClick={findLocalNodes}>Search For Nodes</button>
+
+          {currentView}
+
+
+          <div id='message' className="hidden">
+            <p> No nodes located</p>
+            <button className="config-button message-button2" onClick={findLocalNodes}> Search </button>
+            <button className="config-button config-button-cancel message-button1" onClick={handleCancel}> Cancel</button>
+          </div>
+
+        </main>
+      )
+    } else {
+      return <Redirect to='/nodes' />
+    }
 }
 export default DashboardConfig

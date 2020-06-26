@@ -8,7 +8,8 @@ function NodeIndex(props) {
 
   async function getAllNodes() {
     const getNodes = await Node.getNodes()
-    setNodes(getNodes);
+    console.log("getAllNodes -> getNodes", getNodes);
+    (getNodes.message) ? setNodes([]) : setNodes(getNodes);
   }
 
   useEffect(() => {

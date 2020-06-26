@@ -1,6 +1,8 @@
 import React, { useState, useEffect, useReducer } from "react";
 import { Node, Device, Site } from "../../../js/requests";
 
+import { Redirect } from 'react-router-dom'
+
 import DeviceConfig from './DeviceConfig';
 import SensorConfig from './SensorConfig'
 import ControllerConfig from "./ControllerConfig";
@@ -424,7 +426,7 @@ function NodeConfig(props) {
   // if (foundNodes === null) {
   //   return "Searching..."
   // };
-
+  if (props.admin) {
 
   return (
     <div className="NodeConfig config-body" >
@@ -508,5 +510,8 @@ function NodeConfig(props) {
 
     </div>
   )
+  } else {
+    return <Redirect to='/nodes' />
+  }
 }
 export default NodeConfig;

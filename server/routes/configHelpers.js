@@ -5,7 +5,7 @@ module.exports = {
 
   getDevices(XMLFile) {
     let devicesXml;
-    XMLFile = file;
+    // XMLFile = file;
     const devicesList = [];
     parseString(XMLFile, ((err, result) => {
       devicesXml = result.application.device
