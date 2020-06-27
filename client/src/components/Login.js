@@ -2,7 +2,7 @@ import React from 'react';
 
 import '../styles/user.css';
 import { User } from '../js/requests'
-import { Link, useHistory } from "react-router-dom";
+import { useHistory } from "react-router-dom";
 
 function Login(props) {
   const history = useHistory();
@@ -21,7 +21,7 @@ function Login(props) {
       document.querySelector("#error").classList.remove('hidden');
     } else {
       props.setAdmin();
-      history.push( `/site`)
+      history.push(`/site`)
 
     }
   }
@@ -35,7 +35,7 @@ function Login(props) {
         <input type="text" name="username" placeholder="Enter your username"></input>
 
 
-        <label htmlFor="password">Password</label>
+        <label htmlFor="current_password">Password</label>
         <input type="password" name="current_password"></input>
         <button type="submit" onClick={handle} className="login-button">Login</button>
       </form>

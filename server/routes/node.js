@@ -11,12 +11,13 @@ const DeviceQuery = require('../db/queries/deviceQuery');
 const SensorQuery = require('../db/queries/sensorQuery');
 const ControllerQuery = require('../db/queries/controllerQuery');
 const PropertyQuery = require('../db/queries/propertyQuery');
+const UserQuery = require('../db/queries/userQuery');
 
 // // Helpers
 
-const ConfigHelpers = require('./configHelpers')
-const NodeHelpers = require('./nodeHelper')
-
+const ConfigHelpers = require('./configHelpers');
+const NodeHelpers = require('./nodeHelper');
+const AuthMiddleware = require('./middleware')
 // Node Routes
 
 
@@ -37,7 +38,7 @@ router.get('/', async (req, res) => {
   res.send(nodes);
 });
 
-router.post('/', async (req, res) => {
+router.post('/', async (req, res, next) => {
   const nodeInfo = req.body;
   const existing = await NodeQuery.nodeExist(nodeInfo);
   res.send(existing);
@@ -86,24 +87,34 @@ router.get('/:id/devices', async (req, res) => {
 // })
 
 router.patch('/active', async (req, res) => {
-  const info = req.body;
-  let result = {};
-  if (info.nodes) {
-    result = await NodeQuery.updateActive(info.nodes);
-  } else if (info.devices.length > 0) {
-    result = await DeviceQuery.activeByDevicesId(info.devices);
+  const id = req.signedCookies.user ;
+
+  const admin = await AuthMiddleware.isAdmin(id);
+  console.log("admin", admin);
+  if (admin) {
+    const info = req.body;
+    let result = {};
+    if (info.nodes) {
+      result = await NodeQuery.updateActive(info.nodes);
+    } else if (info.devices.length > 0) {
+      result = await DeviceQuery.activeByDevicesId(info.devices);
+    } else {
+      if (info.sensors.length > 0) {
+        result.sensors = await SensorQuery.activeBySensorsId(info.sensors);
+      };
+      if (info.controllers.length > 0) {
+        result.controllers = await ControllerQuery.activeByControllersId(info.controllers);
+      };
+      if (info.properties.length > 0) {
+        result.properties = await PropertyQuery.activeByPropertiesId(info.properties);
+      };
+    };
+    res.send(result);
   } else {
-    if (info.sensors.length > 0) {
-      result.sensors = await SensorQuery.activeBySensorsId(info.sensors);
-    };
-    if (info.controllers.length > 0) {
-      result.controllers = await ControllerQuery.activeByControllersId(info.controllers);
-    };
-    if (info.properties.length > 0) {
-      result.properties = await PropertyQuery.activeByPropertiesId(info.properties);
-    };
-  };
-  res.send(result);
+    console.log('not allowed');
+    res.status(401).send({ error: 'Unauthorized'});
+  }
+
 });
 
 

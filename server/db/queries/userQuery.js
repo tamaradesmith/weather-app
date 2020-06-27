@@ -17,9 +17,7 @@ module.exports = {
     return savedUser[0];
   },
   async getDefaultUser(){
-    console.log('getdefault')
     const user = await knex('users').select('id').where({username: 'default'})
-    console.log("getDefaultUsers -> user", user);
     return user[0].id
   }
 }

@@ -59,19 +59,12 @@ router.post('/login', async (req, res, next) => {
                   // secure: isSecure,
                   // signed: true
                 });
-                console.log("user.is_admin", user.is_admin);
-                res.cookie("admin", user.is_admin, {
-                  httpOnly: true,
-                  secure: isSecure,
-                  signed: true,
-                  SameSite: 'None',
-                });
                 return res.json({
                   result,
                   message: "Logging in!"
                 });
               } else {
-                next(new Error("Invaild login..."))
+                next(new Error("Invaild login"))
               }
             });
         } else {

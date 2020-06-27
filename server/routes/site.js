@@ -16,7 +16,6 @@ router.get('/', async (req, res) => {
 
 router.get('/:site/locations', async (req, res) => {
   const siteId= req.params.site
-  console.log("siteId", siteId);
   const locations = await LocationQuery.getLocationsBySiteId(siteId);
   res.send(locations);
 })

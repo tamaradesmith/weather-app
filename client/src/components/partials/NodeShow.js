@@ -107,15 +107,19 @@ function NodeShow(props) {
 
   async function handleUpdate() {
     const body = { nodes: updateNode, devices: updateDevice, sensors: updateSensor, controllers: updateController, properties: updateProperty };
-    await Node.updateActiveStates(body);
-    setUpdateNode(null);
-    setUpdateDevice([]);
-    setUpdateSensor([]);
-    setUpdateController([]);
-    setUpdateProperty([]);
-    getNodeInfo();
-    setButtonDisabled(true);
-  };
+    const result = await Node.updateActiveStates(body);
+    if (result.error) {
+      alert(result.error)
+    } else {
+      setUpdateNode(null);
+      setUpdateDevice([]);
+      setUpdateSensor([]);
+      setUpdateController([]);
+      setUpdateProperty([]);
+      getNodeInfo();
+      setButtonDisabled(true);
+    };
+  }
 
   function checkIfExistsInUpdate(newItem, existing) {
     let flag = 0;
@@ -147,7 +151,6 @@ function NodeShow(props) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [node]);
 
-console.log(admin)
   return (
 
     <main className="NodeShow  view">
@@ -160,7 +163,7 @@ console.log(admin)
         <button id="properties" className=" tab-button" onClick={() => dispatch({ view: 'properties' })} >Properties</button>
 
         {admin ? (
-          <button id="save" className=" tab-button" disabled={buttonDisabled} onClick={handleUpdate}> Save</button>
+        <button id="save" className=" tab-button" disabled={buttonDisabled} onClick={handleUpdate}> Save</button>
         ) : null
         }
       </div>
