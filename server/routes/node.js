@@ -39,25 +39,23 @@ router.get('/', async (req, res) => {
 });
 
 router.post('/', async (req, res, next) => {
-  const nodeInfo = req.body;
-  const existing = await NodeQuery.nodeExist(nodeInfo);
-  res.send(existing);
+  const id = req.signedCookies.user;
+  const admin = await AuthMiddleware.isAdmin(id);
+  if (admin) {
+    const nodeInfo = req.body;
+    const existing = await NodeQuery.nodeExist(nodeInfo);
+    res.send(existing);
+  } else {
+    res.status(401).send({ error: 'Unauthorized' });
+  }
 });
 
 router.get('/:id', async (req, res) => {
   const id = req.params.id
   const node = await NodeQuery.getNodeById(id)
-  res.send(node)
+  res.send(node);
+
 });
-
-// router.patch(`/:type/:id/update`, async (req, res) => {
-//   const type = req.params.type;
-//   const id = req.params.id;
-//   const info = req.body;
-//   const updateItem = await NodeQuery.update(type, info, id);
-//   res.send(updateItem);
-// });
-
 
 
 // Special ROUTES
@@ -79,18 +77,9 @@ router.get('/:id/devices', async (req, res) => {
   res.send(devices);
 });
 
-// router.get('/:id/devices/sensors', async (req, res) => {
-//   const nodeId = req.params.id;
-//   const devices = await DeviceQuery.getDevicseByNodeId(nodeId);
-//   const sensors = await SensorQuery.getAllSensorOnNodeByDevices(devices);
-//   res.send(sensors);
-// })
-
 router.patch('/active', async (req, res) => {
-  const id = req.signedCookies.user ;
-
+  const id = req.signedCookies.user;
   const admin = await AuthMiddleware.isAdmin(id);
-  console.log("admin", admin);
   if (admin) {
     const info = req.body;
     let result = {};
@@ -111,8 +100,7 @@ router.patch('/active', async (req, res) => {
     };
     res.send(result);
   } else {
-    console.log('not allowed');
-    res.status(401).send({ error: 'Unauthorized'});
+    res.status(401).send({ error: 'Unauthorized' });
   }
 
 });
