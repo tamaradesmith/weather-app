@@ -13,6 +13,7 @@ import NodeConfig from './components/partials/configure/NodeConfig';
 import NodeShow from './components/partials/NodeShow';
 import NodeIndex from './components/partials/NodeIndex';
 import Login from './components/Login';
+import SensorShow from './components/partials/SensorShow';
 
 import { User } from './js/requests'
 
@@ -51,6 +52,9 @@ function App(props) {
 
           <Route path="/node/:id" component={NodeShow} />
           <Route path="/nodes" component={NodeIndex} />
+
+          <Route path="/sensor/:id" component={SensorShow} />
+
           <Route path="/login" render={(routeProps => (
             <Login setAdmin={checkAdmin} />))} />
 

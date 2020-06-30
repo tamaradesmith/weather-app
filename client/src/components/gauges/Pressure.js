@@ -19,7 +19,7 @@ function Pressure(props) {
 
 
   return (
-    <div className="Pressure">
+    <div id={sensorId} className="Pressure sensor">
     <p> {pressure}</p>
       <img src={pressureIcon} alt={"Air Pressure Icon"} style={{'width': size}} />
     </div>

@@ -30,48 +30,6 @@ module.exports = {
     }));
     return devices;
   },
-  // get Sensors by Type 
-  // async getSensorsByType(type, site) {
-  //   const sensors = await knex('devices')
-  //   .join('nodes', 'nodes.id', "node_id")
-  //   .select("nodes.site", "nodes.location", 'nodes.active', "devices.id")
-  //   .join('sensors', 'devices.id', 'device_id')
-  //   .select('*')
-  //     .where({ site: site, location: "outside" }).andWhere('sensors.type', type).andWhere('sensors.active', true)
-  //   .orWhere({ site: site, location: "inside" })
-  //   .andWhere('sensors.type', type).andWhere('sensors.active', true)
-  //   return sensors;
-  // },
-  // async getSensorsBySite(site) {
-  //   const sensors = await knex('devices')
-  //     .join('nodes', 'nodes.id', 'node_id')
-  //     .join('sensors', 'device_id', 'devices.id')
-  //     .select("nodes.site", 'nodes.id as node_id', 'devices.id as device_id', "nodes.location", 'sensors.type', 'sensors.id as sensor_id', "sensors.max", "sensors.min", 'sensors.name', "sensors.active as sensor_active")
-  //     .where("devices.active", true).andWhere('sensors.active', true)
-  //     .andWhere({ site: site, location: 'outside' })
-  //     .orWhere({ site: site, location: 'inside' }).andWhere('sensors.active', true).andWhere("devices.active", true)
-  //   return sensors
-  // },
-  // // get Sensors by Type and Device Id
-  // async getSensorsByTypeAndDeviceId(type, deviceId) {
-  //   const sensors = await knex('sensors').select("*").where({ type, device_id: deviceId, active: true });
-  //   return sensors[0];
-  // },
-  // // get all different type of sensors
-  // async getTypeOfSensors() {
-  //   const types = await knex.distinct().from('sensors').pluck("type");
-  //   return types
-  // },
-  // // get Sensors locations
-  // async getSensorsLocations() {
-  //   const locations = await knex.distinct().from('sensors').pluck("location").where({ active: true });
-  //   return locations;
-  // },
-  // //  Get All Temperature Sensor- 
-  // async getTemperatureSensors() {
-  //   const sensors = await knex("sensors").select("*").where({ type: "temperature", active: true, location: 'outside' }).orWhere({ location: 'inside', type: "temperature", active: true })
-  //   return sensors
-  // },
 
 
   // ACTIVE UPDATES

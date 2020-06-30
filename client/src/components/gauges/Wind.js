@@ -23,11 +23,11 @@ function Wind(props) {
   }, [sensorSpeed]);
 
   return (
-    <div className="WindDirection wind-div" style={{ 'width': size, 'height': size }} >
+    <div id={sensorDirection} className="WindDirection wind-div sensor" style={{ 'width': size, 'height': size }} >
       <div className="wind-arrow" style={{ 'transform': `rotate(${windDirection}deg)` }}>
-      <div className="wind-arrow-top"></div></div>
+        <div className="wind-arrow-top"></div></div>
 
-      <img id="temp" src={compass} alt={"wind Direction"}  className="wind-speed-gauge"/>
+      <img src={compass} alt={"wind Direction"} className="wind-speed-gauge" />
       {windSpeed ? (<p className="wind-speed-gauge">{windSpeed.value}</p>) : (null)}
     </div>
   );

@@ -11,6 +11,7 @@ function DashboardSite(props) {
 
   const [dashboardSensors, setDashboardSensors] = useState([]);
   const [rainfall, setRainfall] = useState();
+  const [loading, setLoading] = useState(true);
 
   async function getDashboardSensors() {
     const user = 1;
@@ -21,9 +22,19 @@ function DashboardSite(props) {
   async function getRainfallReading() {
     const reading = await Sensor.getLastReading(dashboardSensors.rainfallSensor);
     setRainfall(reading.value);
+    setLoading(false);
   };
 
-  
+  function addListeners() {
+    const sensors = document.querySelectorAll(".sensor");
+    sensors.forEach(sensor => {
+      sensor.addEventListener('click', (event) => {
+        const id = event.target.closest('.sensor').id;
+        props.history.push(`/sensor/${id}`);
+      })
+    })
+  }
+
   useEffect(() => {
     getDashboardSensors();
   }, []);
@@ -32,6 +43,10 @@ function DashboardSite(props) {
     if (dashboardSensors.rainfallSensor !== undefined) { getRainfallReading() };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [dashboardSensors])
+
+  useEffect(() => {
+    addListeners();
+  }, [loading === false])
 
   return (
     <main className="DashboardSite site">
@@ -54,7 +69,7 @@ function DashboardSite(props) {
           <Humidily sensorId={dashboardSensors.humidilyInside} size={"60px"} />
         </div>
         <h4 className="site-label">--Inside--</h4>
-        <div className="site-humidily-gauge">
+        <div className="site-humidily-gauge sensor">
           <Humidily sensorId={dashboardSensors.humidilyOutside} size={"60px"} />
         </div>
         <h4 className="site-label">--Outside--</h4>
@@ -64,21 +79,23 @@ function DashboardSite(props) {
 
       <div className="site-wind" style={{ "width": "300px", "height": '300px' }}>
         <h3 className="site-sensor-header">Wind</h3>
-        <div>
+        <div className="sensor">
           <Wind sensorDirection={dashboardSensors.windDirection} sensorSpeed={dashboardSensors.windSpeed} size={'200px'} />
         </div>
       </div>
 
       <div className=" site-rain">
         <h3 className="site-sensor-header site-label-header">Rain</h3>
-        <Rainfall amount={rainfall} label={30} size={'70px'} />
-
+        <div className="sensor">
+          <Rainfall sensorId={dashboardSensors.rainfallSensor} amount={rainfall} label={30} size={'70px'} />
+        </div>
       </div>
 
       <div className=" site-pressure">
         <h3 className="site-sensor-header site-label-header">Air Pressure</h3>
-        <Pressure sensorId={dashboardSensors.pressureSensor} size={"100px"} />
-        {/* <p >{pressure} </p> */}
+        <div className=" sensor">
+          <Pressure sensorId={dashboardSensors.pressureSensor} size={"100px"} />
+        </div>
       </div>
 
 
@@ -87,3 +104,5 @@ function DashboardSite(props) {
 };
 
 export default DashboardSite
+
+

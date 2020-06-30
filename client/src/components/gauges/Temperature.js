@@ -124,7 +124,7 @@ function Temperature(props) {
 
   return (
 
-    <div id={sensorId} className="Temperature">
+    <div id={sensorId} className="Temperature sensor">
       <div className="thermometer-div">
         <p className="thermometer-labels"> 0- </p>
         <p className="thermometer-labels-hight"> 40-</p>

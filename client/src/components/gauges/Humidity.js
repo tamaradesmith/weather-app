@@ -21,7 +21,7 @@ function Humidity(props) {
   }, [sensorId]);
 
   return (
-    <div className="Humidily humidity-div">
+    <div id={sensorId} className="Humidily humidity-div  sensor">
       <p className="humidity-text"> {humidity}%</p>
       <div id="humidity" className="humidity-gauge" style={{
         'backgroundImage': `linear-gradient(transparent 0%, transparent ${100 - (humidity)}%, #2C7CB0 ${100 - (humidity)}% ,#2C7CB0 100%)`, 'width': size, 'height': size
