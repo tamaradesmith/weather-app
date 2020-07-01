@@ -1,7 +1,19 @@
 
 .chart-div{
-  width: 600px;
+  width: 750px;
   height: 300px;
   margin: 0 auto;
-  background: #fff0f5;
+
+}
+
+path {
+fill: none;
+stroke: black;
+}
+.line{
+  stroke-width: 3px;
+  stroke: darkblue;
+}
+.axis-label{
+  font-size: .75em;
 }

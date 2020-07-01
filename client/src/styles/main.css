@@ -638,3 +638,14 @@ background: var(--background-secondary-hover);
   grid-row: 2/3;
   grid-column: 3/4;
 }
+
+.show-sensor-header{
+  display: flex;
+  justify-content: space-evenly;
+  font-size: 1.1em;
+  font-weight: 700;
+}
+.show-sensor-body{
+  line-height: 1.5;
+  margin-left: .5em;
+}

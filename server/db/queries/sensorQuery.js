@@ -16,7 +16,17 @@ module.exports = {
 
   // get sensor by id;
   async getSensor(id) {
-    return await knex('sensors').select("*").where({ id: id })
+ 
+    const sensor = await knex('sensors')
+    .select("sensors.*", "locations.name as location", 'sensor_types.type as type')
+    .join('devices', 'devices.id', 'sensors.device_id')
+    .join('nodes', 'nodes.id', 'node_id')
+    .join('locations', "locations.id", "location_id")
+    .join("sensor_types", 'sensor_types.id', "sensors.type_id")
+    // .where({id: device_id})
+    .where("sensors.id", id)
+    console.log("getSensor -> sensor", sensor);
+    return  sensor
   },
 
   // SPECIAL QUERIES
@@ -70,7 +80,7 @@ module.exports = {
     return readings
   },
   async getLast24ReadingsBySensor(sensorId) {
-    const readings = await knex('readings').select("value", "time").where({ sensor_id: sensorId }).orderBy('time', "desc").limit(12);
+    const readings = await knex('readings').select("value", "time").where({ sensor_id: sensorId }).orderBy('time', "desc").limit(24);
     return readings
   },
 

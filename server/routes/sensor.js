@@ -33,6 +33,7 @@ router.get('/:id', async (req, res) => {
   try {
     const id = req.params.id;
     const sensor = await SensorQuery.getSensor(id);
+    console.log("sensor", sensor);
     res.send(sensor[0]);
   } catch (error) {
     res.send(error.message);
@@ -68,10 +69,8 @@ router.get('/:id/24', async (req, res) => {
   try {
     const sensorId = req.params.id;
     const readings = await SensorQuery.getLast24ReadingsBySensor(sensorId);
-    console.log("readings", readings);
     res.send(readings)
   } catch (error) {
-    console.log(error)
     res.send(error.message);
   }
 })
