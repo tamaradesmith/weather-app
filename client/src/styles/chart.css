@@ -12,8 +12,11 @@ stroke: black;
 }
 .line{
   stroke-width: 3px;
-  stroke: darkblue;
+  stroke: #00008b;
 }
 .axis-label{
   font-size: .75em;
+}
+.bar-colour{
+  fill: green;
 }

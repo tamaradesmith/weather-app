@@ -21,6 +21,7 @@ function SensorShow(props) {
   async function getSensor() {
     const sensorInfo = await Sensor.getSensor(sensorId);
     console.log("getSensor -> sensorInfo", sensorInfo);
+    sensorInfo.chart = sensorInfo.chart || "line";
     setSensor(sensorInfo);
   };
 
@@ -52,7 +53,7 @@ function SensorShow(props) {
         <h3>sensor: {sensor.name} </h3>
         <h3>location: {sensor.location}</h3>
       </div>
-      {sensor.name === "rainfall" ? (
+      {sensor.chart ===  "bar" ? (
         <BarChart data={data} stateWidth={stateWidth} stateHeight={stateHeight} />
       ) : (
 

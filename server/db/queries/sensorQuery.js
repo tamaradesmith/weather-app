@@ -16,17 +16,19 @@ module.exports = {
 
   // get sensor by id;
   async getSensor(id) {
- 
+
     const sensor = await knex('sensors')
-    .select("sensors.*", "locations.name as location", 'sensor_types.type as type')
-    .join('devices', 'devices.id', 'sensors.device_id')
-    .join('nodes', 'nodes.id', 'node_id')
-    .join('locations', "locations.id", "location_id")
-    .join("sensor_types", 'sensor_types.id', "sensors.type_id")
-    // .where({id: device_id})
-    .where("sensors.id", id)
-    console.log("getSensor -> sensor", sensor);
-    return  sensor
+      .select("sensors.active", "sensors.name", "sensors.id", "sensors.description", "locations.name as location", 'sensor_types.type as type',)
+      .join('devices', 'devices.id', 'sensors.device_id')
+      .join('nodes', 'nodes.id', 'node_id')
+      .join('locations', "locations.id", "location_id")
+      .join("sensor_types", 'sensor_types.id', "sensors.type_id")
+      .where("sensors.id", id)
+    const sensorProperties = await knex('sensor_properties').select('*').where('sensor_id', id)
+    sensorProperties.forEach(proptery => {
+      sensor[0][proptery.name] = proptery.value
+    })
+    return sensor[0]
   },
 
   // SPECIAL QUERIES

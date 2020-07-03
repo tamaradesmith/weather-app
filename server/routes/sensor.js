@@ -33,8 +33,7 @@ router.get('/:id', async (req, res) => {
   try {
     const id = req.params.id;
     const sensor = await SensorQuery.getSensor(id);
-    console.log("sensor", sensor);
-    res.send(sensor[0]);
+    res.send(sensor);
   } catch (error) {
     res.send(error.message);
   }

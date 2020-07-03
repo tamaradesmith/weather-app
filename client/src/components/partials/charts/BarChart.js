@@ -6,14 +6,11 @@ function BarChart(props) {
 
   const { data, stateHeight, stateWidth } = props;
 
-  function setMax(array) {
-    const max = Math.max.apply(Math, array.map(function (o) { return o.value; }))
-    return max + (max / 4);
-  };
 
+  const parseDate = d3.isoParse
   function drawChart() {
 
-    const margin = { top: 20, right: 30, bottom: 60, left: 45 },
+    const margin = { top: 20, right: 5, bottom: 15, left: 25 },
       width = stateWidth - margin.left - margin.right,
       height = stateHeight - margin.top - margin.bottom;
 
@@ -26,14 +23,11 @@ function BarChart(props) {
       .attr("transform", `translate(${margin.left},${margin.top})`);
 
 
-    // var bandScale = d3.scaleBand()
-    //   .domain(['Mon', 'Tue', 'Wed', 'Thu', 'Fri'])
-    //   .range([0, 200]);    
-
     const x = d3.scaleBand()
       .domain(d3.range(data.length))
       .range([margin.left, width - margin.right])
       .padding(0.1)
+
 
     const y = d3.scaleLinear()
       .domain([0, d3.max(data, d => d.value)])
@@ -41,6 +35,7 @@ function BarChart(props) {
 
     const xAxis = g => g
       .attr("transform", `translate(0,${height - margin.bottom})`)
+      .attr("fill", "#69b3a2")
       .call(d3.axisBottom(x)) //.tickFormat(i => data[i].time).tickSizeOuter(0))
 
     const yAxis = g => g
@@ -66,23 +61,25 @@ function BarChart(props) {
       .attr("width", x.bandwidth());
 
     svg.append("g")
+      .attr('class', "axis-label")
+
       .call(xAxis);
 
     svg.append("g")
+      .attr('class', "axis-label")
+
       .call(yAxis);
 
   }
 
   useEffect(() => {
-
-    console.log("BarChart -> data", data[0].time);
     if (data.length > 0) {
       drawChart();
     }
   }, [data])
 
   return (
-    <div className="BarChart rowChart">
+    <div className="BarChart rowChart chart-div">
 
       <div id='path' className="path"></div>
 
