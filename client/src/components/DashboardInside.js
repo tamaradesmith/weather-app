@@ -9,16 +9,32 @@ import AirQuality from './gauges/AirQuality';
 function DashboardInside(props) {
 
   const [displaySensors, setDisplaySensors] = useState([]);
+  const [loading, setLoading] = useState(true);
+
 
   async function getDisplaySensors() {
     const user = 1;
     const sensors = await Display.getDisplaySensors('inside', user)
     setDisplaySensors(sensors);
-  };
+  }; 
+
+  function addListeners() {
+    const sensors = document.querySelectorAll(".sensor");
+    sensors.forEach(sensor => {
+      sensor.addEventListener('click', (event) => {
+        const id = event.target.closest('.sensor').id;
+        props.history.push(`/sensor/${id}`);
+      })
+    })
+  }
 
   useEffect(() => {
     getDisplaySensors();
   }, []);
+
+  useEffect(() => {
+    addListeners();
+  }, [loading === false])
 
   return (
     <main className="DashboardInside site">

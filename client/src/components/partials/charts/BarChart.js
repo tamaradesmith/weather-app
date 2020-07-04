@@ -1,16 +1,19 @@
 import React, { useEffect } from 'react';
 import * as d3 from "d3";
-
+import { format } from 'date-fns'
 
 function BarChart(props) {
 
   const { data, stateHeight, stateWidth } = props;
 
+  function dateformate(date) {
 
-  const parseDate = d3.isoParse
+    return format(new Date(date), "hh mm a")
+  }
+
   function drawChart() {
 
-    const margin = { top: 20, right: 5, bottom: 15, left: 25 },
+    const margin = { top: 20, right: 5, bottom: 75, left: 40 },
       width = stateWidth - margin.left - margin.right,
       height = stateHeight - margin.top - margin.bottom;
 
@@ -22,54 +25,59 @@ function BarChart(props) {
       .append("g")
       .attr("transform", `translate(${margin.left},${margin.top})`);
 
+ 
 
     const x = d3.scaleBand()
-      .domain(d3.range(data.length))
-      .range([margin.left, width - margin.right])
-      .padding(0.1)
+      .domain(data.map(function (d) { return dateformate(d.time) }))
+      .range([0, width])
+      .padding(0.2)
 
 
     const y = d3.scaleLinear()
       .domain([0, d3.max(data, d => d.value)])
-      .range([height - margin.bottom, margin.top])
+      .range([height , margin.top])
 
-    const xAxis = g => g
-      .attr("transform", `translate(0,${height - margin.bottom})`)
-      .attr("fill", "#69b3a2")
-      .call(d3.axisBottom(x)) //.tickFormat(i => data[i].time).tickSizeOuter(0))
+    // const xAxis = g => g
+    //   .attr("transform", `translate(0,${height - margin.bottom})`)
+    //   .call(d3.axisBottom(x))
 
-    const yAxis = g => g
-      .attr("transform", `translate(${margin.left},0)`)
-      .call(d3.axisLeft(y).ticks(null, data.format))
-      .call(g => g.select(".domain").remove())
+
+    // const yAxis = g => g
+    //   .attr("transform", `translate(${margin.left},0)`)
+    //   .call(d3.axisLeft(y).ticks(null, data.format))
+    //   .call(g => g.append("text")
+    //     .attr("x", -margin.left)
+    //     .attr("y", 10)
+    //     .attr("text-anchor", "start")
+    //     .text(data.y))
+
+
+    svg.append("g")
+      .attr("transform", `translate(0, ${height})`)
+      .attr('class', "axis-label")
+      .call(d3.axisBottom(x))
+      .selectAll("text")
+      .attr("x", 30)
+      .attr("transform", "rotate(45)")
+
+    svg.append("g")
+      .attr('class', "axis-label")
+      .call(d3.axisLeft(y).ticks(10))
       .call(g => g.append("text")
         .attr("x", -margin.left)
-        .attr("y", 10)
-        .attr("fill", "currentColor")
+        .attr("y", 15)
         .attr("text-anchor", "start")
         .text(data.y))
 
 
-    svg.append("g")
-      .attr("fill", 'red')
-      .selectAll("rect")
+    svg.append("g").selectAll(".bar")
       .data(data)
-      .join("rect")
-      .attr("x", (d, i) => x(i))
-      .attr("y", d => y(d.value))
-      .attr("height", d => y(0) - y(d.value))
-      .attr("width", x.bandwidth());
-
-    svg.append("g")
-      .attr('class', "axis-label")
-
-      .call(xAxis);
-
-    svg.append("g")
-      .attr('class', "axis-label")
-
-      .call(yAxis);
-
+      .enter().append("rect")
+      .attr("class", "bar-colour")
+      .attr("x", function (d) { return x(dateformate(d.time)); })
+      .attr("y", function (d) { return y(d.value); })
+      .attr("width", x.bandwidth())
+      .attr("height", function (d) { return height - y(d.value); });
   }
 
   useEffect(() => {

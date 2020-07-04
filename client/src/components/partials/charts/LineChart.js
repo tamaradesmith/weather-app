@@ -18,7 +18,7 @@ function LineChart(props) {
 
   function drawChart() {
 
-    const margin = { top: 20, right: 30, bottom: 60, left: 4 },
+    const margin = { top: 20, right: 15, bottom: 60, left: 40 },
       width = stateWidth - margin.left - margin.right,
       height = stateHeight - margin.top - margin.bottom;
 
@@ -32,16 +32,13 @@ function LineChart(props) {
 
     // Add X axis
     const x = d3.scaleTime()
-      .domain([new Date(data[data.length - 1].time), new Date(data[0].time)])
+      .domain([new Date(data[0].time), new Date(data[data.length - 1].time)])
       .range([0, width]);
 
     // Add Y axis
     const y = d3.scaleLinear()
       .domain([setMax(data), setMin(data)])
       .range([0, height])
-
-
-
 
 
     // create line

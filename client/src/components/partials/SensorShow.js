@@ -20,7 +20,6 @@ function SensorShow(props) {
 
   async function getSensor() {
     const sensorInfo = await Sensor.getSensor(sensorId);
-    console.log("getSensor -> sensorInfo", sensorInfo);
     sensorInfo.chart = sensorInfo.chart || "line";
     setSensor(sensorInfo);
   };

@@ -47,7 +47,7 @@ function AirQuality(props) {
   }, [airQuality]);
 
   return (
-    <div className="AirQuality air-quality-icon" style={{ 'borderColor': level.colour, 'background': level.background }}>
+    <div className="AirQuality air-quality-icon sensor" style={{ 'borderColor': level.colour, 'background': level.background }}>
       <p> {airQuality}</p>
       <p> {level.level}</p>
     </div>

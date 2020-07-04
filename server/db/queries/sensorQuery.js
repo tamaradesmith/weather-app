@@ -82,7 +82,13 @@ module.exports = {
     return readings
   },
   async getLast24ReadingsBySensor(sensorId) {
-    const readings = await knex('readings').select("value", "time").where({ sensor_id: sensorId }).orderBy('time', "desc").limit(24);
+    let date = new Date();
+    date.setDate(date.getDate()-1) 
+    const readings = await knex('readings')
+      .select("value", "time")
+      .where({ sensor_id: sensorId })
+      .andWhere('time', '>=', date)
+      .orderBy('time', "asc")
     return readings
   },
 

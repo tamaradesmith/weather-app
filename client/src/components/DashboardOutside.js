@@ -9,10 +9,11 @@ import Rainfall from './gauges/Rainfall';
 import SkyColour from './gauges/SkyColour';
 
 
-function DashboardOutside() {
+function DashboardOutside(props) {
 
   const [displaySensors, setDisplaySensors] = useState([]);
   const [rainAmount, SetRainAmount] = useState({});
+  const [loading, setLoading] = useState(true);
 
 
   async function getDisplaySensors() {
@@ -24,7 +25,7 @@ function DashboardOutside() {
   async function getRainReadings() {
     const reading = await Sensor.getLastReading(displaySensors.rainfallSensor);
     const dailyRain = await getTotalDaily();
-      SetRainAmount({ hourly: reading.value, daily: dailyRain });
+    SetRainAmount({ hourly: reading.value, daily: dailyRain });
   }
 
   async function getTotalDaily() {
@@ -36,6 +37,15 @@ function DashboardOutside() {
     return total;
   };
 
+  function addListeners() {
+    const sensors = document.querySelectorAll(".sensor");
+    sensors.forEach(sensor => {
+      sensor.addEventListener('click', (event) => {
+        const id = event.target.closest('.sensor').id;
+        props.history.push(`/sensor/${id}`);
+      })
+    })
+  }
 
   useEffect(() => {
     getDisplaySensors();
@@ -44,9 +54,14 @@ function DashboardOutside() {
   }, []);
 
   useEffect(() => {
-    if (displaySensors.rainfallSensor) { getRainReadings();}
+    if (displaySensors.rainfallSensor) { getRainReadings(); }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [displaySensors]);
+
+  useEffect(() => {
+    addListeners();
+  }, [loading === false])
+
 
   return (
     <main className='DashboardOutside site'>
