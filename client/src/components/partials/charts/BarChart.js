@@ -37,21 +37,6 @@ function BarChart(props) {
       .domain([0, d3.max(data, d => d.value)])
       .range([height , margin.top])
 
-    // const xAxis = g => g
-    //   .attr("transform", `translate(0,${height - margin.bottom})`)
-    //   .call(d3.axisBottom(x))
-
-
-    // const yAxis = g => g
-    //   .attr("transform", `translate(${margin.left},0)`)
-    //   .call(d3.axisLeft(y).ticks(null, data.format))
-    //   .call(g => g.append("text")
-    //     .attr("x", -margin.left)
-    //     .attr("y", 10)
-    //     .attr("text-anchor", "start")
-    //     .text(data.y))
-
-
     svg.append("g")
       .attr("transform", `translate(0, ${height})`)
       .attr('class', "axis-label")
@@ -84,6 +69,7 @@ function BarChart(props) {
     if (data.length > 0) {
       drawChart();
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [data])
 
   return (

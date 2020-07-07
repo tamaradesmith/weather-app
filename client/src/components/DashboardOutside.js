@@ -20,6 +20,7 @@ function DashboardOutside(props) {
     const user = 1;
     const sensors = await Display.getDisplaySensors('outside', user)
     setDisplaySensors(sensors);
+    setLoading(false)
   };
 
   async function getRainReadings() {
@@ -49,7 +50,6 @@ function DashboardOutside(props) {
 
   useEffect(() => {
     getDisplaySensors();
-    // getSiteFromCookies();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -60,6 +60,7 @@ function DashboardOutside(props) {
 
   useEffect(() => {
     addListeners();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [loading === false])
 
 

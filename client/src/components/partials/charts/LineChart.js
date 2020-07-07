@@ -17,7 +17,7 @@ function LineChart(props) {
 }
 
   function drawChart() {
-
+    document.querySelector('.rowChart').innerHTML = null;
     const margin = { top: 20, right: 15, bottom: 60, left: 40 },
       width = stateWidth - margin.left - margin.right,
       height = stateHeight - margin.top - margin.bottom;
@@ -57,7 +57,7 @@ function LineChart(props) {
     svg.append("g")
       .attr("transform", `translate(0, ${height})`)
       .attr('class', "axis-label")
-      .call(d3.axisBottom(x))
+      .call(d3.axisBottom(x).ticks(10))
       .selectAll("text")
       .attr("x", 25)
       .attr("transform", "rotate(45)")
@@ -74,12 +74,12 @@ function LineChart(props) {
     if (data.length > 0) {
       drawChart();
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [data])
 
   return (
     <div className="SensorShow chart-div">
       <div id='chart' className="rowChart">
-        <div id='path' className="path"></div>
       </div>
     </div>
   );

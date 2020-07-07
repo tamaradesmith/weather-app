@@ -16,6 +16,7 @@ function DashboardInside(props) {
     const user = 1;
     const sensors = await Display.getDisplaySensors('inside', user)
     setDisplaySensors(sensors);
+    setLoading(false);
   }; 
 
   function addListeners() {
@@ -30,10 +31,12 @@ function DashboardInside(props) {
 
   useEffect(() => {
     getDisplaySensors();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {
     addListeners();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [loading === false])
 
   return (

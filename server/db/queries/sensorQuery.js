@@ -91,6 +91,20 @@ module.exports = {
       .orderBy('time', "asc")
     return readings
   },
+ async getReadingsBySensor(sensorId, period){
+   console.log("getReadingsBySensor -> period", period);
+   let date = new Date();
+   date.setDate(date.getDate() - period)
+   console.log("getReadingsBySensor -> date.getDate() - period", date.getDate() - period);
+   console.log("getReadingsBySensor -> date", date);
+   const readings = await knex('readings')
+     .select("value", "time")
+     .where({ sensor_id: sensorId })
+     .andWhere('time', '>=', date)
+     .orderBy('time', "asc")
+   console.log("getReadingsBySensor -> readings", readings);
+   return readings
+ },
 
   // TYPE QUERIES
   async getTypeId(type) {

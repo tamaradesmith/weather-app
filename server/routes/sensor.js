@@ -64,10 +64,10 @@ router.get('/:id/highslows', async (req, res) => {
 });
 
 // get last 24 readings
-router.get('/:id/24', async (req, res) => {
+router.get('/:id/:period', async (req, res) => {
   try {
-    const sensorId = req.params.id;
-    const readings = await SensorQuery.getLast24ReadingsBySensor(sensorId);
+    const {id, period } = req.params;
+    const readings = await SensorQuery.getReadingsBySensor(id, period );
     res.send(readings)
   } catch (error) {
     res.send(error.message);

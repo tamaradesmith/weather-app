@@ -46,6 +46,7 @@ function DashboardSite(props) {
 
   useEffect(() => {
     addListeners();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [loading === false])
 
   return (

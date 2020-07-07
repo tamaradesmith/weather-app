@@ -80,10 +80,7 @@ const Node = {
 };
 
 const Device = {
-  // async getDevices() {
-  //   const res = await fetch(`${BASE_URL}/devices`);
-  //   return res.json();
-  // },
+
   async getDevicesFromNodeById(nodeId) {
     const res = await fetch(`${BASE_URL}/nodes/${nodeId}/devices/config`, {
       credentials: 'include',
@@ -132,10 +129,6 @@ const Sensor = {
     };
   },
 
-  // async getSensors() {
-  //   const res = await fetch(`${BASE_URL}/sensors`);
-  //   return res.json();
-  // },
   async getLastReading(sensorId) {
     try {
       const res = await fetch(`${BASE_URL}/sensors/${sensorId}/reading`, {
@@ -167,9 +160,9 @@ const Sensor = {
       console.log(error.message);
     };
   },
-  async getLast24Readings(sensorId) {
+  async getReadings(sensorId, period) {
     try {
-      const res = await fetch(`${BASE_URL}/sensors/${sensorId}/24`, {
+      const res = await fetch(`${BASE_URL}/sensors/${sensorId}/${period}`, {
         credentials: 'include',
       })
       return res.json();
