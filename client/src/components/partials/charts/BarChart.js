@@ -12,6 +12,7 @@ function BarChart(props) {
   }
 
   function drawChart() {
+    document.querySelector('.rowChart').innerHTML = null;
 
     const margin = { top: 20, right: 5, bottom: 75, left: 40 },
       width = stateWidth - margin.left - margin.right,
@@ -73,10 +74,8 @@ function BarChart(props) {
   }, [data])
 
   return (
-    <div className="BarChart rowChart chart-div">
-
-      <div id='path' className="path"></div>
-
+    <div className="BarChart chart-div">
+      <div id='chart' className="rowChart"></div>
     </div>
   );
 };

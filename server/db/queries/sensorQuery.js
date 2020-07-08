@@ -81,28 +81,17 @@ module.exports = {
     const readings = { high: reading[reading.length - 1].value, low: reading[0].value }
     return readings
   },
-  async getLast24ReadingsBySensor(sensorId) {
-    let date = new Date();
-    date.setDate(date.getDate()-1) 
-    const readings = await knex('readings')
-      .select("value", "time")
-      .where({ sensor_id: sensorId })
-      .andWhere('time', '>=', date)
-      .orderBy('time', "asc")
-    return readings
-  },
+
  async getReadingsBySensor(sensorId, period){
-   console.log("getReadingsBySensor -> period", period);
    let date = new Date();
    date.setDate(date.getDate() - period)
-   console.log("getReadingsBySensor -> date.getDate() - period", date.getDate() - period);
-   console.log("getReadingsBySensor -> date", date);
    const readings = await knex('readings')
-     .select("value", "time")
+     .select( 'time', 'value'
+      // knex.raw( "date_trunc('hour', time) as time")
+       )
      .where({ sensor_id: sensorId })
      .andWhere('time', '>=', date)
      .orderBy('time', "asc")
-   console.log("getReadingsBySensor -> readings", readings);
    return readings
  },
 
@@ -119,3 +108,4 @@ module.exports = {
     }));
   },
 };
+

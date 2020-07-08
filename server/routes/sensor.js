@@ -3,7 +3,7 @@ const router = express.Router();
 
 const SensorQuery = require('../db/queries/sensorQuery');
 
-// const SensorHelpers = require('../controller/sensors');
+const SensorHelpers = require('./sensorHelpers');
 
 // SENSOR ROUTES
 
@@ -63,12 +63,14 @@ router.get('/:id/highslows', async (req, res) => {
   }
 });
 
-// get last 24 readings
+// get readings by period
 router.get('/:id/:period', async (req, res) => {
   try {
     const {id, period } = req.params;
     const readings = await SensorQuery.getReadingsBySensor(id, period );
-    res.send(readings)
+    const readingFormated = SensorHelpers.formateReadings(period, readings);
+    // console.log("readingFormated", readingFormated);
+    res.send(readingFormated)
   } catch (error) {
     res.send(error.message);
   }

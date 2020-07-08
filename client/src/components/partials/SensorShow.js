@@ -53,7 +53,7 @@ function SensorShow(props) {
   useEffect(() => {
     getWidthAndHeigth();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [data])
+  }, [sensor])
 
 
 
@@ -67,7 +67,6 @@ function SensorShow(props) {
       {sensor.chart === "bar" ? (
         <BarChart data={data} stateWidth={stateWidth} stateHeight={stateHeight} />
       ) : (
-
           <LineChart data={data} stateWidth={stateWidth} stateHeight={stateHeight} />
         )}
 
@@ -75,7 +74,6 @@ function SensorShow(props) {
       <div className="show-sensor-body capitlize">
         <p>type: {sensor.type}</p>
         <p>description: {sensor.description}</p>
-
 
 
         <div onClick={chartChange}>
@@ -94,15 +92,7 @@ function SensorShow(props) {
 
           <label htmlFor="year">Year
           </label>
-          <input type="radio" name="peroid" id="year" value={364} className="radio-button"  />
-
-          {/* </div>
-        <div onChange={chartChange}>
-          <input type="radio" value="Male" name="gender" /> Male
-          <input type="radio" value="Female" name="gender" /> Female
-         <input type="radio" value="Other" name="gender" /> Other
-      </div> */}
-
+          <input type="radio" name="peroid" id="year" value={365} className="radio-button"  />
 
         </div>
       </div>
