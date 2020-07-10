@@ -1,14 +1,28 @@
 import React, { useEffect } from 'react';
 import * as d3 from "d3";
-import { format } from 'date-fns'
+import { format } from 'date-fns';
 
 function BarChart(props) {
 
-  const { data, stateHeight, stateWidth } = props;
+  const { data, stateHeight, stateWidth, period } = props;
 
   function dateformate(date) {
-
-    return format(new Date(date), "hh mm a")
+    switch (parseInt(period)) {
+      case 1:
+        return format(new Date(date), "h a");
+        break;
+      case 7:
+        return format(new Date(date), "iiii");
+        break;
+      case 30:
+        return format(new Date(date), "dd");
+        break;
+      case 365:
+        return format(new Date(date), "MMMM");
+        break;
+      default:
+        break;
+    }
   }
 
   function drawChart() {

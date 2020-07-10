@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-// import * as d3 from "d3";
+import { format } from 'date-fns';
 
 import LineChart from './charts/LineChart';
 import BarChart from './charts/BarChart';
@@ -16,7 +16,7 @@ function SensorShow(props) {
   const [sensor, setSensor] = useState('');
   const [stateWidth, setWidth] = useState(0);
   const [stateHeight, setHeight] = useState(0);
-  // const [chartCheck, setChartCheck] = useState('day');
+  const [period, setPeriod] = useState(1);
 
   async function getSensor() {
     const sensorInfo = await Sensor.getSensor(sensorId);
@@ -24,11 +24,36 @@ function SensorShow(props) {
     setSensor(sensorInfo);
   };
 
-  async function getReading(period) {
-    const sensorReadings = await Sensor.getReadings(sensorId, period);
+  async function getReading(timePeriod) {
+    const sensorReadings = await Sensor.getReadings(sensorId, timePeriod);
+    
+    setHeader(sensorReadings[0].time, timePeriod);
     setData(sensorReadings);
   }
 
+
+  function setHeader(date, timePeriod){
+    let time;
+    switch (parseInt(timePeriod)) {
+      case 1:
+        time = format(new Date(date), 'MMMM dd, yyyy');
+        break;
+      case 7:
+        const formated = format(new Date(date), 'do');
+        time = `Week of ${formated}`;
+        break;
+      case 30:
+        time = format(new Date(date), 'MMMM yyyy');
+        break;
+      case 365:
+        time = format(new Date(date), 'yyyy');
+        break;
+      default:
+        time = format(new Date(date), 'MMMM dd, yyyy');
+        break;
+    }
+    document.querySelector('#timePeriod').innerText = time
+  }
   function getWidthAndHeigth() {
     const width = document.querySelector('#chart').parentElement.offsetWidth;
     setWidth(width);
@@ -37,9 +62,10 @@ function SensorShow(props) {
   };
 
   function chartChange(event) {
-    const period = event.target.value;
-    if (period){
-      getReading(period)
+    const newPeriod = event.target.value;
+    if (newPeriod){
+      setPeriod(newPeriod)
+      getReading(newPeriod)
     }
   }
 
@@ -62,10 +88,11 @@ function SensorShow(props) {
     <div className="SensorShow chart">
       <div className="show-sensor-header capitlize">
         <h3>sensor: {sensor.name} </h3>
+        <h3 id="timePeriod"></h3>
         <h3>location: {sensor.location}</h3>
       </div>
       {sensor.chart === "bar" ? (
-        <BarChart data={data} stateWidth={stateWidth} stateHeight={stateHeight} />
+        <BarChart data={data} stateWidth={stateWidth} stateHeight={stateHeight} period={period} />
       ) : (
           <LineChart data={data} stateWidth={stateWidth} stateHeight={stateHeight} />
         )}
