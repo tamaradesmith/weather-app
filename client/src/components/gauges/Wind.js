@@ -28,7 +28,7 @@ function Wind(props) {
         <div className="wind-arrow-top"></div></div>
 
       <img src={compass} alt={"wind Direction"} className="wind-speed-gauge" />
-      {windSpeed ? (<p className="wind-speed-gauge">{windSpeed.value}</p>) : (null)}
+      {windSpeed ? (<p className="wind-speed-gauge">{Math.round(windSpeed.value) }</p>) : (null)}
     </div>
   );
 };
