@@ -12,12 +12,12 @@ exports.seed = function (knex) {
         const temperature = { sensor_id: 27, value: Math.random() * 35, time: dt }
         const windD = { sensor_id: 38, value: Math.random() * 360, time: dt }
         const windS = { sensor_id: 37, value: Math.random() * 40, time: dt }
-        // const perssure = { sensor_id: 37, value: (Math.random() * 40) + 990, time: dt }
+        // const persure = { sensor_id: 28, value: Math.random() * 10, time: dt }
         result.push(rain)
         result.push(temperature)
         result.push(windD)
         result.push(windS)
-        // result.push(perssure)
+        // result.push(persure)
 
 
       }

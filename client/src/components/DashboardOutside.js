@@ -30,7 +30,7 @@ function DashboardOutside(props) {
   }
 
   async function getTotalDaily() {
-    const readings = await Sensor.getLast24Readings(displaySensors.rainfallSensor);
+    const readings = await Sensor.getReadings(displaySensors.rainfallSensor, 7);
     let total = 0;
     readings.forEach(reading => {
       total += reading.value

@@ -26,13 +26,14 @@ function SensorShow(props) {
 
   async function getReading(timePeriod) {
     const sensorReadings = await Sensor.getReadings(sensorId, timePeriod);
-    
-    setHeader(sensorReadings[0].time, timePeriod);
-    setData(sensorReadings);
+    if (sensorReadings.length !== undefined) {
+      setHeader(sensorReadings[0].time, timePeriod);
+      setData(sensorReadings);
+    }
   }
 
 
-  function setHeader(date, timePeriod){
+  function setHeader(date, timePeriod) {
     let time;
     switch (parseInt(timePeriod)) {
       case 1:
@@ -46,7 +47,7 @@ function SensorShow(props) {
         time = format(new Date(date), 'MMMM yyyy');
         break;
       case 365:
-        time = format(new Date(date), 'yyyy');
+        time = `Year of ${format(new Date(date), 'yyyy')}`;
         break;
       default:
         time = format(new Date(date), 'MMMM dd, yyyy');
@@ -63,7 +64,7 @@ function SensorShow(props) {
 
   function chartChange(event) {
     const newPeriod = event.target.value;
-    if (newPeriod){
+    if (newPeriod) {
       setPeriod(newPeriod)
       getReading(newPeriod)
     }
@@ -107,19 +108,19 @@ function SensorShow(props) {
 
           <label htmlFor="day">Day
           </label>
-          <input type="radio" name="peroid" id="day" value={1} className="radio-button" defaultChecked/>
+          <input type="radio" name="peroid" id="day" value={1} className="radio-button" defaultChecked />
 
           <label htmlFor="week">Week
           </label>
-          <input type="radio" name="peroid" id="week" value={7} className="radio-button"  />
+          <input type="radio" name="peroid" id="week" value={7} className="radio-button" />
 
           <label htmlFor="month"> Month
           </label>
-          <input type="radio" name="peroid" id="month" value={30} className="radio-button"  />
+          <input type="radio" name="peroid" id="month" value={30} className="radio-button" />
 
           <label htmlFor="year">Year
           </label>
-          <input type="radio" name="peroid" id="year" value={365} className="radio-button"  />
+          <input type="radio" name="peroid" id="year" value={365} className="radio-button" />
 
         </div>
       </div>
