@@ -17,6 +17,9 @@ stroke: black;
 .axis-label{
   font-size: .5em;
 }
+.bar-colour1{
+  fill: #990000;
+}
 .bar-colour{
   fill: #3e517a;
 }

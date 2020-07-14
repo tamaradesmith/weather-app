@@ -77,7 +77,14 @@ function BarChart(props) {
       .attr("x", function (d) { return x(dateformate(d.time)); })
       .attr("y", function (d) { return y(d.value); })
       .attr("width", x.bandwidth())
+      .attr("height", 0)
+      .transition()
+      .duration(2000)
+      .style("fill", "#990003")
       .attr("height", function (d) { return height - y(d.value); });
+
+
+    // d3.select(".bar")
   }
 
   useEffect(() => {

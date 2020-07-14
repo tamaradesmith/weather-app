@@ -83,6 +83,7 @@ module.exports = {
   },
 
  async getReadingsBySensor(sensorId, period){
+   period = period > 1 ? period -1 : period
    let date = new Date();
    date.setDate(date.getDate() - period)
    const readings = await knex('readings')

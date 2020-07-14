@@ -5,6 +5,7 @@ module.exports = {
     switch (parseInt(period)) {
       case 1:
         result = this.day(readings);
+ 
         break;
       case 7:
         result = this.week(readings);
@@ -23,20 +24,29 @@ module.exports = {
   },
 
   day(readings) {
-    const startDate = new Date(readings[0].time);
+
     const today = new Date();
     const todayDate = today.getDate()
+    const startDate = new Date(readings[0].time);
     let sum = readings[0].value;
-    let day = startDate.getDay();
+    let day = startDate.getDate();
     let hour = startDate.getHours();
     const result = [];
     readings.shift();
 
-    readings.map(reading => {
+    readings.map((reading, index) => {
       const readingDate = new Date(reading.time);
       if (todayDate === readingDate.getDate()) {
-        if (readingDate.getHours() === hour && readingDate.getDay() === day) {
+        if (readingDate.getHours() === hour) {
           sum = + reading.value;
+          if (index === readings.length - 1) {
+            readingDate.setMinutes(00);
+            readingDate.setSeconds(00);
+            result.push({ time: readingDate, value: parseFloat(sum.toFixed(2)) });
+            sum = reading.value;
+            hour = readingDate.getHours();
+            day = readingDate.getDay();
+          }
         } else {
           readingDate.setMinutes(00);
           readingDate.setSeconds(00);
@@ -52,7 +62,7 @@ module.exports = {
       }
       return;
     });
-   
+
     while (result.length < 24) {
       const oldDate = result[result.length - 1].time;
       const hour = oldDate.getHours() + 1;
@@ -64,34 +74,39 @@ module.exports = {
   },
 
   week(readings) {
+
     const start = new Date(readings[0].time);
     let day = start.getDay();
+    console.log("week -> day", day);
+    const today = new Date();
+    const todayDay = today.getDay();
     let sum = readings[0].value;
     readings.shift();
-    const startDay = start.getDay();
     const result = [];
 
     readings.forEach((reading, index) => {
+      console.log("week -> reading", reading);
       const readingDate = new Date(reading.time);
-      const currentDay = readingDate.getDay();
-      if (currentDay <= startDay) {
-        if (day === currentDay) {
+      const readingDay = readingDate.getDay();
+      console.log("week -> readingDay", readingDay);
+      if (readingDay <= todayDay) {
+        if (day === readingDay) {
           sum += reading.value;
-          if (index === readings.length - 1) {
-            readingDate.setMinutes(00);
-            readingDate.setSeconds(00);
-            readingDate.setHours(00);
-            result.push({ time: readingDate, value: parseFloat(sum.toFixed(2)) });
-            sum = reading.value;
-            day = currentDay;
-          };
+          // if (index === readings.length - 1) {
+          //   readingDate.setMinutes(00);
+          //   readingDate.setSeconds(00);
+          //   readingDate.setHours(00);
+          //   result.push({ time: readingDate, value: parseFloat(sum.toFixed(2)) });
+          //   sum = reading.value;
+          //   day = readingDay;
+          // };
         } else {
           readingDate.setMinutes(00);
           readingDate.setSeconds(00);
           readingDate.setHours(00);
           result.push({ time: readingDate, value: parseFloat(sum.toFixed(2)) });
           sum = reading.value;
-          day = currentDay;
+          day = readingDay;
         };
       };
       return;
@@ -109,12 +124,16 @@ module.exports = {
     readings.shift();
     const result = [];
 
-    readings.forEach((reading) => {
+    readings.forEach((reading, index) => {
       const readingDate = reading.time;
       const readingDay = readingDate.getDate()
       if (readingDate.getMonth() === month) {
         if (readingDay === day) {
           sum += reading.value;
+          if (readingDay === 1) {
+            console.log(sum)
+          }
+
         } else {
           readingDate.setMinutes(00);
           readingDate.setSeconds(00);
