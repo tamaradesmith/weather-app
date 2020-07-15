@@ -68,9 +68,13 @@ router.get('/:id/:period', async (req, res) => {
   try {
     const {id, period } = req.params;
     const readings = await SensorQuery.getReadingsBySensor(id, period );
-    const readingFormated = SensorHelpers.formateReadings(period, readings);
-    // console.log("readingFormated", readingFormated);
-    res.send(readingFormated)
+    try {
+      const readingFormated = SensorHelpers.formateReadings(period, readings);
+      res.send(readingFormated)
+    } catch (error) {
+      console.log(error);
+      
+    }
   } catch (error) {
     res.send(error.message);
   }

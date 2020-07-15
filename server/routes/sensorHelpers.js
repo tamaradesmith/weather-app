@@ -1,3 +1,4 @@
+const e = require("express");
 
 module.exports = {
   formateReadings(period, readings) {
@@ -5,7 +6,6 @@ module.exports = {
     switch (parseInt(period)) {
       case 1:
         result = this.day(readings);
- 
         break;
       case 7:
         result = this.week(readings);
@@ -24,129 +24,108 @@ module.exports = {
   },
 
   day(readings) {
-
     const today = new Date();
-    const todayDate = today.getDate()
-    const startDate = new Date(readings[0].time);
-    let sum = readings[0].value;
-    let day = startDate.getDate();
-    let hour = startDate.getHours();
+    const date = today.getDate();
+    let hour = 0;
+    let sum = 0;
     const result = [];
-    readings.shift();
-
-    readings.map((reading, index) => {
-      const readingDate = new Date(reading.time);
-      if (todayDate === readingDate.getDate()) {
-        if (readingDate.getHours() === hour) {
-          sum = + reading.value;
-          if (index === readings.length - 1) {
-            readingDate.setMinutes(00);
-            readingDate.setSeconds(00);
-            result.push({ time: readingDate, value: parseFloat(sum.toFixed(2)) });
-            sum = reading.value;
-            hour = readingDate.getHours();
-            day = readingDate.getDay();
-          }
+    readings.forEach((reading, index) => {
+      const readingTime = reading.time;
+      const readingHour = readingTime.getHours();
+      if (readingTime.getDate() === date) {
+        if (readingHour === hour) {
+          sum += reading.value;
         } else {
-          readingDate.setMinutes(00);
-          readingDate.setSeconds(00);
-          result.push({ time: readingDate, value: parseFloat(sum.toFixed(2)) });
+          const time = new Date(today.setHours(hour, 00, 00))
+          result.push({ time, value: reading.value, });
           sum = reading.value;
-          hour = readingDate.getHours();
-          day = readingDate.getDay();
-        };
-      } else {
-        hour = readingDate.getHours();
-        day = readingDate.getDay();
-        sum = reading.value;
+          hour = readingHour;
+        }
+        if (index === readings.length - 1) {
+          const time = new Date(today.setHours(hour, 00, 00))
+          result.push({ time, value: parseFloat(sum.toFixed(2)) })
+        }
       }
-      return;
     });
-
     while (result.length < 24) {
       const oldDate = result[result.length - 1].time;
       const hour = oldDate.getHours() + 1;
-      const date = new Date();
-      date.setHours(hour);
+      const date = new Date(oldDate.setHours(hour, 00, 00));
       result.push({ time: date, value: 0 });
     };
     return result;
   },
 
-  week(readings) {
 
-    const start = new Date(readings[0].time);
-    let day = start.getDay();
-    console.log("week -> day", day);
+  week(readings) {
     const today = new Date();
-    const todayDay = today.getDay();
-    let sum = readings[0].value;
-    readings.shift();
+    const startWeekday = today.getDay();
+    const startDay = new Date(today.setDate(today.getDate() - startWeekday))
+    let currentdate = startDay;
+    let sum = 0;
+
     const result = [];
 
     readings.forEach((reading, index) => {
-      console.log("week -> reading", reading);
-      const readingDate = new Date(reading.time);
-      const readingDay = readingDate.getDay();
-      console.log("week -> readingDay", readingDay);
-      if (readingDay <= todayDay) {
-        if (day === readingDay) {
+      const readingTime = reading.time;
+      const readingDate = readingTime.getDate();
+
+      if (readingTime.getDate() > startDay.getDate() - 1) {
+        if (readingDate === currentdate.getDate()) {
           sum += reading.value;
-          // if (index === readings.length - 1) {
-          //   readingDate.setMinutes(00);
-          //   readingDate.setSeconds(00);
-          //   readingDate.setHours(00);
-          //   result.push({ time: readingDate, value: parseFloat(sum.toFixed(2)) });
-          //   sum = reading.value;
-          //   day = readingDay;
-          // };
         } else {
-          readingDate.setMinutes(00);
-          readingDate.setSeconds(00);
-          readingDate.setHours(00);
-          result.push({ time: readingDate, value: parseFloat(sum.toFixed(2)) });
+          let time = new Date(currentdate);
+          time = new Date(time.setHours(00, 00, 00));
+          result.push({ time, value: parseFloat(sum.toFixed(2)) });
           sum = reading.value;
-          day = readingDay;
-        };
-      };
+          currentdate = readingTime;
+        }
+        if (index === readings.length - 1) {
+          let time = new Date(currentdate);
+          time = new Date(time.setHours(00, 00, 00));
+          result.push({ time, value: parseFloat(sum.toFixed(2)) });
+        }
+      }
       return;
-    });
+    })
+    console.log("week -> result", result);
+
     const data = this.NonRollPeriod(result, 7);
     return data;
   },
 
+
+
   month(readings) {
     const today = new Date();
     const month = today.getMonth();
-    const start = new Date(readings[0].time);
-    let day = start.getDate();
-    let sum = readings[0].value;
-    readings.shift();
+    let startDay = new Date()
+    let currentdate = new Date(startDay.setDate(1));
+    console.log("month -> currentdate", currentdate);
+    let sum = 0;
     const result = [];
 
     readings.forEach((reading, index) => {
       const readingDate = reading.time;
       const readingDay = readingDate.getDate()
       if (readingDate.getMonth() === month) {
-        if (readingDay === day) {
-          sum += reading.value;
-          if (readingDay === 1) {
-            console.log(sum)
-          }
+        if (readingDay === currentdate.getDate()) {
 
+          sum += reading.value;
         } else {
-          readingDate.setMinutes(00);
-          readingDate.setSeconds(00);
-          readingDate.setHours(00);
-          result.push({ time: readingDate, value: parseFloat(sum.toFixed(2)) });
+          let time = new Date(currentdate);
+          time = new Date(time.setHours(00, 00, 00));
+          result.push({ time, value: parseFloat(sum.toFixed(2)) });
           sum = reading.value;
-          day = readingDay;
+          currentdate = reading.time;
         }
-      } else {
-        day = readingDay;
-      };
-      return;
-    });
+      }
+      if (index === readings.length - 1) {
+        let time = new Date(currentdate);
+        time = new Date(time.setHours(00, 00, 00));
+        result.push({ time, value: parseFloat(sum.toFixed(2)) });
+      }
+    })
 
     const year = today.getFullYear();
     const monthLength = new Date(year, month + 1, 0).getDate()
@@ -154,67 +133,111 @@ module.exports = {
     return data;
   },
 
+
   year(readings) {
-    const result = [];
     const today = new Date();
     const year = today.getFullYear();
-    let sum = readings[0].value;
-    let month = readings[0].time.getMonth();
-    readings.shift();
-    if (month !== 0) {
-      let i = 0
-      while (i <= month) {
-        let yearDate = new Date();
-        yearDate.setMinutes(00);
-        yearDate.setSeconds(00);
-        yearDate.setHours(00);
-        yearDate.setDate(1);
-        yearDate.setMonth(i);
-        yearDate.setDate(1);
-        result.push({ value: 0, time: yearDate });
-        i++;
-      };
-    };
+    console.log("year -> year", year);
+    let result = [];
+    let currentdate = new Date(year, 00, 01);
 
-    readings.forEach(reading => {
-      const readingDate = reading.time;
-      const readingMonth = readingDate.getMonth();
-      const readingYear = readingDate.getFullYear();
-      if (readingYear === year) {
-        if (readingMonth === month) {
+    let month = 0;
+    let sum = 0
+    readings.forEach((reading, index) => {
+      const readingTime = reading.time;
+      if (readingTime.getFullYear() === year) {
+
+        if (readingTime.getMonth() === month) {
           sum += reading.value;
         } else {
-          readingDate.setMinutes(00);
-          readingDate.setSeconds(00);
-          readingDate.setHours(00);
-          readingDate.setDate(1);
-          result.push({ time: readingDate, value: parseFloat(sum.toFixed(2)) });
+          let time = new Date(year, month, 01);
+          time = new Date(time.setHours(00, 00, 00));
+          result.push({ time, value: parseFloat(sum.toFixed(2)) });
+          console.log("year -> result", result);
           sum = reading.value;
-          month = readingMonth;
+          currentdate = reading.time;
+          month = currentdate.getMonth();
         };
+
+        if (index === readings.length -1) {
+          let time = new Date(year, month, 01);
+          time = new Date(time.setHours(00, 00, 00));
+          result.push({ time, value: parseFloat(sum.toFixed(2)) });
+        }
       };
-      return;
-    });
-    while (result.length < 12) {
+
+    })
+    while (result.length < 12){
       const oldDate = result[result.length - 1].time;
       const oldMonth = oldDate.getMonth() + 1;
-      let yearDate = new Date();
-      yearDate.setMinutes(00);
-      yearDate.setSeconds(00);
-      yearDate.setHours(01);
-      yearDate.setDate(1);
-      yearDate.setMonth(oldMonth);;
-      result.push({ value: 0, time: yearDate });
-    };
+      let date = new Date();
+      date = new Date(year, oldMonth, 01)
+      date = new Date(date.setHours(00, 00, 00));
+      result.push({ time: date, value: 0 });
+    }
     return result;
   },
+  //   const result = [];
+  //   const today = new Date();
+  //   const year = today.getFullYear();
+  //   let sum = readings[0].value;
+  //   let month = readings[0].time.getMonth();
+  //   readings.shift();
+  //   if (month !== 0) {
+  //     let i = 0
+  //     while (i <= month) {
+  //       let yearDate = new Date();
+  //       yearDate.setMinutes(00);
+  //       yearDate.setSeconds(00);
+  //       yearDate.setHours(00);
+  //       yearDate.setDate(1);
+  //       yearDate.setMonth(i);
+  //       yearDate.setDate(1);
+  //       result.push({ value: 0, time: yearDate });
+  //       i++;
+  //     };
+  //   };
+
+  //   readings.forEach(reading => {
+  //     const readingDate = reading.time;
+  //     const readingMonth = readingDate.getMonth();
+  //     const readingYear = readingDate.getFullYear();
+  //     if (readingYear === year) {
+  //       if (readingMonth === month) {
+  //         sum += reading.value;
+  //       } else {
+  //         readingDate.setMinutes(00);
+  //         readingDate.setSeconds(00);
+  //         readingDate.setHours(00);
+  //         readingDate.setDate(1);
+  //         result.push({ time: readingDate, value: parseFloat(sum.toFixed(2)) });
+  //         sum = reading.value;
+  //         month = readingMonth;
+  //       };
+  //     };
+  //     return;
+  //   });
+  //   while (result.length < 12) {
+  //     const oldDate = result[result.length - 1].time;
+  //     const oldMonth = oldDate.getMonth() + 1;
+  //     let yearDate = new Date();
+  //     yearDate.setMinutes(00);
+  //     yearDate.setSeconds(00);
+  //     yearDate.setHours(01);
+  //     yearDate.setDate(1);
+  //     yearDate.setMonth(oldMonth);;
+  //     result.push({ value: 0, time: yearDate });
+  //   };
+  //   return result;
+  // },
 
   NonRollPeriod(readings, period) {
     while (readings.length < period) {
       const oldDate = readings[readings.length - 1].time;
       const oldDay = oldDate.getDate() + 1;
-      const date = new Date();
-      date.setDate(oldDay);
+      let date = new Date();
+      date = new Date(date.setDate(oldDay))
+      date = new Date(date.setHours(00, 00, 00));
       readings.push({ time: date, value: 0 });
     };
     return readings;

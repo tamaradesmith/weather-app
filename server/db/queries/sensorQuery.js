@@ -85,10 +85,12 @@ module.exports = {
  async getReadingsBySensor(sensorId, period){
    period = period > 1 ? period -1 : period
    let date = new Date();
+
    date.setDate(date.getDate() - period)
+   date.setHours(00);
+   date.setMinutes(00);
    const readings = await knex('readings')
      .select( 'time', 'value'
-      // knex.raw( "date_trunc('hour', time) as time")
        )
      .where({ sensor_id: sensorId })
      .andWhere('time', '>=', date)

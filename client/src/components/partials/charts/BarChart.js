@@ -9,7 +9,7 @@ function BarChart(props) {
   function dateformate(date) {
     switch (parseInt(period)) {
       case 1:
-        return format(new Date(date), "h a");
+        return format(new Date(date), "ha");
         break;
       case 7:
         return format(new Date(date), "iiii");
@@ -18,7 +18,7 @@ function BarChart(props) {
         return format(new Date(date), "dd");
         break;
       case 365:
-        return format(new Date(date), "MMMM");
+        return format(new Date(date), "MMM");
         break;
       default:
         break;
@@ -28,7 +28,7 @@ function BarChart(props) {
   function drawChart() {
     document.querySelector('.rowChart').innerHTML = null;
 
-    const margin = { top: 20, right: 5, bottom: 75, left: 40 },
+    const margin = { top: 20, right: 5, bottom: 60, left: 40 },
       width = stateWidth - margin.left - margin.right,
       height = stateHeight - margin.top - margin.bottom;
 
@@ -40,7 +40,7 @@ function BarChart(props) {
       .append("g")
       .attr("transform", `translate(${margin.left},${margin.top})`);
 
- 
+
 
     const x = d3.scaleBand()
       .domain(data.map(function (d) { return dateformate(d.time) }))
@@ -50,15 +50,16 @@ function BarChart(props) {
 
     const y = d3.scaleLinear()
       .domain([0, d3.max(data, d => d.value)])
-      .range([height , margin.top])
+      .range([height, margin.top])
 
     svg.append("g")
       .attr("transform", `translate(0, ${height})`)
       .attr('class', "axis-label")
       .call(d3.axisBottom(x))
       .selectAll("text")
-      .attr("x", 30)
-      .attr("transform", "rotate(45)")
+    // .axisLabelOffset( x.axisOrdinalBottom(scale))
+    // .attr("x", 10)
+    // .attr("transform", "rotate(30)")
 
     svg.append("g")
       .attr('class', "axis-label")
@@ -75,16 +76,25 @@ function BarChart(props) {
       .enter().append("rect")
       .attr("class", "bar-colour")
       .attr("x", function (d) { return x(dateformate(d.time)); })
+      // .attr('y', 0)
       .attr("y", function (d) { return y(d.value); })
       .attr("width", x.bandwidth())
-      .attr("height", 0)
+      .attr("height", function (d) { return height})
       .transition()
       .duration(2000)
+      .attr("height", function (d) { return height - y(d.value); })
       .style("fill", "#990003")
-      .attr("height", function (d) { return height - y(d.value); });
 
 
-    // d3.select(".bar")
+    // svg.append("g").selectAll(".bar").forEach(bar =>{
+
+    //   bar.on('mouseenter', function (actual, i) {
+    //     d3.select(this).attr('opacity', 0.5)
+    //   })
+    //   bar.on('mouseleave', function (actual, i) {
+    //     d3.select(this).attr('opacity', 1)
+    //   })
+    // })
   }
 
   useEffect(() => {

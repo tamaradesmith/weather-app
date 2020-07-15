@@ -25,10 +25,8 @@ function SensorShow(props) {
   };
 
   async function getReading(timePeriod) {
-    // timePeriod =  timePeriod > 1 ? timePeriod -1 : timePeriod;
     const sensorReadings = await Sensor.getReadings(sensorId, timePeriod );
-    console.log("getReading -> sensorReadings", sensorReadings);
-    if (sensorReadings.length !== undefined) {
+    if (sensorReadings !== undefined) {
       setHeader(sensorReadings[0].time, timePeriod);
       setData(sensorReadings);
     }
