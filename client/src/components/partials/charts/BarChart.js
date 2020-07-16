@@ -5,19 +5,29 @@ import { format } from 'date-fns';
 function BarChart(props) {
 
   const { data, stateHeight, stateWidth, period } = props;
+  let rotate = 30;
+  let offset = 10;
 
   function dateformate(date) {
     switch (parseInt(period)) {
       case 1:
+        rotate = 30; 
+        offset = 10;
         return format(new Date(date), "ha");
         break;
       case 7:
+        rotate = 0;
+        offset = 0;
         return format(new Date(date), "iiii");
         break;
       case 30:
+        offset = 0;
+        rotate = 0;
         return format(new Date(date), "dd");
         break;
       case 365:
+        offset = 0;
+        rotate = 0;
         return format(new Date(date), "MMM");
         break;
       default:
@@ -57,9 +67,9 @@ function BarChart(props) {
       .attr('class', "axis-label")
       .call(d3.axisBottom(x))
       .selectAll("text")
-    // .axisLabelOffset( x.axisOrdinalBottom(scale))
-    // .attr("x", 10)
-    // .attr("transform", "rotate(30)")
+      // .axisLabelOffset( x.axisOrdinalBottom(scale))
+      .attr("x", offset)
+      .attr("transform", `rotate(${rotate})`)
 
     svg.append("g")
       .attr('class', "axis-label")
@@ -76,14 +86,13 @@ function BarChart(props) {
       .enter().append("rect")
       .attr("class", "bar-colour")
       .attr("x", function (d) { return x(dateformate(d.time)); })
-      // .attr('y', 0)
       .attr("y", function (d) { return y(d.value); })
-      .attr("width", x.bandwidth())
-      .attr("height", function (d) { return height})
+      .attr("height", function (d) { return height - y(d.value); })
       .transition()
       .duration(2000)
-      .attr("height", function (d) { return height - y(d.value); })
-      .style("fill", "#990003")
+      .attr("width", x.bandwidth())
+      
+
 
 
     // svg.append("g").selectAll(".bar").forEach(bar =>{

@@ -103,6 +103,10 @@ module.exports = {
     return await knex("sensor_types").select('id').where({ type });
   },
 
+  async getSensorType(){
+    
+  }
+
   // PROPERTIES QUERIES
   async createProperties(properties, sensorId) {
     const keys = Object.keys(properties)

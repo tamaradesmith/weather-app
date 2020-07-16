@@ -13,12 +13,12 @@ function LineChart(props) {
   };
   function setMin(array) {
     const min = Math.min.apply(Math, array.map(function (o) { return o.value; }))
-   return min === 0 ? min : min - (min/4);
-}
+    return min === 0 ? min : min - (min / 4);
+  }
 
   function drawChart() {
     document.querySelector('.rowChart').innerHTML = null;
-    
+
     const margin = { top: 20, right: 15, bottom: 60, left: 40 },
       width = stateWidth - margin.left - margin.right,
       height = stateHeight - margin.top - margin.bottom;

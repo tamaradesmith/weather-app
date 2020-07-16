@@ -67,7 +67,8 @@ router.get('/:id/highslows', async (req, res) => {
 router.get('/:id/:period', async (req, res) => {
   try {
     const {id, period } = req.params;
-    const readings = await SensorQuery.getReadingsBySensor(id, period );
+    const readings = await SensorQuery.getReadingsBySensor(id, period);
+    const type = await SensorQuery.getTypeId(id);
     try {
       const readingFormated = SensorHelpers.formateReadings(period, readings);
       res.send(readingFormated)
