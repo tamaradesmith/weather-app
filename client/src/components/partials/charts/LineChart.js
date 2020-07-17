@@ -80,6 +80,7 @@ function LineChart(props) {
 
   return (
     <div className="SensorShow chart-div">
+    {props.message}
       <div id='chart' className="rowChart">
       </div>
     </div>

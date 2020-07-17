@@ -1,4 +1,5 @@
 const knex = require('../../client');
+const { andWhere } = require('../../client');
 
 // const axios = require('axios');
 
@@ -82,30 +83,33 @@ module.exports = {
     return readings
   },
 
- async getReadingsBySensor(sensorId, period){
-   period = period > 1 ? period -1 : period
-   let date = new Date();
+  async getReadingsBySensor(sensorId, period) {
+    period = period > 1 ? period - 1 : period
+    let date = new Date();
 
-   date.setDate(date.getDate() - period)
-   date.setHours(00);
-   date.setMinutes(00);
-   const readings = await knex('readings')
-     .select( 'time', 'value'
-       )
-     .where({ sensor_id: sensorId })
-     .andWhere('time', '>=', date)
-     .orderBy('time', "asc")
-   return readings
- },
+    date.setDate(date.getDate() - period)
+    date.setHours(00);
+    date.setMinutes(00);
+    const readings = await knex('readings')
+      .select('time', 'value'
+      )
+      .where({ sensor_id: sensorId })
+      .andWhere('time', '>=', date)
+      .orderBy('time', "asc")
+    return readings
+  },
 
   // TYPE QUERIES
   async getTypeId(type) {
     return await knex("sensor_types").select('id').where({ type });
   },
 
-  async getSensorType(){
-    
-  }
+  // async getSensorType(id) {
+  //   return await knex('sensors')
+  //     .select('*')
+  //     .join('sensor_types', 'sensor_types.id', 'type_id')
+  //     .where( "sensors.id", id );
+  // },
 
   // PROPERTIES QUERIES
   async createProperties(properties, sensorId) {
@@ -113,6 +117,15 @@ module.exports = {
     return await Promise.all(keys.map(async (key) => {
       return knex('sensor_properties').insert({ sensor_id: sensorId, name: key, value: properties[key] }).returning('*');
     }));
+  },
+  async getChartType(id) {
+    return await knex('sensors')
+      .select('sensor_properties.value', 'sensor_properties.name')
+      .join('sensor_properties', 'sensor_properties.sensor_id', 'sensors.id')
+      .where("sensors.id", id)
+      .andWhere("sensor_properties.name", 'chart')
+      .orWhere("sensor_properties.name", 'formate')
+
   },
 };
 

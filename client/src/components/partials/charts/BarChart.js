@@ -67,7 +67,6 @@ function BarChart(props) {
       .attr('class', "axis-label")
       .call(d3.axisBottom(x))
       .selectAll("text")
-      // .axisLabelOffset( x.axisOrdinalBottom(scale))
       .attr("x", offset)
       .attr("transform", `rotate(${rotate})`)
 
@@ -92,23 +91,13 @@ function BarChart(props) {
       .duration(2000)
       .attr("width", x.bandwidth())
       
-
-
-
-    // svg.append("g").selectAll(".bar").forEach(bar =>{
-
-    //   bar.on('mouseenter', function (actual, i) {
-    //     d3.select(this).attr('opacity', 0.5)
-    //   })
-    //   bar.on('mouseleave', function (actual, i) {
-    //     d3.select(this).attr('opacity', 1)
-    //   })
-    // })
   }
 
   useEffect(() => {
     if (data.length > 0) {
       drawChart();
+    } else {
+      document.querySelector('#chart').innerHTML =`<p>${props.message}</p>`;
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [data])

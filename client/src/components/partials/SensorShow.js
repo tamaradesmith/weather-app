@@ -17,7 +17,7 @@ function SensorShow(props) {
   const [stateWidth, setWidth] = useState(0);
   const [stateHeight, setHeight] = useState(0);
   const [period, setPeriod] = useState(1);
-
+  const [message, setMessage] = useState('')
   async function getSensor() {
     const sensorInfo = await Sensor.getSensor(sensorId);
     sensorInfo.chart = sensorInfo.chart || "line";
@@ -25,10 +25,14 @@ function SensorShow(props) {
   };
 
   async function getReading(timePeriod) {
-    const sensorReadings = await Sensor.getReadings(sensorId, timePeriod );
+    const sensorReadings = await Sensor.getReadings(sensorId, timePeriod);
     if (sensorReadings !== undefined) {
       setHeader(sensorReadings[0].time, timePeriod);
       setData(sensorReadings);
+      setMessage("")
+
+    } else {
+     setMessage("No Sensor Reading for this time period")
     }
   }
 
@@ -92,12 +96,14 @@ function SensorShow(props) {
         <h3 id="timePeriod"></h3>
         <h3>location: {sensor.location}</h3>
       </div>
-      {sensor.chart === "bar" ? (
-        <BarChart data={data} stateWidth={stateWidth} stateHeight={stateHeight} period={period} />
-      ) : (
-          <LineChart data={data} stateWidth={stateWidth} stateHeight={stateHeight} />
-        )}
+      <div id="chart-div">
 
+      {sensor.chart === "bar" ? (
+        <BarChart data={data} stateWidth={stateWidth} stateHeight={stateHeight} period={period} message={message}/>
+      ) : (
+            <LineChart data={data} stateWidth={stateWidth} stateHeight={stateHeight} message={message} />
+        )}
+      </div>
 
       <div className="show-sensor-body capitlize">
         <p>type: {sensor.type}</p>
