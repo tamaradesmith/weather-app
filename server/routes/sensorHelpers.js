@@ -70,34 +70,45 @@ module.exports = {
   },
 
   dayLine(readings) {
-    let day = readings[0].time
-    let hour = day.getHours();
-    let sum = readings[0].value;
-    readings.shift();
+    console.log("dayLine -> readings", readings.length);
+    let currentDay = new Date()
+    currentDay = new Date(currentDay.setDate(currentDay.getDate() - 1))
+    currentDay = new Date(currentDay.setMinutes(00));
+    console.log("dayLine -> currentDay", currentDay);
+    let day //= readings[0].time
+    let hour //= day.getHours();
+    let sum //= readings[0].value;
+    // readings.shift();
     const result = [];
     let count = 1;
 
     readings.forEach((reading, index) => {
       const readingTime = reading.time;
       const readingHour = readingTime.getHours();
-      if (readingHour === hour) {
-        sum += reading.value;
-        count++;
-      } else {
-        const time = new Date(day.setHours(hour, 00, 00))
-        result.push({ time, value: sum / (count + 1), });
-        sum = reading.value;
-        hour = readingHour;
-        day = readingTime;
-        count = 1;
-      }
-      if (index === readings.length - 1) {
-        const time = new Date(day.setHours(hour, 00, 00))
-        result.push({ time, value: parseFloat(sum.toFixed(2)) })
+      if (readingTime > currentDay) {
+        hour = (!hour) ? readingHour : hour;
+        day = (!day) ? readingTime : day;
+        sum = (!sum) ? reading.value : sum;
+
+        if (readingHour === hour) {
+          sum += reading.value;
+          count++;
+        } else {
+          const time = new Date(day.setHours(hour, 00, 00));
+          const value = sum / (count + 1)
+          result.push({ time, value: parseFloat(value.toFixed(2)) });
+          sum = reading.value;
+          hour = readingHour;
+          day = readingTime;
+          count = 1;
+        }
+        if (index === readings.length - 1) {
+          const time = new Date(day.setHours(hour, 00, 00))
+          result.push({ time, value: parseFloat(sum.toFixed(2)) })
+        }
       }
     });
-
-    return result;
+    return [result];
   },
 
   week(readings) {
@@ -133,43 +144,15 @@ module.exports = {
     return data;
   },
   weekLine(readings, chart) {
+    let data
+    try {
 
-let data
-try {
-  
-   data = (chart.formate) ? this.getHighLows(readings, 6) : null;
-} catch (error) {
-console.log("weekLine -> error", error.message);
-  
-}
-    // const startDay = new Date(today.setDate(today.getDate() - startWeekday))
-    // let currentdate = startDay;
-    // let sum = 0;
+      data = (chart.formate) ? this.getHighLows(readings, 7) : null;
+    } catch (error) {
+      console.log("weekLine -> error", error.message);
 
+    }
 
-    // readings.forEach((reading, index) => {
-    //   const readingTime = reading.time;
-    //   const readingDate = readingTime.getDate();
-
-    //   if (readingTime.getDate() > startDay.getDate() - 1) {
-    //     if (readingDate === currentdate.getDate()) {
-    //       sum += reading.value;
-    //     } else {
-    //       let time = new Date(currentdate);
-    //       time = new Date(time.setHours(00, 00, 00));
-    //       result.push({ time, value: parseFloat(sum.toFixed(2)) });
-    //       sum = reading.value;
-    //       currentdate = readingTime;
-    //     }
-    //     if (index === readings.length - 1) {
-    //       let time = new Date(currentdate);
-    //       time = new Date(time.setHours(00, 00, 00));
-    //       result.push({ time, value: parseFloat(sum.toFixed(2)) });
-    //     }
-    //   }
-    //   return;
-    // })
-    // const data = this.NonRollPeriod(result, 7);
     return data;
   },
 
@@ -268,38 +251,69 @@ console.log("weekLine -> error", error.message);
   getHighLows(readings, period) {
     const today = new Date();
     const startDate = today.getDate() - period;
-    let date = today.getDate();
     const reducer = (accumulator, currentValue) => accumulator + currentValue;
-    let currentDate = readings[0].time
+    let currentDate;
+
     const resultMin = [];
 
     const resultMax = [];
-    let max = [50,50,50,50,50];
-    let min = [-25,-25,-25,-25,-25];
-    readings.forEach(reading => {
+    let max = [];
+    let min = [];
+    readings.forEach((reading, index) => {
       const readingTime = reading.time;
-      const readingDate =readingTime.getDate()
-      
+      const readingDate = readingTime.getDate()
+
       if (readingDate > startDate) {
-        if (readingDate === date) {
-          console.log("getHighLows -> Math.max(...min) < reading.value", Math.max(...min) < reading.value);
-          if (Math.max(...min) < reading.value) {
-            const index = min.indexOf(Math.max(...min));
-            min[index] = reading.value;
+        currentDate = (!currentDate) ? readingTime : currentDate;
+        if (readingDate === currentDate.getDate()) {
+
+          if (min.length < 5) {
+            min.push(reading.value);
+          } else if (Math.max(...min) < reading.value) {
+            const indexMin = min.indexOf(Math.max(...min));
+            min[indexMin] = reading.value;
             currentDate = readingTime;
-          } else {
-            console.log("getHighLows -> min", min);
-           const avg =  min.reduce(reducer)/min.length;
-           console.log("getHighLows -> avg", avg);
-            let time = new Date(currentdate);
-            time = new Date(time.setHours(00, 00, 00));
-            resultMin.push({ time, value: parseFloat(avg.toFixed(2)) });
           }
+
+          if (max.length < 5) {
+            max.push(reading.value);
+          } else if (Math.min(...max) < reading.value) {
+            const indexMax = max.indexOf(Math.min(...max));
+            max[indexMax] = reading.value;
+            currentDate = readingTime;
+          }
+
+        } else {
+          const avgMax = max.reduce(reducer) / max.length;
+          const avg = min.reduce(reducer) / min.length;
+
+          let time = new Date(currentDate);
+          time = new Date(time.setHours(00, 00, 00));
+
+          resultMax.push({ time, value: parseFloat(avgMax.toFixed(2)) });
+          resultMin.push({ time, value: parseFloat(avg.toFixed(2)) });
+
+          max = [];
+          min = [];
+          currentDate = readingTime;
+        }
+
+
+        if (index === readings.length - 1) {
+          const avg = min.reduce(reducer) / min.length;
+          const avgMax = max.reduce(reducer) / max.length;
+
+          let time = new Date(currentDate);
+          time = new Date(time.setHours(00, 00, 00));
+          resultMax.push({ time, value: parseFloat(avgMax.toFixed(2)) });
+
+          resultMin.push({ time, value: parseFloat(avg.toFixed(2)) });
         }
       }
-      console.log("getHighLows -> resultMin", resultMin);
     })
+    console.log("getHighLows -> resultMin", resultMin);
 
-    return result;
+    console.log("getHighLows -> resultMax", resultMax);
+    return [resultMin, resultMax];
   },
 };

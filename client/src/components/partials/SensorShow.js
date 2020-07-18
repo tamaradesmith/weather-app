@@ -2,11 +2,13 @@ import React, { useEffect, useState } from 'react';
 import { format } from 'date-fns';
 
 import LineChart from './charts/LineChart';
+
 import BarChart from './charts/BarChart';
 
 import '../../styles/chart.css';
 
 import { Sensor } from '../../js/requests'
+import LineChartTwo from './charts/LineChartTwoLines';
 
 function SensorShow(props) {
 
@@ -16,7 +18,7 @@ function SensorShow(props) {
   const [sensor, setSensor] = useState('');
   const [stateWidth, setWidth] = useState(0);
   const [stateHeight, setHeight] = useState(0);
-  const [period, setPeriod] = useState(1);
+  const [period, setPeriod] = useState(7);
   const [message, setMessage] = useState('')
   async function getSensor() {
     const sensorInfo = await Sensor.getSensor(sensorId);
@@ -27,7 +29,7 @@ function SensorShow(props) {
   async function getReading(timePeriod) {
     const sensorReadings = await Sensor.getReadings(sensorId, timePeriod);
     if (sensorReadings !== undefined) {
-      setHeader(sensorReadings[0].time, timePeriod);
+      setHeader(sensorReadings[0][0].time, timePeriod);
       setData(sensorReadings);
       setMessage("")
 
@@ -38,14 +40,16 @@ function SensorShow(props) {
 
 
   function setHeader(date, timePeriod) {
+    console.log("setHeader -> date", date);
     let time;
     switch (parseInt(timePeriod)) {
       case 1:
         time = format(new Date(date), 'MMMM dd, yyyy');
         break;
       case 7:
-        const formated = format(new Date(date), 'do');
-        time = `Week of ${formated}`;
+        const formated = date ? format(new Date(date), 'do') : format(new Date(), 'do');
+
+        time = formated ? `Week of ${formated}` : `Week of ${new Date()}` ;
         break;
       case 30:
         time = format(new Date(date), 'MMMM yyyy');
@@ -101,7 +105,7 @@ function SensorShow(props) {
       {sensor.chart === "bar" ? (
         <BarChart data={data} stateWidth={stateWidth} stateHeight={stateHeight} period={period} message={message}/>
       ) : (
-            <LineChart data={data} stateWidth={stateWidth} stateHeight={stateHeight} message={message} />
+            <LineChart data={data} stateWidth={stateWidth} stateHeight={stateHeight} period={period} message={message} />
         )}
       </div>
 
