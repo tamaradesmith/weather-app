@@ -70,11 +70,9 @@ module.exports = {
   },
 
   dayLine(readings) {
-    console.log("dayLine -> readings", readings.length);
     let currentDay = new Date()
     currentDay = new Date(currentDay.setDate(currentDay.getDate() - 1))
     currentDay = new Date(currentDay.setMinutes(00));
-    console.log("dayLine -> currentDay", currentDay);
     let day //= readings[0].time
     let hour //= day.getHours();
     let sum //= readings[0].value;
@@ -108,7 +106,7 @@ module.exports = {
         }
       }
     });
-    return [result];
+    return result;
   },
 
   week(readings) {
@@ -150,7 +148,6 @@ module.exports = {
       data = (chart.formate) ? this.getHighLows(readings, 7) : null;
     } catch (error) {
       console.log("weekLine -> error", error.message);
-
     }
 
     return data;
@@ -247,16 +244,12 @@ module.exports = {
     return readings;
   },
 
-
   getHighLows(readings, period) {
     const today = new Date();
     const startDate = today.getDate() - period;
     const reducer = (accumulator, currentValue) => accumulator + currentValue;
     let currentDate;
-
-    const resultMin = [];
-
-    const resultMax = [];
+    const result = []
     let max = [];
     let min = [];
     readings.forEach((reading, index) => {
@@ -286,34 +279,28 @@ module.exports = {
         } else {
           const avgMax = max.reduce(reducer) / max.length;
           const avg = min.reduce(reducer) / min.length;
-
           let time = new Date(currentDate);
           time = new Date(time.setHours(00, 00, 00));
-
-          resultMax.push({ time, value: parseFloat(avgMax.toFixed(2)) });
-          resultMin.push({ time, value: parseFloat(avg.toFixed(2)) });
+          result.push({
+            time, value: parseFloat(avgMax.toFixed(2)), min: parseFloat(avg.toFixed(2))
+          });
 
           max = [];
           min = [];
           currentDate = readingTime;
         }
-
-
         if (index === readings.length - 1) {
           const avg = min.reduce(reducer) / min.length;
           const avgMax = max.reduce(reducer) / max.length;
-
           let time = new Date(currentDate);
           time = new Date(time.setHours(00, 00, 00));
-          resultMax.push({ time, value: parseFloat(avgMax.toFixed(2)) });
-
-          resultMin.push({ time, value: parseFloat(avg.toFixed(2)) });
+          result.push({
+            time, value: parseFloat(avgMax.toFixed(2)), min: parseFloat(avg.toFixed(2))
+          });
         }
       }
     })
-    console.log("getHighLows -> resultMin", resultMin);
-
-    console.log("getHighLows -> resultMax", resultMax);
-    return [resultMin, resultMax];
+    console.log("getHighLows -> result", result);
+    return result;
   },
 };

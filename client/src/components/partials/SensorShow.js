@@ -18,7 +18,7 @@ function SensorShow(props) {
   const [sensor, setSensor] = useState('');
   const [stateWidth, setWidth] = useState(0);
   const [stateHeight, setHeight] = useState(0);
-  const [period, setPeriod] = useState(7);
+  const [period, setPeriod] = useState(1);
   const [message, setMessage] = useState('')
   async function getSensor() {
     const sensorInfo = await Sensor.getSensor(sensorId);
@@ -29,7 +29,7 @@ function SensorShow(props) {
   async function getReading(timePeriod) {
     const sensorReadings = await Sensor.getReadings(sensorId, timePeriod);
     if (sensorReadings !== undefined) {
-      setHeader(sensorReadings[0][0].time, timePeriod);
+      setHeader(sensorReadings[0].time, timePeriod);
       setData(sensorReadings);
       setMessage("")
 
@@ -105,7 +105,7 @@ function SensorShow(props) {
       {sensor.chart === "bar" ? (
         <BarChart data={data} stateWidth={stateWidth} stateHeight={stateHeight} period={period} message={message}/>
       ) : (
-            <LineChart data={data} stateWidth={stateWidth} stateHeight={stateHeight} period={period} message={message} />
+            <LineChart data={data} stateWidth={stateWidth} stateHeight={stateHeight} period={period} message={message} type={sensor.type} />
         )}
       </div>
 

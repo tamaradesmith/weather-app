@@ -1,28 +1,38 @@
-
-.chart-div{
+:root {
+  --main-colour: #3e517a;
+  --min-colour: #76bed0;
+  --max-colour: #c60610;
+}
+.chart-div {
   width: 750px;
   height: 300px;
   margin: 0 auto;
 }
 
 path {
-fill: none;
-stroke: black;
+  fill: none;
+  stroke: black;
 }
 
-.line{
+.line {
   stroke-width: 3px;
-  stroke: #3e517a;
+  stroke: var(--main-colour);
 }
-.axis-label{
-  font-size: .5em;
+.min-line {
+  stroke-width: 3px;
+  stroke: var(--min-colour);
 }
-.bar-colour1{
-  fill: #990000;
+.max-line {
+  stroke-width: 3px;
+  stroke: var(--max-colour);
 }
-.bar-colour{
-  fill: #3e517a;
+.axis-label {
+  font-size: 0.5em;
 }
-.radio-button{
+
+.bar-colour {
+  fill: var(--main-colour);
+}
+.radio-button {
   margin-right: 1em;
 }
