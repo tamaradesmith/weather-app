@@ -23,7 +23,7 @@ function Wind(props) {
   }, [sensorSpeed]);
 
   return (
-    <div id={sensorDirection} className="WindDirection wind-div sensor" style={{ 'width': size, 'height': size }} >
+    <div id={sensorDirection} name={sensorSpeed} className="WindDirection wind-div sensor" style={{ 'width': size, 'height': size }} >
       <div className="wind-arrow" style={{ 'transform': `rotate(${windDirection}deg)` }}>
         <div className="wind-arrow-top"></div></div>
 

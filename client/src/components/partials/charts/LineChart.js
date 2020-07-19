@@ -7,39 +7,32 @@ function LineChart(props) {
 
 
   const { data, stateHeight, stateWidth, period, type } = props;
-
+  
   let rotate = 30;
   let offset = 10;
 
-  function dateformate() {
-
+  function dateformate(date) {
+   
     let formatDate
     switch (parseInt(period)) {
       case 1:
-        formatDate = d3.timeFormat("%H h");
+        formatDate = d3.timeFormat("%H");
         rotate = 30;
         offset = 10;
-
-        return data.map(date => {
-          return formatDate(date.time)
-        });
+          const newDate =formatDate(date)
+          return 
         break;
       case 7:
         formatDate = d3.timeFormat("%A");
         rotate = 0;
         offset = 0;
-
         return data.map(date => {
           date.time = formatDate(new Date(date.time))
-
-
           return
         });
         // const formated = data.map(date => { return format(new Date(date.time), "iiii") });
         // console.log("dateformate -> formated", formated);
         // return formated
-
-
         break;
       case 30:
         offset = 0;
@@ -59,12 +52,12 @@ function LineChart(props) {
 
 
   function setMax(array) {
-    const max = Math.max.apply(Math, array.map(function (o) { return o.value; }))
+    const max = Math.max.apply(Math, array.map(function (maxValue) { return maxValue.value; }))
     return max + (max / 4);
   };
 
   function setMin(array) {
-    const min = Math.min.apply(Math, array.map(function (o) { return o.value; }))
+    const min = Math.min.apply(Math, array.map(function (minValue) { return minValue.value; }))
     return min === 0 ? min : min - (min / 4);
   };
 
@@ -72,7 +65,7 @@ function LineChart(props) {
 
     document.querySelector('.rowChart').innerHTML = null;
 
-    const margin = { top: 20, right: 15, bottom: 20, left: 40 },
+    const margin = { top: 20, right: 15, bottom: 40, left: 40 },
       width = stateWidth - margin.left - margin.right,
       height = stateHeight - margin.top - margin.bottom;
 
@@ -97,21 +90,19 @@ function LineChart(props) {
 
     // create line
     const lineGenerator = d3.line()
-    .x(function (d) { return x(new Date(d.time)); })
-    .y(function (d) { return y(d.value); });
-    
-    svg.append("path")
-    .data([data])
-      .attr("class", type === 'temperature'? "max-line" : 'line')
-    .attr("d", lineGenerator);
-    
-      if (data[0].min) {
-      console.log("drawChart -> data", data[0].max);
+      .x(function (d) { return x(new Date(d.time)); })
+      .y(function (d) { return y(d.value); });
 
+    svg.append("path")
+      .data([data])
+      .attr("class", type === 'temperature' ? "max-line" : 'line')
+      .attr("d", lineGenerator);
+
+    if (data[0].min) {
       const lineLowGenerator = d3.line()
         .x(function (d) { return x(new Date(d.time)); })
         .y(function (d) { return y(d.min); });
-     
+
       svg.append("path")
         .data([data])
         .attr("class", "min-line")
@@ -122,7 +113,7 @@ function LineChart(props) {
     svg.append("g")
       .attr("transform", `translate(0, ${height})`)
       .attr('class', "axis-label")
-      .call(d3.axisBottom(x).ticks(24))
+      .call(d3.axisBottom(x).ticks(12))
       .selectAll("text")
       .attr("x", offset)
       .attr("transform", `rotate(${rotate})`)

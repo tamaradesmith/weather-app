@@ -19,13 +19,13 @@ module.exports = {
             result = (chart.chart === 'bar') ? this.week(readings) : this.weekLine(readings, chart);
             break;
           case 30:
-            result = (chart.chart === 'bar') ? this.month(readings) : readings;
+            result = (chart.chart === 'bar') ? this.month(readings) : this.monthLine(readings, chart);
             break;
           case 365:
-            result = (chart.chart === 'bar') ? this.year(readings) : readings;
+            result = (chart.chart === 'bar') ? this.year(readings) : this.yearLine(readings, chart);
             break;
           default:
-            result = (chart.chart === 'bar') ? this.dayBar(readings) : readings;
+            result = (chart.chart === 'bar') ? this.dayBar(readings) : this.dayLine(readings);
             break;
         };
         return result;
@@ -141,15 +141,14 @@ module.exports = {
     const data = this.NonRollPeriod(result, 7);
     return data;
   },
+
   weekLine(readings, chart) {
     let data
     try {
-
       data = (chart.formate) ? this.getHighLows(readings, 7) : null;
     } catch (error) {
       console.log("weekLine -> error", error.message);
     }
-
     return data;
   },
 
@@ -190,6 +189,18 @@ module.exports = {
   },
 
 
+  monthLine(readings, chart) {
+    console.log('month')
+    let data
+    try {
+      data = (chart.formate) ? this.getHighLows(readings, 30) : readings;
+    } catch (error) {
+      console.log("MonthLine -> error", error.message);
+    }
+    return data;
+  },
+
+
   year(readings) {
     const today = new Date();
     const year = today.getFullYear();
@@ -198,10 +209,18 @@ module.exports = {
 
     let month = 0;
     let sum = 0
+    const firstReading = readings[0].time;
+    let checkMonth = firstReading.getMonth();
+    while (checkMonth > month && firstReading.getFullYear() === year) {
+      let time = new Date(year, month, 01);
+      time = new Date(time.setHours(00, 00, 00));
+      result.push({ time, value: 0 });
+      month++;
+    }
+
     readings.forEach((reading, index) => {
       const readingTime = reading.time;
       if (readingTime.getFullYear() === year) {
-
         if (readingTime.getMonth() === month) {
           sum += reading.value;
         } else {
@@ -229,7 +248,18 @@ module.exports = {
       date = new Date(date.setHours(00, 00, 00));
       result.push({ time: date, value: 0 });
     }
+    console.log("year -> result", result);
     return result;
+  },
+
+  yearLine(readings, chart) {
+    let data
+    try {
+      data = (chart.formate) ? this.getHighLowsYear(readings) : null;
+    } catch (error) {
+      console.log("MonthLine -> error", error.message);
+    }
+    return data;
   },
 
   NonRollPeriod(readings, period) {
@@ -245,6 +275,7 @@ module.exports = {
   },
 
   getHighLows(readings, period) {
+    console.log("getHighLows -> period", period);
     const today = new Date();
     const startDate = today.getDate() - period;
     const reducer = (accumulator, currentValue) => accumulator + currentValue;
@@ -255,11 +286,9 @@ module.exports = {
     readings.forEach((reading, index) => {
       const readingTime = reading.time;
       const readingDate = readingTime.getDate()
-
       if (readingDate > startDate) {
         currentDate = (!currentDate) ? readingTime : currentDate;
         if (readingDate === currentDate.getDate()) {
-
           if (min.length < 5) {
             min.push(reading.value);
           } else if (Math.max(...min) < reading.value) {
@@ -267,7 +296,6 @@ module.exports = {
             min[indexMin] = reading.value;
             currentDate = readingTime;
           }
-
           if (max.length < 5) {
             max.push(reading.value);
           } else if (Math.min(...max) < reading.value) {
@@ -275,7 +303,6 @@ module.exports = {
             max[indexMax] = reading.value;
             currentDate = readingTime;
           }
-
         } else {
           const avgMax = max.reduce(reducer) / max.length;
           const avg = min.reduce(reducer) / min.length;
@@ -284,7 +311,6 @@ module.exports = {
           result.push({
             time, value: parseFloat(avgMax.toFixed(2)), min: parseFloat(avg.toFixed(2))
           });
-
           max = [];
           min = [];
           currentDate = readingTime;
@@ -300,7 +326,67 @@ module.exports = {
         }
       }
     })
-    console.log("getHighLows -> result", result);
+    return result;
+  },
+
+
+
+
+  getHighLowsYear(readings) {
+    console.log("getHighLowsYear -> readings", readings[0]);
+    const today = new Date();
+    const startMonth = today.getMonth() - 12;
+    const reducer = (accumulator, currentValue) => accumulator + currentValue;
+    let currentDate;
+    const result = []
+    let max = [];
+    let min = [];
+    readings.forEach((reading, index) => {
+      const readingTime = reading.time;
+      const readingMonth = readingTime.getMonth();
+      if (readingMonth > startMonth) {
+        currentDate = (!currentDate) ? readingTime : currentDate;
+        if (readingMonth === currentDate.getMonth()) {
+          if (min.length < 5) {
+            min.push(reading.value);
+          } else if (Math.max(...min) < reading.value) {
+            const indexMin = min.indexOf(Math.max(...min));
+            min[indexMin] = reading.value;
+            currentDate = readingTime;
+          }
+          if (max.length < 5) {
+            max.push(reading.value);
+          } else if (Math.min(...max) < reading.value) {
+            const indexMax = max.indexOf(Math.min(...max));
+            max[indexMax] = reading.value;
+            currentDate = readingTime;
+          }
+        } else {
+          const avgMax = max.reduce(reducer) / max.length;
+          const avg = min.reduce(reducer) / min.length;
+          let time = new Date(currentDate);
+          time = new Date(time.setDate(1))
+          time = new Date(time.setHours(00, 00, 00));
+          result.push({
+            time, value: parseFloat(avgMax.toFixed(2)), min: parseFloat(avg.toFixed(2))
+          });
+          max = [];
+          min = [];
+          currentDate = readingTime;
+        }
+        if (index === readings.length - 1) {
+          const avg = min.reduce(reducer) / min.length;
+          const avgMax = max.reduce(reducer) / max.length;
+          let time = new Date(currentDate);
+          time = new Date(time.setDate(1))
+          time = new Date(time.setHours(00, 00, 00));
+          result.push({
+            time, value: parseFloat(avgMax.toFixed(2)), min: parseFloat(avg.toFixed(2))
+          });
+        }
+      }
+    })
+    console.log("getHighLowsYear -> result", result);
     return result;
   },
 };

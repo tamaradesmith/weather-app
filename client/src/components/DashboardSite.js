@@ -30,6 +30,7 @@ function DashboardSite(props) {
     sensors.forEach(sensor => {
       sensor.addEventListener('click', (event) => {
         const id = event.target.closest('.sensor').id;
+        
         props.history.push(`/sensor/${id}`);
       })
     })

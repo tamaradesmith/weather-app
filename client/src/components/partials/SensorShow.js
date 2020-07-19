@@ -1,14 +1,14 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useReducer } from 'react';
 import { format } from 'date-fns';
 
 import LineChart from './charts/LineChart';
-
 import BarChart from './charts/BarChart';
+import MixChart from './charts/MixChart';
+import { Sensor } from '../../js/requests'
 
 import '../../styles/chart.css';
+import { Switch } from 'react-router-dom';
 
-import { Sensor } from '../../js/requests'
-import LineChartTwo from './charts/LineChartTwoLines';
 
 function SensorShow(props) {
 
@@ -19,7 +19,11 @@ function SensorShow(props) {
   const [stateWidth, setWidth] = useState(0);
   const [stateHeight, setHeight] = useState(0);
   const [period, setPeriod] = useState(1);
-  const [message, setMessage] = useState('')
+  const [message, setMessage] = useState('');
+
+  const [chart, setChart] = useState(<LineChart data={data} stateWidth={stateWidth} stateHeight={stateHeight} period={period} message={message} type={sensor.type} />);
+
+
   async function getSensor() {
     const sensorInfo = await Sensor.getSensor(sensorId);
     sensorInfo.chart = sensorInfo.chart || "line";
@@ -28,19 +32,32 @@ function SensorShow(props) {
 
   async function getReading(timePeriod) {
     const sensorReadings = await Sensor.getReadings(sensorId, timePeriod);
-    if (sensorReadings !== undefined) {
+    if (sensorReadings.length > 0) {
       setHeader(sensorReadings[0].time, timePeriod);
       setData(sensorReadings);
       setMessage("")
-
     } else {
-     setMessage("No Sensor Reading for this time period")
+      setMessage("No Sensor Reading for this time period")
     }
   }
 
+  function setChartType(){
+    switch (sensor.chart) {
+      case 'line':
+        setChart(<LineChart data={data} stateWidth={stateWidth} stateHeight={stateHeight} period={period} message={message} type={sensor.type} />)
+        break;
+      case 'bar':
+        setChart(<BarChart data={data} stateWidth={stateWidth} stateHeight={stateHeight} period={period} message={message} type={sensor.type} />)
+        break;
+      case 'line':
+        setChart(<MixChart data={data} stateWidth={stateWidth} stateHeight={stateHeight} period={period} message={message} type={sensor.type} />)
+        break;
+      default:
+        break;
+    }
+  }
 
   function setHeader(date, timePeriod) {
-    console.log("setHeader -> date", date);
     let time;
     switch (parseInt(timePeriod)) {
       case 1:
@@ -49,7 +66,7 @@ function SensorShow(props) {
       case 7:
         const formated = date ? format(new Date(date), 'do') : format(new Date(), 'do');
 
-        time = formated ? `Week of ${formated}` : `Week of ${new Date()}` ;
+        time = formated ? `Week of ${formated}` : `Week of ${new Date()}`;
         break;
       case 30:
         time = format(new Date(date), 'MMMM yyyy');
@@ -86,6 +103,7 @@ function SensorShow(props) {
   }, []);
 
   useEffect(() => {
+    setChartType();
     getWidthAndHeigth();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [sensor])
@@ -101,12 +119,12 @@ function SensorShow(props) {
         <h3>location: {sensor.location}</h3>
       </div>
       <div id="chart-div">
-
-      {sensor.chart === "bar" ? (
-        <BarChart data={data} stateWidth={stateWidth} stateHeight={stateHeight} period={period} message={message}/>
-      ) : (
+        {chart}
+        {/* {sensor.chart === "bar" ? (
+          <BarChart data={data} stateWidth={stateWidth} stateHeight={stateHeight} period={period} message={message} />
+        ) : (
             <LineChart data={data} stateWidth={stateWidth} stateHeight={stateHeight} period={period} message={message} type={sensor.type} />
-        )}
+          )} */}
       </div>
 
       <div className="show-sensor-body capitlize">
