@@ -1,3 +1,4 @@
+
 const BASE_URL = 'http://localhost:4000';
 
 const Site = {
@@ -170,6 +171,16 @@ const Sensor = {
       console.log(error.message);
     };
   },
+  async getPartnerSensor(sensorId){
+    try {
+      const res = await fetch(`${BASE_URL}/sensors/${sensorId}/partner`, {
+        credentials: 'include',
+      })
+      return res.json();
+    } catch (error) {
+      console.log(error.message);
+    };
+  }
 };
 
 const Controller = {

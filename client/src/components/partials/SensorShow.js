@@ -7,7 +7,6 @@ import MixChart from './charts/MixChart';
 import { Sensor } from '../../js/requests'
 
 import '../../styles/chart.css';
-import { Switch } from 'react-router-dom';
 
 
 function SensorShow(props) {
@@ -33,7 +32,8 @@ function SensorShow(props) {
   async function getReading(timePeriod) {
     const sensorReadings = await Sensor.getReadings(sensorId, timePeriod);
     if (sensorReadings.length > 0) {
-      setHeader(sensorReadings[0].time, timePeriod);
+
+      setHeader(sensorReadings[sensorReadings.length - 1] === "partner" ? sensorReadings[0][0].time : sensorReadings[0].time, timePeriod);
       setData(sensorReadings);
       setMessage("")
     } else {
@@ -41,7 +41,7 @@ function SensorShow(props) {
     }
   }
 
-  function setChartType(){
+  async function setChartType() {
     switch (sensor.chart) {
       case 'line':
         setChart(<LineChart data={data} stateWidth={stateWidth} stateHeight={stateHeight} period={period} message={message} type={sensor.type} />)
@@ -49,8 +49,9 @@ function SensorShow(props) {
       case 'bar':
         setChart(<BarChart data={data} stateWidth={stateWidth} stateHeight={stateHeight} period={period} message={message} type={sensor.type} />)
         break;
-      case 'line':
-        setChart(<MixChart data={data} stateWidth={stateWidth} stateHeight={stateHeight} period={period} message={message} type={sensor.type} />)
+      case 'mix':
+        const partner = await Sensor.getPartnerSensor(sensor.id);
+        setChart(<MixChart data={data} stateWidth={stateWidth} stateHeight={stateHeight} period={period} message={message} type={sensor.type} sensor={sensor} partner={partner} />)
         break;
       default:
         break;

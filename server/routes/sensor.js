@@ -63,12 +63,30 @@ router.get('/:id/highslows', async (req, res) => {
   }
 });
 
+// get partner
+router.get('/:id/partner', async(req, res) =>{
+  try {
+    const {id} = req.params;
+    const partner = await SensorQuery.getPartner(id);
+    const sensor = await SensorQuery.getSensor(partner[0].partner)
+    res.send(sensor)
+  } catch (error) {
+    console.log(error.message)
+  }
+})
+
 // get readings by period
 router.get('/:id/:period', async (req, res) => {
   try {
     const { id, period } = req.params;
-    const readings = await SensorQuery.getReadingsBySensor(id, period);
-    const chart = await (SensorQuery.getChartType(id));
+    let readings = await SensorQuery.getReadingsBySensor(id, period);
+    const chart = await SensorQuery.getChartType(id);
+    const partner = await SensorQuery.getPartner(id);
+    if ("partner", partner.length !== 0) {
+      const partnerReadings = await SensorQuery.getReadingsBySensor(partner[0].partner, period);
+      const partnerChart = await SensorQuery.getChartType(id);
+      readings = ['partner', { sensor: readings, chart: chart }, { sensor: partnerReadings, chart: partnerChart }]
+    };
     try {
       const readingFormated = SensorHelpers.formateReadings(period, readings, chart);
       res.send(readingFormated)

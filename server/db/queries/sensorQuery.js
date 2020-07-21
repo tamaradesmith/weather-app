@@ -99,6 +99,8 @@ module.exports = {
     return readings
   },
 
+
+
   // TYPE QUERIES
   async getTypeId(type) {
     return await knex("sensor_types").select('id').where({ type });
@@ -127,5 +129,11 @@ module.exports = {
       .orWhere("sensor_properties.name", 'formate')
 
   },
+async  getPartner(id){
+  return await knex('sensor_properties')
+  .select('value as partner')
+  .where({sensor_id: id, name: 'partner'})
+
+},
 };
 

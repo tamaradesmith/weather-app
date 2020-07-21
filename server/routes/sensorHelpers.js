@@ -2,33 +2,38 @@ const e = require("express");
 
 module.exports = {
   formateReadings(period, readings, properties) {
-    const chart = {}
-    properties.forEach(item => {
-      chart[item.name] = item.value
-    })
-    if (readings.length === 0) {
-      return readings;
+    if (readings[0] === "partner") {
+      let result = this.formateParnters(readings);
+      return result;
     } else {
-      if (readings) {
-        let result;
-        switch (parseInt(period)) {
-          case 1:
-            result = (chart.chart === 'bar') ? this.dayBar(readings) : this.dayLine(readings);
-            break;
-          case 7:
-            result = (chart.chart === 'bar') ? this.week(readings) : this.weekLine(readings, chart);
-            break;
-          case 30:
-            result = (chart.chart === 'bar') ? this.month(readings) : this.monthLine(readings, chart);
-            break;
-          case 365:
-            result = (chart.chart === 'bar') ? this.year(readings) : this.yearLine(readings, chart);
-            break;
-          default:
-            result = (chart.chart === 'bar') ? this.dayBar(readings) : this.dayLine(readings);
-            break;
-        };
-        return result;
+      const chart = {}
+      properties.forEach(item => {
+        chart[item.name] = item.value
+      })
+      if (readings.length === 0) {
+        return readings;
+      } else {
+        if (readings) {
+          let result;
+          switch (parseInt(period)) {
+            case 1:
+              result = (chart.chart === 'bar') ? this.dayBar(readings) : this.dayLine(readings);
+              break;
+            case 7:
+              result = (chart.chart === 'bar') ? this.week(readings) : this.weekLine(readings, chart);
+              break;
+            case 30:
+              result = (chart.chart === 'bar') ? this.month(readings) : this.monthLine(readings, chart);
+              break;
+            case 365:
+              result = (chart.chart === 'bar') ? this.year(readings) : this.yearLine(readings, chart);
+              break;
+            default:
+              result = (chart.chart === 'bar') ? this.dayBar(readings) : this.dayLine(readings);
+              break;
+          };
+          return result;
+        }
       }
     }
   },
@@ -190,7 +195,6 @@ module.exports = {
 
 
   monthLine(readings, chart) {
-    console.log('month')
     let data
     try {
       data = (chart.formate) ? this.getHighLows(readings, 30) : readings;
@@ -248,7 +252,6 @@ module.exports = {
       date = new Date(date.setHours(00, 00, 00));
       result.push({ time: date, value: 0 });
     }
-    console.log("year -> result", result);
     return result;
   },
 
@@ -275,7 +278,6 @@ module.exports = {
   },
 
   getHighLows(readings, period) {
-    console.log("getHighLows -> period", period);
     const today = new Date();
     const startDate = today.getDate() - period;
     const reducer = (accumulator, currentValue) => accumulator + currentValue;
@@ -333,7 +335,6 @@ module.exports = {
 
 
   getHighLowsYear(readings) {
-    console.log("getHighLowsYear -> readings", readings[0]);
     const today = new Date();
     const startMonth = today.getMonth() - 12;
     const reducer = (accumulator, currentValue) => accumulator + currentValue;
@@ -386,7 +387,35 @@ module.exports = {
         }
       }
     })
-    console.log("getHighLowsYear -> result", result);
     return result;
+  },
+
+  formateParnters(readings, period) {
+    readings.shift()
+
+    const result = readings.map((sensor, index) => {
+      let readingResult;
+      switch (parseInt(period)) {
+        case 1:
+          readingResult = (sensor.chart === 'bar') ? this.dayBar(readings[index].sensor) : this.dayLine(readings[index].sensor);
+          break;
+        case 7:
+          readingResult = (sensor.chart === 'bar') ? this.week(readings[index].sensor) : this.weekLine(readings[index].sensor, chart);
+          break;
+        case 30:
+          readingResult = (sensor.chart === 'bar') ? this.month(readings[index].sensor) : this.monthLine(readings[index].sensor, chart);
+          break;
+        case 365:
+          readingResult = (sensor.chart === 'bar') ? this.year(readings[index].sensor) : this.yearLine(readings[index].sensor, chart);
+          break;
+        default:
+          readingResult = (sensor.chart === 'bar') ? this.dayBar(readings[index].sensor) : this.dayLine(readings[index].sensor);
+          break;
+      };
+      return readingResult;
+
+    });
+  result.push("partner")
+    return result
   },
 };
