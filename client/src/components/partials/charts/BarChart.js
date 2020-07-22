@@ -14,22 +14,18 @@ function BarChart(props) {
         rotate = 30; 
         offset = 10;
         return format(new Date(date), "ha");
-        break;
       case 7:
         rotate = 0;
         offset = 0;
         return format(new Date(date), "iiii");
-        break;
       case 30:
         offset = 0;
         rotate = 0;
         return format(new Date(date), "dd");
-        break;
       case 365:
         offset = 0;
         rotate = 0;
         return format(new Date(date), "MMM");
-        break;
       default:
         break;
     }
@@ -59,7 +55,7 @@ function BarChart(props) {
 
 
     const y = d3.scaleLinear()
-      .domain([0, d3.max(data, d => d.value)])
+      .domain([0, d3.max(data, d => d.sum)])
       .range([height, margin.top])
 
     svg.append("g")
@@ -85,8 +81,8 @@ function BarChart(props) {
       .enter().append("rect")
       .attr("class", "bar-colour")
       .attr("x", function (d) { return x(dateformate(d.time)); })
-      .attr("y", function (d) { return y(d.value); })
-      .attr("height", function (d) { return height - y(d.value); })
+      .attr("y", function (d) { return y(d.sum); })
+      .attr("height", function (d) { return height - y(d.sum); })
       .transition()
       .duration(2000)
       .attr("width", x.bandwidth())
@@ -94,13 +90,14 @@ function BarChart(props) {
   }
 
   useEffect(() => {
+    console.log("BarChart -> data", data);
     if (data.length > 0) {
       drawChart();
     } else {
       document.querySelector('#chart').innerHTML =`<p>${props.message}</p>`;
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [data])
+  }, [data]);
 
   return (
     <div className="BarChart chart-div">

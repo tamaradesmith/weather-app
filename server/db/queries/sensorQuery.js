@@ -121,19 +121,18 @@ module.exports = {
     }));
   },
   async getChartType(id) {
-    return await knex('sensors')
-      .select('sensor_properties.value', 'sensor_properties.name')
-      .join('sensor_properties', 'sensor_properties.sensor_id', 'sensors.id')
-      .where("sensors.id", id)
-      .andWhere("sensor_properties.name", 'chart')
-      .orWhere("sensor_properties.name", 'formate')
+    return await knex('sensor_properties')
+      .select('value', 'name')
+      .where({ sensor_id: id, name: 'mix' })
+      .orWhere({ sensor_id: id, name: 'chart' })
+      .orWhere({ sensor_id: id, name: 'formate' })
+      .orderBy('name')
+  },
+  async getPartner(id) {
+    return await knex('sensor_properties')
+      .select('value as partner')
+      .where({ sensor_id: id, name: 'partner' })
 
   },
-async  getPartner(id){
-  return await knex('sensor_properties')
-  .select('value as partner')
-  .where({sensor_id: id, name: 'partner'})
-
-},
 };
 

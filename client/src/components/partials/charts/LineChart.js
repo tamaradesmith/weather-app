@@ -4,6 +4,7 @@ import { format } from 'date-fns';
 
 
 function LineChart(props) {
+console.log("LineChart -> props", props);
 
 
   const { data, stateHeight, stateWidth, period, type } = props;

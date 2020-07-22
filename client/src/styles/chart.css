@@ -2,6 +2,7 @@
   --main-colour: #3e517a;
   --min-colour: #76bed0;
   --max-colour: #c60610;
+  --mix-colour: #DB2B39;
 }
 .chart-div {
   width: 750px;
@@ -25,6 +26,10 @@ path {
 .max-line {
   stroke-width: 3px;
   stroke: var(--max-colour);
+}
+.line-mix {
+  stroke-width: 3px;
+  stroke: var(--mix-colour);
 }
 .axis-label {
   font-size: 0.5em;

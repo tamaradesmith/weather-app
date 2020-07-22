@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useReducer } from 'react';
+import React, { useEffect, useState } from 'react';
 import { format } from 'date-fns';
 
 import LineChart from './charts/LineChart';
@@ -18,7 +18,7 @@ function SensorShow(props) {
   const [stateWidth, setWidth] = useState(0);
   const [stateHeight, setHeight] = useState(0);
   const [period, setPeriod] = useState(1);
-  const [message, setMessage] = useState('');
+  const [message, setMessage] = useState('loading');
 
   const [chart, setChart] = useState(<LineChart data={data} stateWidth={stateWidth} stateHeight={stateHeight} period={period} message={message} type={sensor.type} />);
 
@@ -30,15 +30,14 @@ function SensorShow(props) {
   };
 
   async function getReading(timePeriod) {
-    const sensorReadings = await Sensor.getReadings(sensorId, timePeriod);
-    if (sensorReadings.length > 0) {
-
-      setHeader(sensorReadings[sensorReadings.length - 1] === "partner" ? sensorReadings[0][0].time : sensorReadings[0].time, timePeriod);
+      const sensorReadings = await Sensor.getReadings(sensorId, timePeriod);
       setData(sensorReadings);
-      setMessage("")
-    } else {
-      setMessage("No Sensor Reading for this time period")
-    }
+      if (sensorReadings.length > 0) {
+        setHeader(sensorReadings[sensorReadings.length - 1] === "partner" ? sensorReadings[0][0].time : sensorReadings[0].time, timePeriod);
+        setMessage("")
+      } else {
+        setMessage("No Sensor Reading for this time period")
+      }
   }
 
   async function setChartType() {
@@ -105,27 +104,24 @@ function SensorShow(props) {
 
   useEffect(() => {
     setChartType();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [data])
+
+  useEffect(() => {
     getWidthAndHeigth();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [sensor])
-
-
+  }, [chart])
 
   return (
 
     <div className="SensorShow chart">
       <div className="show-sensor-header capitlize">
         <h3>sensor: {sensor.name} </h3>
-        <h3 id="timePeriod"></h3>
+        <h3 id="timePeriod">checking</h3>
         <h3>location: {sensor.location}</h3>
       </div>
       <div id="chart-div">
         {chart}
-        {/* {sensor.chart === "bar" ? (
-          <BarChart data={data} stateWidth={stateWidth} stateHeight={stateHeight} period={period} message={message} />
-        ) : (
-            <LineChart data={data} stateWidth={stateWidth} stateHeight={stateHeight} period={period} message={message} type={sensor.type} />
-          )} */}
       </div>
 
       <div className="show-sensor-body capitlize">

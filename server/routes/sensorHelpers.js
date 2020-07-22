@@ -32,6 +32,7 @@ module.exports = {
               result = (chart.chart === 'bar') ? this.dayBar(readings) : this.dayLine(readings);
               break;
           };
+          // console.log("formateReadings -> result", result);
           return result;
         }
       }
@@ -52,13 +53,13 @@ module.exports = {
           sum += reading.value;
         } else {
           const time = new Date(today.setHours(hour, 00, 00))
-          result.push({ time, value: parseFloat(sum.toFixed(2)) });
+          result.push({ time, sum: parseFloat(sum.toFixed(2)) });
           sum = reading.value;
           hour = readingHour;
         }
         if (index === readings.length - 1) {
           const time = new Date(today.setHours(hour, 00, 00))
-          result.push({ time, value: parseFloat(sum.toFixed(2)) })
+          result.push({ time, sum: parseFloat(sum.toFixed(2)) })
         }
       }
     });
@@ -68,7 +69,7 @@ module.exports = {
         const oldDate = result[result.length - 1].time;
         const hour = oldDate.getHours() + 1;
         const date = new Date(oldDate.setHours(hour, 00, 00));
-        result.push({ time: date, value: 0 });
+        result.push({ time: date, sum: 0 });
       };
     };
     return result;
@@ -394,28 +395,38 @@ module.exports = {
     readings.shift()
 
     const result = readings.map((sensor, index) => {
+      const chart = sensor.chart[1].value
       let readingResult;
       switch (parseInt(period)) {
         case 1:
-          readingResult = (sensor.chart === 'bar') ? this.dayBar(readings[index].sensor) : this.dayLine(readings[index].sensor);
+          readingResult = (chart === 'bar') ? this.dayBar(readings[index].sensor) : this.dayLine(readings[index].sensor);
           break;
         case 7:
-          readingResult = (sensor.chart === 'bar') ? this.week(readings[index].sensor) : this.weekLine(readings[index].sensor, chart);
+          readingResult = (chart === 'bar') ? this.week(readings[index].sensor) : this.weekLine(readings[index].sensor, chart);
           break;
         case 30:
-          readingResult = (sensor.chart === 'bar') ? this.month(readings[index].sensor) : this.monthLine(readings[index].sensor, chart);
+          readingResult = (chart === 'bar') ? this.month(readings[index].sensor) : this.monthLine(readings[index].sensor, chart);
           break;
         case 365:
-          readingResult = (sensor.chart === 'bar') ? this.year(readings[index].sensor) : this.yearLine(readings[index].sensor, chart);
+          readingResult = (chart === 'bar') ? this.year(readings[index].sensor) : this.yearLine(readings[index].sensor, chart);
           break;
         default:
-          readingResult = (sensor.chart === 'bar') ? this.dayBar(readings[index].sensor) : this.dayLine(readings[index].sensor);
+          readingResult = (chart === 'bar') ? this.dayBar(readings[index].sensor) : this.dayLine(readings[index].sensor);
           break;
       };
       return readingResult;
 
+
     });
-  result.push("partner")
+    const matchReading = this.matchDates(result)
+    // matchReading.unshift("partner")
+    return matchReading
+  },
+
+  matchDates(readings) {
+    let sensor1 = readings[0];
+    let sensor2 = readings[1];
+    let result = sensor1.map((item, i) => Object.assign({}, item, sensor2[i]));
     return result
   },
 };

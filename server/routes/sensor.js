@@ -82,9 +82,10 @@ router.get('/:id/:period', async (req, res) => {
     let readings = await SensorQuery.getReadingsBySensor(id, period);
     const chart = await SensorQuery.getChartType(id);
     const partner = await SensorQuery.getPartner(id);
+    console.log("partner", partner);
     if ("partner", partner.length !== 0) {
       const partnerReadings = await SensorQuery.getReadingsBySensor(partner[0].partner, period);
-      const partnerChart = await SensorQuery.getChartType(id);
+      const partnerChart = await SensorQuery.getChartType(parseInt (partner[0].partner));
       readings = ['partner', { sensor: readings, chart: chart }, { sensor: partnerReadings, chart: partnerChart }]
     };
     try {
