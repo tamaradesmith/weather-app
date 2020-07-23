@@ -4,10 +4,11 @@ import { format } from 'date-fns';
 
 function MixChart(props) {
   const { stateHeight, stateWidth, data } = props;
+  console.log("MixChart -> data", data);
 
   function drawChart() {
 
-    // document.querySelector('.rowChart').innerHTML = null;
+    document.querySelector('.rowChart').innerHTML = null;
 
     const margin = { top: 20, right: 30, bottom: 60, left: 30 },
       width = stateWidth - margin.left - margin.right,
@@ -64,16 +65,28 @@ function MixChart(props) {
         .attr("text-anchor", "start")
         .text(data.y2))
 
+
     svg.append('g').selectAll('.bar')
       .data(data)
       .enter().append("rect")
-      .attr("class", "bar-colour")
+      .attr("class", "bar-extra")
       .attr("x", function (d) { return x(format(new Date(d.time), "ha")) })
-      .attr("y", function (d) { return y(d.sum); })
-      .attr("height", function (d) { return height - y(d.sum); })
+      .attr("y", function (d) { return y(d.gust); })
+      .attr("height", function (d) { return height - y(d.gust); })
       .transition()
       .duration(2000)
       .attr("width", x.bandwidth())
+
+    // svg.append('g').selectAll('.bar')
+    //   .data(data)
+    //   .enter().append("rect")
+    //   .attr("class", "bar-colour")
+    //   .attr("x", function (d) { return x(format(new Date(d.time), "ha")) })
+    //   .attr("y", function (d) { return y(d.sum); })
+    //   .attr("height", function (d) { return height - y(d.sum); })
+    //   .transition()
+    //   .duration(2000)
+    //   .attr("width", x.bandwidth())
 
     svg.append("path")
       .data([data])
@@ -84,11 +97,9 @@ function MixChart(props) {
   useEffect(() => {
     if (data.length > 0) {
       try {
-
         drawChart();
       } catch (error) {
         console.log("MixChart -> error", error.message);
-
       }
     } else {
       document.querySelector('#chart').innerHTML = `<p>${props.message}</p>`;

@@ -1,54 +1,49 @@
 import React, { useEffect } from 'react';
 import * as d3 from "d3";
-import { format } from 'date-fns';
+// import { format } from 'date-fns';
 
 
 function LineChart(props) {
-console.log("LineChart -> props", props);
-
 
   const { data, stateHeight, stateWidth, period, type } = props;
-  
+
   let rotate = 30;
   let offset = 10;
 
-  function dateformate(date) {
-   
-    let formatDate
-    switch (parseInt(period)) {
-      case 1:
-        formatDate = d3.timeFormat("%H");
-        rotate = 30;
-        offset = 10;
-          const newDate =formatDate(date)
-          return 
-        break;
-      case 7:
-        formatDate = d3.timeFormat("%A");
-        rotate = 0;
-        offset = 0;
-        return data.map(date => {
-          date.time = formatDate(new Date(date.time))
-          return
-        });
-        // const formated = data.map(date => { return format(new Date(date.time), "iiii") });
-        // console.log("dateformate -> formated", formated);
-        // return formated
-        break;
-      case 30:
-        offset = 0;
-        rotate = 0;
-        // return format(new Date(date), "dd");
-        break;
-      case 365:
-        offset = 0;
-        rotate = 0;
-        // return format(new Date(date), "MMM");
-        break;
-      default:
-        break;
-    };
-  };
+  // function dateformate(date) {
+
+  //   let formatDate
+  //   switch (parseInt(period)) {
+  //     case 1:
+  //       formatDate = d3.timeFormat("%H");
+  //       rotate = 30;
+  //       offset = 10;
+  //       const newDate = formatDate(new Date(date.time))
+  //       return
+  //     case 7:
+  //       formatDate = d3.timeFormat("%A");
+  //       rotate = 0;
+  //       offset = 0;
+  //       return data.map(date => {
+  //         date.time = formatDate(new Date(date.time))
+  //         return
+  //       });
+  //     // const formated = data.map(date => { return format(new Date(date.time), "iiii") });
+  //     // return formated
+  //     case 30:
+  //       offset = 0;
+  //       rotate = 0;
+  //       // return format(new Date(date), "dd");
+  //       break;
+  //     case 365:
+  //       offset = 0;
+  //       rotate = 0;
+  //       // return format(new Date(date), "MMM");
+  //       break;
+  //     default:
+  //       break;
+  //   };
+  // };
 
 
 
@@ -131,6 +126,8 @@ console.log("LineChart -> props", props);
     if (data.length > 0) {
       // dateformate()
       drawChart();
+    } else {
+      props.getReadings(period)
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [data])

@@ -20,7 +20,7 @@ function SensorShow(props) {
   const [period, setPeriod] = useState(1);
   const [message, setMessage] = useState('loading');
 
-  const [chart, setChart] = useState(<LineChart data={data} stateWidth={stateWidth} stateHeight={stateHeight} period={period} message={message} type={sensor.type} />);
+  const [chart, setChart] = useState(<LineChart data={data} stateWidth={stateWidth} stateHeight={stateHeight} period={period} message={message} type={sensor.type} getReadings={getReading} />);
 
 
   async function getSensor() {
@@ -37,20 +37,20 @@ function SensorShow(props) {
         setMessage("")
       } else {
         setMessage("No Sensor Reading for this time period")
-      }
+      };
   }
 
   async function setChartType() {
     switch (sensor.chart) {
       case 'line':
-        setChart(<LineChart data={data} stateWidth={stateWidth} stateHeight={stateHeight} period={period} message={message} type={sensor.type} />)
+        setChart(<LineChart data={data} stateWidth={stateWidth} stateHeight={stateHeight} period={period} message={message} type={sensor.type} getReadings={getReading} />)
         break;
       case 'bar':
-        setChart(<BarChart data={data} stateWidth={stateWidth} stateHeight={stateHeight} period={period} message={message} type={sensor.type} />)
+        setChart(<BarChart data={data} stateWidth={stateWidth} stateHeight={stateHeight} period={period} message={message} type={sensor.type} getReadings={getReading} />)
         break;
       case 'mix':
         const partner = await Sensor.getPartnerSensor(sensor.id);
-        setChart(<MixChart data={data} stateWidth={stateWidth} stateHeight={stateHeight} period={period} message={message} type={sensor.type} sensor={sensor} partner={partner} />)
+        setChart(<MixChart data={data} stateWidth={stateWidth} stateHeight={stateHeight} period={period} message={message} type={sensor.type} sensor={sensor} partner={partner} getReadings={getReading} />)
         break;
       default:
         break;

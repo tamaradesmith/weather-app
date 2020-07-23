@@ -58,6 +58,10 @@ function BarChart(props) {
       .domain([0, d3.max(data, d => d.sum)])
       .range([height, margin.top])
 
+    const yExtra = d3.scaleLinear()
+      .domain([0, d3.max(data, d => d.gust)])
+      .range([height, margin.top])
+
     svg.append("g")
       .attr("transform", `translate(0, ${height})`)
       .attr('class', "axis-label")
@@ -87,12 +91,13 @@ function BarChart(props) {
       .duration(2000)
       .attr("width", x.bandwidth())
       
+
+      
   }
 
   useEffect(() => {
-    console.log("BarChart -> data", data);
     if (data.length > 0) {
-      drawChart();
+      drawChart(period);
     } else {
       document.querySelector('#chart').innerHTML =`<p>${props.message}</p>`;
     }

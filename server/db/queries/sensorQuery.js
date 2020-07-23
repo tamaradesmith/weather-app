@@ -86,7 +86,6 @@ module.exports = {
   async getReadingsBySensor(sensorId, period) {
     period = period > 1 ? period - 1 : period
     let date = new Date();
-
     date.setDate(date.getDate() - period)
     date.setHours(00);
     date.setMinutes(00);
@@ -126,6 +125,8 @@ module.exports = {
       .where({ sensor_id: id, name: 'mix' })
       .orWhere({ sensor_id: id, name: 'chart' })
       .orWhere({ sensor_id: id, name: 'formate' })
+      .orWhere({ sensor_id: id, name: 'extra' })
+
       .orderBy('name')
   },
   async getPartner(id) {

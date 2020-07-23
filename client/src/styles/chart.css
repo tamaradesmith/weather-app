@@ -38,6 +38,9 @@ path {
 .bar-colour {
   fill: var(--main-colour);
 }
+.bar-extra {
+  fill: var(--min-colour);
+}
 .radio-button {
   margin-right: 1em;
 }

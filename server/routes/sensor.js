@@ -64,9 +64,9 @@ router.get('/:id/highslows', async (req, res) => {
 });
 
 // get partner
-router.get('/:id/partner', async(req, res) =>{
+router.get('/:id/partner', async (req, res) => {
   try {
-    const {id} = req.params;
+    const { id } = req.params;
     const partner = await SensorQuery.getPartner(id);
     const sensor = await SensorQuery.getSensor(partner[0].partner)
     res.send(sensor)
@@ -79,13 +79,19 @@ router.get('/:id/partner', async(req, res) =>{
 router.get('/:id/:period', async (req, res) => {
   try {
     const { id, period } = req.params;
-    let readings = await SensorQuery.getReadingsBySensor(id, period);
+    let readings
+    try {
+      readings = await SensorQuery.getReadingsBySensor(id, period);
+
+    } catch (error) {
+    console.log("error readings", error.message);
+
+    }
     const chart = await SensorQuery.getChartType(id);
     const partner = await SensorQuery.getPartner(id);
-    console.log("partner", partner);
     if ("partner", partner.length !== 0) {
       const partnerReadings = await SensorQuery.getReadingsBySensor(partner[0].partner, period);
-      const partnerChart = await SensorQuery.getChartType(parseInt (partner[0].partner));
+      const partnerChart = await SensorQuery.getChartType(parseInt(partner[0].partner));
       readings = ['partner', { sensor: readings, chart: chart }, { sensor: partnerReadings, chart: partnerChart }]
     };
     try {
