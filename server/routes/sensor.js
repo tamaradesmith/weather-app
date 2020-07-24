@@ -3,7 +3,7 @@ const router = express.Router();
 
 const SensorQuery = require('../db/queries/sensorQuery');
 
-const SensorHelpers = require('./sensorHelpers');
+const SensorHelpers = require('../js/sensorHelpers');
 
 // SENSOR ROUTES
 

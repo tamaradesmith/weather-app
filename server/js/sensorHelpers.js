@@ -1,4 +1,7 @@
-const e = require("express");
+const BarChart = require('./barChartData');
+const LineChart = require('./lineChartData');
+const MixChart = require('./mixChartData');
+
 
 module.exports = {
   formateReadings(period, readings, properties) {
@@ -16,10 +19,10 @@ module.exports = {
         let result;
         switch (parseInt(period)) {
           case 1:
-            result = (chart.chart === 'bar') ? this.dayBar(readings) : this.dayLine(readings);
+            result = (chart.chart === 'bar') ? this.dayBar(readings) : LineChart.dayLine(readings);
             break;
           case 7:
-            result = (chart.chart === 'bar') ? this.weekBar(readings) : this.weekLine(readings, chart);
+            result = (chart.chart === 'bar') ? this.weekBar(readings) : LineChart.weekLine(readings, chart);
             break;
           case 30:
             result = (chart.chart === 'bar') ? this.monthBar(readings) : this.monthLine(readings, chart);
@@ -72,45 +75,7 @@ module.exports = {
     return result;
   },
 
-  dayLine(readings) {
-    let currentDay = new Date()
-    currentDay = new Date(currentDay.setDate(currentDay.getDate() - 1))
-    currentDay = new Date(currentDay.setMinutes(00));
-    let day //= readings[0].time
-    let hour //= day.getHours();
-    let sum //= readings[0].value;
-    // readings.shift();
-    const result = [];
-    let count = 1;
-
-    readings.forEach((reading, index) => {
-      const readingTime = reading.time;
-      const readingHour = readingTime.getHours();
-      if (readingTime > currentDay) {
-        hour = (!hour) ? readingHour : hour;
-        day = (!day) ? readingTime : day;
-        sum = (!sum) ? reading.value : sum;
-
-        if (readingHour === hour) {
-          sum += reading.value;
-          count++;
-        } else {
-          const time = new Date(day.setHours(hour, 00, 00));
-          const value = sum / (count + 1)
-          result.push({ time, value: parseFloat(value.toFixed(2)) });
-          sum = reading.value;
-          hour = readingHour;
-          day = readingTime;
-          count = 1;
-        }
-        if (index === readings.length - 1) {
-          const time = new Date(day.setHours(hour, 00, 00))
-          result.push({ time, value: parseFloat(sum.toFixed(2)) })
-        }
-      }
-    });
-    return result;
-  },
+ 
 
   weekBar(readings) {
     const today = new Date();
@@ -275,59 +240,59 @@ module.exports = {
     return readings;
   },
 
-  getHighLows(readings, period) {
-    const today = new Date();
-    const startDate = today.getDate() - period;
-    const reducer = (accumulator, currentValue) => accumulator + currentValue;
-    let currentDate;
-    const result = []
-    let max = [];
-    let min = [];
-    readings.forEach((reading, index) => {
-      const readingTime = reading.time;
-      const readingDate = readingTime.getDate()
-      if (readingDate > startDate) {
-        currentDate = (!currentDate) ? readingTime : currentDate;
-        if (readingDate === currentDate.getDate()) {
-          if (min.length < 5) {
-            min.push(reading.value);
-          } else if (Math.max(...min) < reading.value) {
-            const indexMin = min.indexOf(Math.max(...min));
-            min[indexMin] = reading.value;
-            currentDate = readingTime;
-          }
-          if (max.length < 5) {
-            max.push(reading.value);
-          } else if (Math.min(...max) < reading.value) {
-            const indexMax = max.indexOf(Math.min(...max));
-            max[indexMax] = reading.value;
-            currentDate = readingTime;
-          }
-        } else {
-          const avgMax = max.reduce(reducer) / max.length;
-          const avg = min.reduce(reducer) / min.length;
-          let time = new Date(currentDate);
-          time = new Date(time.setHours(00, 00, 00));
-          result.push({
-            time, value: parseFloat(avgMax.toFixed(2)), min: parseFloat(avg.toFixed(2))
-          });
-          max = [];
-          min = [];
-          currentDate = readingTime;
-        }
-        if (index === readings.length - 1) {
-          const avg = min.reduce(reducer) / min.length;
-          const avgMax = max.reduce(reducer) / max.length;
-          let time = new Date(currentDate);
-          time = new Date(time.setHours(00, 00, 00));
-          result.push({
-            time, value: parseFloat(avgMax.toFixed(2)), min: parseFloat(avg.toFixed(2))
-          });
-        }
-      }
-    })
-    return result;
-  },
+  // getHighLows(readings, period) {
+  //   const today = new Date();
+  //   const startDate = today.getDate() - period;
+  //   const reducer = (accumulator, currentValue) => accumulator + currentValue;
+  //   let currentDate;
+  //   const result = []
+  //   let max = [];
+  //   let min = [];
+  //   readings.forEach((reading, index) => {
+  //     const readingTime = reading.time;
+  //     const readingDate = readingTime.getDate()
+  //     if (readingDate > startDate) {
+  //       currentDate = (!currentDate) ? readingTime : currentDate;
+  //       if (readingDate === currentDate.getDate()) {
+  //         if (min.length < 5) {
+  //           min.push(reading.value);
+  //         } else if (Math.max(...min) < reading.value) {
+  //           const indexMin = min.indexOf(Math.max(...min));
+  //           min[indexMin] = reading.value;
+  //           currentDate = readingTime;
+  //         }
+  //         if (max.length < 5) {
+  //           max.push(reading.value);
+  //         } else if (Math.min(...max) < reading.value) {
+  //           const indexMax = max.indexOf(Math.min(...max));
+  //           max[indexMax] = reading.value;
+  //           currentDate = readingTime;
+  //         }
+  //       } else {
+  //         const avgMax = max.reduce(reducer) / max.length;
+  //         const avg = min.reduce(reducer) / min.length;
+  //         let time = new Date(currentDate);
+  //         time = new Date(time.setHours(00, 00, 00));
+  //         result.push({
+  //           time, value: parseFloat(avgMax.toFixed(2)), min: parseFloat(avg.toFixed(2))
+  //         });
+  //         max = [];
+  //         min = [];
+  //         currentDate = readingTime;
+  //       }
+  //       if (index === readings.length - 1) {
+  //         const avg = min.reduce(reducer) / min.length;
+  //         const avgMax = max.reduce(reducer) / max.length;
+  //         let time = new Date(currentDate);
+  //         time = new Date(time.setHours(00, 00, 00));
+  //         result.push({
+  //           time, value: parseFloat(avgMax.toFixed(2)), min: parseFloat(avg.toFixed(2))
+  //         });
+  //       }
+  //     }
+  //   })
+  //   return result;
+  // },
 
 
 

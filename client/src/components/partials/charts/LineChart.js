@@ -1,11 +1,12 @@
 import React, { useEffect } from 'react';
 import * as d3 from "d3";
-// import { format } from 'date-fns';
+import { format } from 'date-fns';
 
 
 function LineChart(props) {
 
   const { data, stateHeight, stateWidth, period, type } = props;
+  console.log("LineChart -> data", data);
 
   let rotate = 30;
   let offset = 10;
@@ -15,13 +16,14 @@ function LineChart(props) {
   //   let formatDate
   //   switch (parseInt(period)) {
   //     case 1:
-  //       formatDate = d3.timeFormat("%H");
+
   //       rotate = 30;
   //       offset = 10;
-  //       const newDate = formatDate(new Date(date.time))
-  //       return
+  //       const newDate = format(new Date(date), 'ha')
+  //       return newDate
   //     case 7:
   //       formatDate = d3.timeFormat("%A");
+  //       console.log("dateformate -> formatDate", formatDate);
   //       rotate = 0;
   //       offset = 0;
   //       return data.map(date => {
@@ -86,6 +88,7 @@ function LineChart(props) {
 
     // create line
     const lineGenerator = d3.line()
+      .defined(function (d) { return d.value !== null; })
       .x(function (d) { return x(new Date(d.time)); })
       .y(function (d) { return y(d.value); });
 
@@ -105,11 +108,14 @@ function LineChart(props) {
         .attr("d", lineLowGenerator);
     }
 
+
+
+
     // add the X Axis
     svg.append("g")
       .attr("transform", `translate(0, ${height})`)
       .attr('class', "axis-label")
-      .call(d3.axisBottom(x).ticks(12))
+      .call(d3.axisBottom(x).ticks(7).tickSizeOuter(0))
       .selectAll("text")
       .attr("x", offset)
       .attr("transform", `rotate(${rotate})`)
@@ -117,7 +123,13 @@ function LineChart(props) {
     // add the Y Axis
     svg.append("g")
       .attr('class', "axis-label")
-      .call(d3.axisLeft(y));
+      .call(d3.axisLeft(y))
+      .call(g => g.select(".domain").remove())
+      .call(g => g.select(".tick:last-of-type text").clone()
+        .attr("x", 3)
+        .attr("text-anchor", "start")
+        .attr("font-weight", "bold")
+        .text(data.y))
 
   }
 
@@ -127,7 +139,7 @@ function LineChart(props) {
       // dateformate()
       drawChart();
     } else {
-      props.getReadings(period)
+      // props.getReadings(period)
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [data])
