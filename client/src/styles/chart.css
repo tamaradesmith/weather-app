@@ -2,7 +2,8 @@
   --main-colour: #3e517a;
   --min-colour: #76bed0;
   --max-colour: #c60610;
-  --mix-colour: #DB2B39;
+  --mix-colour: #db2b39;
+  --background-secondary: #fffcf2;
 }
 .chart-div {
   width: 750px;
@@ -43,4 +44,18 @@ path {
 }
 .radio-button {
   margin-right: 1em;
+}
+.tooltip {
+  border: 1px solid var(--main-colour);
+  background: var(--background-secondary);
+  padding: 0.3em;
+}
+rect {
+  stroke-width: 4px;
+  opacity: 0.7;
+  stroke: white;
+}
+rect:hover {
+  opacity: 1;
+  cursor: pointer;
 }

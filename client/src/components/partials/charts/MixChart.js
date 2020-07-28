@@ -35,6 +35,7 @@ function MixChart(props) {
       .range([height, margin.top])
 
     var line = d3.line()
+      .defined(function (d) { return d.value !== null; })
       .x(function (d) { return x(format(new Date(d.time), "ha")); })
       .y(function (d) { return y2(d.value); });
 

@@ -95,10 +95,28 @@ function LineChart(props) {
     svg.append("path")
       .data([data])
       .attr("class", type === 'temperature' ? "max-line" : 'line')
-      .attr("d", lineGenerator);
+      .attr("d", lineGenerator)
+      .text(d => d.value)
+      .on("mouseover", d => { tooltip.text(`Time: ` + (d.time) + " \n Value: "); return tooltip.style("visibility", "visible") })
+      .on("mouseout", () => tooltip.style("visibility", "hidden"))
+      .on("mousemove", function () {
+        return tooltip.style("top", (d3.event.pageY - 0) + "px")
+          .style("left", (d3.event.pageX - 25) + "px");
+      })
 
-    if (data[0].min) {
+
+    var tooltip = d3.select("body")
+      .append("div")
+      .attr("class", "tooltip")
+      .style("position", "absolute")
+      .style("z-index", 10)
+      .style("visibility", "hidden")
+      .text("Simple text");
+
+
+    if (data[0].min || data[0].min === null) {
       const lineLowGenerator = d3.line()
+        .defined(function (d) { return d.value !== null; })
         .x(function (d) { return x(new Date(d.time)); })
         .y(function (d) { return y(d.min); });
 

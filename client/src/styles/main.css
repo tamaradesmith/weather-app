@@ -3,7 +3,7 @@
 :root {
   --background-colour: #3e517a;
   --background-colour-hoover: #3e517a6c;;
-  --backgroud-secondary: #fffcf2;
+  --background-secondary: #fffcf2;
 
   --primary-colour: #050505;
 
@@ -18,13 +18,13 @@ body {
   font-size: 1.6em;
   color: var(--primary-colour);
   padding: 0.25em;
-  background: var(--backgroud-secondary);
+  background: var(--background-secondary);
 }
 .App {
   width: 800px;
   height: 480px;
   border: 1px solid var(--primary-colour);
-  background: var(--backgroud-secondary);
+  background: var(--background-secondary);
   color: var(--primary-colour);
   margin: 0 auto;
 }
@@ -37,7 +37,7 @@ img {
 input {
   font-size: 0.8em;
   border: 1px solid black;
-  background: var(--backgroud-secondary);
+  background: var(--background-secondary);
 }
 a{
   text-decoration: none;
@@ -84,7 +84,7 @@ a{
   margin-bottom: 0.4em;
   font-size: 0.9em;
   background: var(--background-colour);
-  color: var(--backgroud-secondary);
+  color: var(--background-secondary);
   height: 60px;
 }
 .nav-icon-div {
@@ -96,7 +96,7 @@ a{
 .header-item {
   text-decoration: none;
   font-size: 1.2em;
-  color: var(--backgroud-secondary);
+  color: var(--background-secondary);
   border-bottom: 5px solid var(--background-colour);
   padding: 0.5em;
 }
@@ -117,7 +117,7 @@ a{
 .nav-menu-item {
   font-size: 1.1em;
   color: var(--background-colour);
-  color: var(--backgroud-secondary);
+  color: var(--background-secondary);
   text-decoration: none;
   padding: 0.25em;
   border-left: 5px solid transparent;
@@ -386,7 +386,7 @@ a{
   font-size: 0.9em;
   border: 1px solid var(--background-colour);
   padding: 0.2em 0.5em;
-  color: var(--backgroud-secondary);
+  color: var(--background-secondary);
   background: var(--input-colour);
   border-radius: 0.25em;
 }
@@ -394,7 +394,7 @@ a{
   color: var(--highlight-colour);
 }
 .config-button-cancel {
-  background: var(--backgroud-secondary);
+  background: var(--background-secondary);
   color: var(--background-colour);
 }
 .config-button-cancel:hover {
@@ -580,7 +580,7 @@ a{
 }
 .active-tab {
   background: var(--background-colour);
-  color: var(--backgroud-secondary);
+  color: var(--background-secondary);
 }
 .show-div {
   height: 275px;
@@ -621,7 +621,7 @@ background: var(--background-secondary-hover);
   left: 25%;
   z-index: 10;
   border: 1px solid black;
-  background: var(--backgroud-secondary);
+  background: var(--background-secondary);
   padding: 0.5em;
   display: grid;
   grid-template-columns: 250px 100px 100px;

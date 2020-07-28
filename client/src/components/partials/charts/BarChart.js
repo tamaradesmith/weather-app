@@ -11,7 +11,7 @@ function BarChart(props) {
   function dateformate(date) {
     switch (parseInt(period)) {
       case 1:
-        rotate = 30; 
+        rotate = 30;
         offset = 10;
         return format(new Date(date), "ha");
       case 7:
@@ -80,26 +80,43 @@ function BarChart(props) {
         .text(data.y))
 
 
+
+
+
     svg.append("g").selectAll(".bar")
       .data(data)
-      .enter().append("rect")
+      .enter()
+      .append("rect")
       .attr("class", "bar-colour")
       .attr("x", function (d) { return x(dateformate(d.time)); })
       .attr("y", function (d) { return y(d.sum); })
-      .attr("height", function (d) { return height - y(d.sum); })
-      .transition()
-      .duration(2000)
+      // .transition()
+      // .duration(2000)
       .attr("width", x.bandwidth())
-      
+      .attr("height", function (d) { return height - y(d.sum); })
+      .text(d => d.value)
+      .on("mouseover", d => { tooltip.text(`Time: ` + dateformate(d.time) + " \n Value: " + (d.sum).toFixed(2)); return tooltip.style("visibility", "visible") })
+      .on("mouseout", () => tooltip.style("visibility", "hidden"))
+      .on("mousemove", function () {
+        return tooltip.style("top", (d3.event.pageY -0) + "px")
+          .style("left", (d3.event.pageX - 25) + "px");
+      })
 
-      
+
+    var tooltip = d3.select("body")
+      .append("div")
+      .attr("class", "tooltip")
+      .style("position", "absolute")
+      .style("z-index", 10)
+      .style("visibility", "hidden")
+      .text("Simple text");
   }
 
   useEffect(() => {
     if (data.length > 0) {
       drawChart(period);
     } else {
-      document.querySelector('#chart').innerHTML =`<p>${props.message}</p>`;
+      document.querySelector('#chart').innerHTML = `<p>${props.message}</p>`;
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [data]);
