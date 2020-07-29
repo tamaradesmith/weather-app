@@ -30,14 +30,14 @@ function SensorShow(props) {
   };
 
   async function getReading(timePeriod) {
-      const sensorReadings = await Sensor.getReadings(sensorId, timePeriod);
-      setData(sensorReadings);
-      if (sensorReadings.length > 0) {
-        setHeader(sensorReadings[sensorReadings.length - 1] === "partner" ? sensorReadings[0][0].time : sensorReadings[0].time, timePeriod);
-        setMessage("")
-      } else {
-        setMessage("No Sensor Reading for this time period")
-      };
+    const sensorReadings = await Sensor.getReadings(sensorId, timePeriod);
+    setData(sensorReadings);
+    if (sensorReadings.length > 0) {
+      setHeader(sensorReadings[sensorReadings.length - 1] === "partner" ? sensorReadings[0][0].time : sensorReadings[0].time, timePeriod);
+      setMessage("")
+    } else {
+      setMessage("No Sensor Reading for this time period")
+    };
   }
 
   async function setChartType() {
@@ -97,20 +97,25 @@ function SensorShow(props) {
 
 
   useEffect(() => {
-    getReading(1);
+    // getReading(1);
     getSensor();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {
+    getReading(1);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [sensor]);
+
+  useEffect(() => {
     setChartType();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [data])
+  }, [data]);
 
   useEffect(() => {
     getWidthAndHeigth();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [chart])
+  }, [chart]);
 
   return (
 

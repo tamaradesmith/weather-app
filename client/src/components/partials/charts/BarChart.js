@@ -58,9 +58,9 @@ function BarChart(props) {
       .domain([0, d3.max(data, d => d.sum)])
       .range([height, margin.top])
 
-    const yExtra = d3.scaleLinear()
-      .domain([0, d3.max(data, d => d.gust)])
-      .range([height, margin.top])
+    // const yExtra = d3.scaleLinear()
+    //   .domain([0, d3.max(data, d => d.gust)])
+    //   .range([height, margin.top])
 
     svg.append("g")
       .attr("transform", `translate(0, ${height})`)
@@ -94,16 +94,16 @@ function BarChart(props) {
       // .duration(2000)
       .attr("width", x.bandwidth())
       .attr("height", function (d) { return height - y(d.sum); })
-      .text(d => d.value)
-      .on("mouseover", d => { tooltip.text(`Time: ` + dateformate(d.time) + " \n Value: " + (d.sum).toFixed(2)); return tooltip.style("visibility", "visible") })
+      .text(d => d.sum)
+      .on("mouseover", d => { tooltip.text((d.sum).toFixed(2)); return tooltip.style("visibility", "visible") })
       .on("mouseout", () => tooltip.style("visibility", "hidden"))
       .on("mousemove", function () {
-        return tooltip.style("top", (d3.event.pageY -0) + "px")
+        return tooltip.style("top", (d3.event.pageY + 30) + "px")
           .style("left", (d3.event.pageX - 25) + "px");
       })
 
 
-    var tooltip = d3.select("body")
+    const tooltip = d3.select("body")
       .append("div")
       .attr("class", "tooltip")
       .style("position", "absolute")

@@ -37,7 +37,7 @@ module.exports = {
         };
       };
     });
-    while (result.length < 24) {
+    while (result.length < 24 && result.length !== 0) {
       const oldDate = result[result.length - 1].time;
       const hour = oldDate.getHours() + 1;
       let time = new Date();
