@@ -9,8 +9,9 @@
   width: 750px;
   height: 300px;
   margin: 0 auto;
+  color: transparent;
 }
-
+ 
 path {
   fill: none;
   stroke: black;
@@ -34,6 +35,7 @@ path {
 }
 .axis-label {
   font-size: 0.5em;
+  color: black;
 }
 
 .bar-colour {
@@ -49,6 +51,7 @@ path {
   border: 1px solid var(--main-colour);
   background: var(--background-secondary);
   padding: 0.3em;
+  text-transform: capitalize;
 }
 rect {
   stroke-width: 4px;
