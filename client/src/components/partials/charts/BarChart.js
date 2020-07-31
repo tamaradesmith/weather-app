@@ -80,9 +80,6 @@ function BarChart(props) {
         .text(data.y))
 
 
-
-
-
     svg.append("g").selectAll(".bar")
       .data(data)
       .enter()
@@ -103,6 +100,10 @@ function BarChart(props) {
       })
 
 
+
+    // const tooltip = svg.append("g")
+    //   .style("position", "absolute")
+
     const tooltip = d3.select("body")
       .append("div")
       .attr("class", "tooltip")
@@ -110,7 +111,42 @@ function BarChart(props) {
       .style("z-index", 10)
       .style("visibility", "hidden")
       .text("Simple text");
+
+    // const callout = (g, value) => {
+    //   if (!value) return g.style("display", "none");
+    //   g
+    //     .style("display", null)
+    //     .style("pointer-events", "none")
+    //     .style("font", "15px sans-serif")
+
+    //   const path = g.selectAll("path")
+    //     .data([null])
+    //     .join("path")
+    //     .style("fill", '#fffcf2')
+    //     .attr("stroke", "black");
+
+    //   const text = g.selectAll("text")
+    //     .data([null])
+    //     .join("text")
+    //     .call(text => text
+    //       .selectAll("tspan")
+    //       .data((value + "").split(/\n/))
+    //       .join("tspan")
+    //       .attr("x", 0)
+    //       .attr("y", (d, i) => `${i * 1.1}em`)
+    //       .style("font-weight", (_, i) => i ? null : "bold")
+    //       .text(d => d));
+
+    //   const { y, width: w, height: h } = text.node().getBBox();
+    //   console.log("callout -> ext.node().getBBox()", text.node().getBBox());
+
+    //   text.attr("transform", `translate(${-w / 2},${15 - y})`);
+    //   path.attr("d", `M${-w / 2 - 10},5 H${w / 2 + 10} v${h + 20} H${w / 2 - 10} l-5,5 l-5,-5 H${-w / 2 - 10} z`);
+
+    // }
+
   }
+
 
   useEffect(() => {
     if (data.length > 0) {

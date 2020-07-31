@@ -205,57 +205,57 @@ module.exports = {
   },
 
 
-  avgWindWeek(readings, period) {
-    const today = new Date();
-    const startWeekday = today.getDay();
-    const startDateTime = new Date(today.setDate(today.getDate() - startWeekday));
-    const startDate = startDateTime.getDate();
-    let currentDate;
-    const result = [];
-    let sum = 0;
-    let count = 0;
-    readings.forEach((reading, index) => {
-      const readingTime = reading.time;
-      const readingDate = readingTime.getDate();
-      if (readingDate >= startDate) {
-        currentDate = (!currentDate) ? readingTime : currentDate;
-        if (readingDate === currentDate.getDate()) {
-          sum = reading.value;
-          count++
+  // avgWindWeek(readings, period) {
+  //   const today = new Date();
+  //   const startWeekday = today.getDay();
+  //   const startDateTime = new Date(today.setDate(today.getDate() - startWeekday));
+  //   const startDate = startDateTime.getDate();
+  //   let currentDate;
+  //   const result = [];
+  //   let sum = 0;
+  //   let count = 0;
+  //   readings.forEach((reading, index) => {
+  //     const readingTime = reading.time;
+  //     const readingDate = readingTime.getDate();
+  //     if (readingDate >= startDate) {
+  //       currentDate = (!currentDate) ? readingTime : currentDate;
+  //       if (readingDate === currentDate.getDate()) {
+  //         sum = reading.value;
+  //         count++
 
-        } else {
-          const avg = sum / count;
-          let time = new Date(currentDate);
-          time = new Date(time.setHours(00, 00, 00));
-          result.push({
-            time, value: parseFloat(sum.toFixed(2))
-          });
-          sum = reading.value;
-          count = 1
-          currentDate = readingTime;
-        }
-        if (index === readings.length - 1) {
-          const avg = sum / count;
-          let time = new Date(currentDate);
-          time = new Date(time.setHours(00, 00, 00));
-          result.push({
-            time, value: parseFloat(sum.toFixed(2))
-          });
-        }
-      }
-    });
+  //       } else {
+  //         const avg = sum / count;
+  //         let time = new Date(currentDate);
+  //         time = new Date(time.setHours(00, 00, 00));
+  //         result.push({
+  //           time, value: parseFloat(sum.toFixed(2))
+  //         });
+  //         sum = reading.value;
+  //         count = 1
+  //         currentDate = readingTime;
+  //       }
+  //       if (index === readings.length - 1) {
+  //         const avg = sum / count;
+  //         let time = new Date(currentDate);
+  //         time = new Date(time.setHours(00, 00, 00));
+  //         result.push({
+  //           time, value: parseFloat(sum.toFixed(2))
+  //         });
+  //       }
+  //     }
+  //   });
 
-    while (result.length < period) {
-      const oldDate = result[result.length - 1].time;
-      const date = oldDate.getDate() + 1;
-      let time = new Date();
-      time = new Date(time.setDate(date))
-      time = new Date(time.setHours(00, 00, 00))
-      result.push({ time, value: null });
-    }
-    console.log("avgWindWeek -> result", result);
-    return result;
-  },
+  //   while (result.length < period) {
+  //     const oldDate = result[result.length - 1].time;
+  //     const date = oldDate.getDate() + 1;
+  //     let time = new Date();
+  //     time = new Date(time.setDate(date))
+  //     time = new Date(time.setHours(00, 00, 00))
+  //     result.push({ time, value: null });
+  //   }
+  //   console.log("avgWindWeek -> result", result);
+  //   return result;
+  // },
 
 
 

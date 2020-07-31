@@ -1,4 +1,6 @@
 const HighsLows = require('./HighsLows');
+const AvgLine = require('./AvgLine');
+
 
 module.exports = {
   // just current day (avg hourly temperature)
@@ -50,7 +52,8 @@ module.exports = {
   weekLine(readings, chart) {
     let data
     try {
-      data = (chart.formate) ? HighsLows.getHighLowsWeek(readings, 7) : HighsLows.avgWindWeek(readings, 7);
+      console.log("weekLine -> chart.formate", chart.formate);
+      data = (chart.formate) ? HighsLows.getHighLowsWeek(readings, 7) : AvgLine.avgWeek(readings, 7);
     } catch (error) {
       console.log("weekLine -> error", error.message);
     }
@@ -60,7 +63,7 @@ module.exports = {
   monthLine(readings, chart) {
     let data
     try {
-      data = (chart.formate) ? HighsLows.getHighLowsMonth(readings, 30) : readings;
+      data = (chart.formate) ? HighsLows.getHighLowsMonth(readings, 30) : AvgLine.avgMonth(readings, 31);
     } catch (error) {
       console.log("MonthLine -> error", error);
     }
@@ -70,7 +73,7 @@ module.exports = {
   yearLine(readings, chart) {
     let data
     try {
-      data = (chart.formate) ? HighsLows.getHighLowsYear(readings) : null;
+      data = (chart.formate) ? HighsLows.getHighLowsYear(readings) : HighsLows.getHighLowsYear(readings) ;
     } catch (error) {
       console.log("MonthLine -> error", error.message);
     }

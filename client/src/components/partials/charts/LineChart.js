@@ -56,8 +56,6 @@ function LineChart(props) {
     document.querySelector('.rowChart').innerHTML = null;
 
 
-
-
     const margin = { top: 20, right: 30, bottom: 40, left: 40 },
       width = stateWidth - margin.left - margin.right,
       height = stateHeight - margin.top - margin.bottom;
@@ -187,15 +185,12 @@ function LineChart(props) {
     }
 
 
-
     svg.on("mousemove touchmove", function () {
-
       const xMouse = x.invert(d3.mouse(this)[0]);
       const date = new Date(xMouse).toISOString()
       const i = bisectDate(data, date, 1);
       const reading = data[i - 1];
       const messages = tooltipMessage(reading)
-
       tooltip
         .attr("transform", `translate(${x(new Date(reading.time))},${y(reading.value)})`)
         .call(callout, `${messages}`)
