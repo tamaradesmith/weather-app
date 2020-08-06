@@ -12,7 +12,7 @@ module.exports = {
     readings.forEach((reading, index) => {
       const readingTime = reading.time;
       const readingDate = readingTime.getDate();
-      if (readingDate >= startDate) {
+      if (readingDate >= startDate && readingTime.getMonth() >= startDateTime.getMonth()) {
         currentDate = (!currentDate) ? readingTime : currentDate;
         if (readingDate === currentDate.getDate()) {
           if (min.length < 5) {
@@ -60,6 +60,7 @@ module.exports = {
       time = new Date(time.setHours(00, 00, 00))
       result.push({ time, value: null });
     }
+    console.log("getHighLowsWeek -> result", result);
     return result;
   },
   getHighLowsMonth(readings, period) {
@@ -79,7 +80,7 @@ module.exports = {
       const readingDate = readingTime.getDate();
       if (readingTime.getMonth() >= month) {
         currentDate = (!currentDate) ? readingTime : currentDate;
-        if (readingDate === currentDate.getDate()) {
+        if (readingDate === currentDate.getDate() ) {
           if (min.length < 5) {
             min.push(reading.value);
           } else if (Math.max(...min) < reading.value) {

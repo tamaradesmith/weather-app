@@ -52,7 +52,7 @@ module.exports = {
   weekLine(readings, chart) {
     let data
     try {
-      console.log("weekLine -> chart.formate", chart.formate);
+
       data = (chart.formate) ? HighsLows.getHighLowsWeek(readings, 7) : AvgLine.avgWeek(readings, 7);
     } catch (error) {
       console.log("weekLine -> error", error.message);

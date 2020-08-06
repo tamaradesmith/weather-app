@@ -36,17 +36,19 @@ module.exports={
   },
 
   weekBar(readings) {
+
     const today = new Date();
     const startWeekday = today.getDay();
     const startDay = new Date(today.setDate(today.getDate() - startWeekday))
     let currentdate = startDay;
     let sum = 0;
     const result = [];
+
     readings.forEach((reading, index) => {
       const readingTime = reading.time;
       const readingDate = readingTime.getDate();
 
-      if (readingTime.getDate() > startDay.getDate() - 1) {
+      if (readingTime.getDate() >= startDay.getDate() && readingTime.getMonth() >= startDay.getMonth()) {
         if (readingDate === currentdate.getDate()) {
           sum += reading.value;
         } else {
@@ -61,11 +63,11 @@ module.exports={
           time = new Date(time.setHours(00, 00, 00));
           result.push({ time, sum: parseFloat(sum.toFixed(2)) });
         }
-      }
+
+        }
       return;
     })
     const data = this.NonRollPeriod(result, 7);
-    console.log("weekBar -> data", data);
     return data;
   },
 

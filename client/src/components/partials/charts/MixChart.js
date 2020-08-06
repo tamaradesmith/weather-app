@@ -4,8 +4,6 @@ import { format } from 'date-fns';
 
 function MixChart(props) {
   const { stateHeight, stateWidth, data, period } = props;
-  console.log("MixChart -> data", data);
-
 
   let rotate = 30;
   let offset = 10;
@@ -61,20 +59,12 @@ function MixChart(props) {
       .domain([0, 360])
       .range([height, margin.top])
 
-    var line = d3.line()
+    const line = d3.line()
       .defined(function (d) { return d.value !== null; })
       .x(function (d) { return x(dateformate(d.time)); })
       .y(function (d) { return y2(d.value); });
 
-
-    var stack = d3.stack()
-      .keys(["sum", "gust","time"])
-      .order(d3.stackOrderNone)
-      .offset(d3.stackOffsetNone);
-
-    var series = stack(data);
-
-
+    // Axis X
 
     svg.append('g')
       .attr('transform', `translate(0, ${height})`)
@@ -83,6 +73,8 @@ function MixChart(props) {
       .selectAll("text")
       .attr("x", 0)
       .attr("transform", `rotate(${rotate})`)
+
+    // Axis Ys
 
     svg.append("g")
       .attr('class', "axis-label")
@@ -103,6 +95,7 @@ function MixChart(props) {
         .attr("text-anchor", "start")
         .text(data.y2))
 
+    // Y Axis Labels
 
     svg.append("text")
       .attr("transform", "rotate(-90)")
@@ -120,55 +113,20 @@ function MixChart(props) {
       .style("text-anchor", "middle")
       .text("Wind Direction");
 
-    // svg.append('g').selectAll('.bar')
-    //   .data(data)
-    //   .enter().append("rect")
-    //   .attr("class", "bar-extra")
-    //   .attr("x", function (d) { return x(format(new Date(d.time), "ha")) })
-    //   .attr("y", function (d) { return y(d.gust); })
-    //   .attr("height", function (d) { return height - y(d.gust); })
-    //   .transition()
-    //   .duration(2000)
-    //   .attr("width", x.bandwidth())
+    // Create Bars
 
-    // svg.append('g').selectAll('.bar')
-    //   .data(data)
-    //   .enter().append("rect")
-    //   .attr("class", "bar-colour")
-    //   .attr("x", function (d) { return x(dateformate(d.time)) })
-    //   .attr("y", function (d) { return y(d.sum); })
-    //   .attr("height", function (d) { return height - y(d.sum); })
-    //   .transition()
-    //   .duration(2000)
-    //   .attr("width", x.bandwidth())
-
-
-
-    const color = d3.scaleOrdinal()
-      .domain(data)
-      .range(['#e41a1c', '#377eb8', '#4daf4a'])
-
-    //stack the data? --> stack per subgroup
-    // const stackedData = d3.stack()
-    //   .keys(data)
-    //   (data)
-
-    // Show the bars
-    svg.append("g")
-      .selectAll("g")
-      // Enter in the stack data = loop key per key = group per group
-      .data(series)
-      .enter().append("g")
-      .attr("fill", function (d) { return color(d.key); })
-      .selectAll("rect")
-      // enter a second time = loop subgroup per subgroup to add all rectangles
-      .data(function (d) {  return d; })
-
+    svg.append('g').selectAll('.bar')
+      .data(data)
       .enter().append("rect")
-      .attr("x", function (d) { return x(dateformate(d.data.time)); })
-      .attr("y", function (d) { return y(d[1]); })
-      .attr("height", function (d) { return y(d[0]) - y(d[1]); })
+      .attr("class", "bar-colour")
+      .attr("x", function (d) { return x(dateformate(d.time)) })
+      .attr("y", function (d) { return y(d.sum); })
+      .attr("height", function (d) { return height - y(d.sum); })
+      .transition()
+      .duration(2000)
       .attr("width", x.bandwidth())
+
+    // create Path
 
     svg.append("path")
       .data([data])
@@ -176,6 +134,45 @@ function MixChart(props) {
       .attr("d", line);
 
 
+
+    // Stacked Bars 
+
+    // const stack = d3.stack()
+    //   .keys(["gust", "sum"])
+    //   .order(d3.stackOrderNone)
+    //   .offset(d3.stackOffsetNone);
+
+    // const series = stack(data);
+
+
+    // const z = d3.scaleOrdinal()
+    //   .domain([-0.5 * 4, 1.5 * 4])
+    //   .range([ '#377eb8', '#4daf4a'])
+
+
+    // let index = 1
+    //     // Show the bars
+    //     svg.append("g")
+    //       .selectAll("g")
+    //       // Enter in the stack data = loop key per key = group per group
+    //       .data(series)
+    //       .enter().append("g")
+    //       .attr("fill", (d, i) => z(i))
+    //       // .attr("fill", function (d) { return color(d.key); })
+    //       .selectAll("rect")
+    //       // enter a second time = loop subgroup per subgroup to add all rectangles
+    //       .data(function (d) { return d; })
+    //       .enter().append("rect")
+    //       .attr("x", function (d) { return x(dateformate(d.data.time)); })
+    //       .attr("y", function (d) {
+    //         return y(d[1] - d[0]);
+    //       })
+    //       .attr('z', index )
+    //       .attr("height", function (d) {
+    //         index++
+    //         return y(d[0]) - y(d[1]);
+    //       })
+    //       .attr("width", x.bandwidth())
   }
 
   useEffect(() => {
@@ -184,7 +181,7 @@ function MixChart(props) {
         drawChart();
       } catch (error) {
         console.log("MixChart -> error", error.message);
-      }
+      };
     } else {
       document.querySelector('#chart').innerHTML = `<p>${props.message}</p>`;
     };
@@ -192,11 +189,10 @@ function MixChart(props) {
   }, [data]);
 
   return (
-
     <div className="BarChart chart-div">
       <div id='chart' className="rowChart"></div>
     </div>
-  )
+  );
 };
 
 export default MixChart;

@@ -52,7 +52,7 @@ module.exports = {
       const readingTime = reading.time;
       const readingDate = readingTime.getDate();
 
-      if (readingTime.getDate() > startDay.getDate() - 1) {
+      if (readingTime.getDate() >= startDay.getDate() && readingTime.getMonth() >= startDay.getMonth()) {
         if (readingDate === currentdate.getDate()) {
           sum += reading.value;
           count++;

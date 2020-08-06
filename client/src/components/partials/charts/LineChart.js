@@ -39,8 +39,6 @@ function LineChart(props) {
     };
   };
 
-
-
   function setMax(array) {
     const max = Math.max.apply(Math, array.map(function (maxValue) { return maxValue.value; }))
     return max + (max / 4);
@@ -55,11 +53,9 @@ function LineChart(props) {
 
     document.querySelector('.rowChart').innerHTML = null;
 
-
     const margin = { top: 20, right: 30, bottom: 40, left: 40 },
       width = stateWidth - margin.left - margin.right,
       height = stateHeight - margin.top - margin.bottom;
-
 
     const svg = d3.select(".rowChart")
       .append("svg")
@@ -78,11 +74,9 @@ function LineChart(props) {
     let start = new Date(data[0].time)
     start = new Date(start.setMinutes(start.getMinutes() - 1))
 
-
     const x = d3.scaleTime()
       .domain([start, new Date(data[data.length - 1].time)])
       .range([0, width]);
-
    
     // add the X Axis
     svg.append("g")
@@ -125,8 +119,9 @@ function LineChart(props) {
         .defined(function (d) { return d.value !== null; })
         .x(function (d) { return x(new Date(d.time)); })
         .y(function (d) { return y(d.min); });
+
       svg.append("path")
-        .datum([data])
+        .datum(data)
         .attr("class", "min-line")
         .attr("d", lineLowGenerator)
     }
@@ -134,7 +129,6 @@ function LineChart(props) {
 
     // Tooltip
     const bisectDate = d3.bisector(function (d) { return d.time; }).left
-
     const tooltip = svg.append("g")
 
     const tooltipMessage = (reading) => {
@@ -184,7 +178,6 @@ function LineChart(props) {
       path.attr("d", `M${-w / 2 - 10},5H-5l5,-5l5,5H${w / 2 + 10}v${h + 20}h-${w + 20}z`);
     }
 
-
     svg.on("mousemove touchmove", function () {
       const xMouse = x.invert(d3.mouse(this)[0]);
       const date = new Date(xMouse).toISOString()
@@ -204,7 +197,6 @@ function LineChart(props) {
 
     })
   }
-
 
   useEffect(() => {
 

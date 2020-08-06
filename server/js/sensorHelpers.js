@@ -43,6 +43,7 @@ module.exports = {
 
 
   formateParnters(readings, period) {
+    console.log('parnters')
     readings.shift()
     let extra = null;
 
@@ -74,10 +75,11 @@ module.exports = {
           readingResult = (chart === 'bar') ? MixChart.dayBar(readings[index].sensor) : LineChart.dayLine(readings[index].sensor);
           break;
       };
-      extra = extraChart === "gust" ? this.getGusts(readings[index].sensor, period) : null;
+      // extra = extraChart === "gust" ? this.getGusts(readings[index].sensor, period) : null;
       return readingResult;
     });
     const matchReading = this.matchDates(result, extra)
+    console.log("formateParnters -> matchReading", matchReading);
     return matchReading
   },
 
@@ -87,55 +89,55 @@ module.exports = {
 
     let result = sensor1.map((item, index) => Object.assign({}, item, sensor2[index]));
     let resultExtra = null
-    if (extra) {
-      resultExtra = result.map((item, index) => Object.assign({}, item, extra[index]));
-    };
+    // if (extra) {
+    //   resultExtra = result.map((item, index) => Object.assign({}, item, extra[index]));
+    // };
     return (resultExtra) ? resultExtra : result;
   },
 
-  getGusts(readings, period) {
-    const today = new Date();
-    const startDate = today.getDate()
-    let currentDate;
-    const result = [];
-    let hour = 0;
-    let max = 0;
-    readings.forEach((reading, index) => {
-      const readingTime = reading.time;
-      const readingDate = readingTime.getDate();
-      const readingHour = readingTime.getHours();
+  // getGusts(readings, period) {
+  //   const today = new Date();
+  //   const startDate = today.getDate()
+  //   let currentDate;
+  //   const result = [];
+  //   let hour = 0;
+  //   let max = 0;
+  //   readings.forEach((reading, index) => {
+  //     const readingTime = reading.time;
+  //     const readingDate = readingTime.getDate();
+  //     const readingHour = readingTime.getHours();
 
-      if (readingDate === startDate) {
-        currentDate = (!currentDate) ? readingTime : currentDate;
-        if (readingHour === hour) {
-          if (max < reading.value) {
-            max = reading.value;
-          }
-        } else {
-          let time = new Date(currentDate);
-          time = new Date(time.setHours(hour, 00, 00));
-          result.push({ time, gust: parseFloat(max.toFixed(2)) });
-          max = 0;
-          currentDate = readingTime;
-          hour = currentDate.getHours()
-        }
-        if (index === readings.length - 1) {
-          let time = new Date(currentDate);
-          let hour = time.getHours();
-          time = new Date(time.setHours(hour, 00, 00));
-          result.push({ time, gust: parseFloat(max.toFixed(2)) });
-        };
-      };
-    });
+  //     if (readingDate === startDate) {
+  //       currentDate = (!currentDate) ? readingTime : currentDate;
+  //       if (readingHour === hour) {
+  //         if (max < reading.value) {
+  //           max = reading.value;
+  //         }
+  //       } else {
+  //         let time = new Date(currentDate);
+  //         time = new Date(time.setHours(hour, 00, 00));
+  //         result.push({ time, gust: parseFloat(max.toFixed(2)) });
+  //         max = 0;
+  //         currentDate = readingTime;
+  //         hour = currentDate.getHours()
+  //       }
+  //       if (index === readings.length - 1) {
+  //         let time = new Date(currentDate);
+  //         let hour = time.getHours();
+  //         time = new Date(time.setHours(hour, 00, 00));
+  //         result.push({ time, gust: parseFloat(max.toFixed(2)) });
+  //       };
+  //     };
+  //   });
 
     
-    while (result.length < 24) {
-      const oldDate = result[result.length - 1].time;
-      const hour = oldDate.getHours() + 1;
-      const date = new Date(oldDate.setHours(hour, 00, 00));
-      result.push({ time: date, sum: 0 });
-    };
+  //   while (result.length < 24) {
+  //     const oldDate = result[result.length - 1].time;
+  //     const hour = oldDate.getHours() + 1;
+  //     const date = new Date(oldDate.setHours(hour, 00, 00));
+  //     result.push({ time: date, sum: 0 });
+  //   };
 
-    return result;
-  },
+  //   return result;
+  // },
 };
