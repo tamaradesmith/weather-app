@@ -59,6 +59,19 @@ router.get('/:id/highslows', async (req, res) => {
     const highslows = await SensorQuery.getHighsAndLows(sensorId);
     res.send(highslows);
   } catch (error) {
+    console.log("error", error);
+    res.send(error.message);
+  }
+});
+
+router.get('/:id/day', async (req, res) => {
+  try {
+    const sensorId = req.params.id;
+    const daily = await SensorQuery.getDayReading(sensorId);
+    console.log("daily", daily);
+    res.send(daily);
+  } catch (error) {
+    console.log("error", error);
     res.send(error.message);
   }
 });

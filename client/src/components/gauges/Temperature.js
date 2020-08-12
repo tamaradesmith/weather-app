@@ -3,8 +3,6 @@ import React, { useState, useEffect } from 'react';
 import thermometer from "../../images/thermometer.png"
 import { Sensor } from '../../js/requests';
 
-// const colours = ["#22AED1", "#B8F3FF", "#DEFFFC", "#FFF07C", '#FDCA40', '#F79824', "#FF7700", "##E55812", "#BA2D0B", "#A30000"]
-
 const colours = ["#57C4E5", "#B8F3FF", "#DEFFFC", "#F4F1BB", "#FFF07C", "#F5BB00", "#EC9F05", "#D76A03", '#BF3100', "#A30000"]
 function Temperature(props) {
 

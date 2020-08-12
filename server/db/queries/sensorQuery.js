@@ -78,11 +78,27 @@ module.exports = {
   // },
   // get High and Low 24 hours
   async getHighsAndLows(sensorId) {
-    const reading = await knex("readings").select("value").where({ sensor_id: sensorId }).orderBy('value');
+    let date = new Date();
+    date.setHours(00, 00, 00)
+    const reading = await knex("readings").select("value").where({ sensor_id: sensorId }).andWhere('time', '>=', date).orderBy('value');
     const readings = { high: reading[reading.length - 1].value, low: reading[0].value }
     return readings
   },
+  async getDayReading(sensorId) {
+    let date = new Date();
+    date.setHours(00, 00, 00)
+    const reading = await knex('readings')
+    .where({ sensor_id: sensorId })
+    .andWhere('time', '>=', date)
+    .sum('value as daily')
+    return reading[0];
+      
 
+
+  //  .select('product')
+  //   .sum('revenue')
+  //   .from('orders')
+  },
   async getReadingsBySensor(sensorId, period) {
     period = period > 1 ? period - 1 : period
     let date = new Date();

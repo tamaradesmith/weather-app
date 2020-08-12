@@ -40,7 +40,7 @@ app.use(logger('dev'));
 // app.use(cookieParser('keyboard_cat'));
 app.use(cookieParser(process.env.COOKIE_SECRET));
 app.use(cors({
-  origin: 'http://localhost:8181',
+  origin: 'http://localhost:8081',
   credentials: true,
 }));
 
@@ -72,7 +72,7 @@ app.use(function (err, req, res, next) {
     message: err.message,
     error: req.app.get('env') === 'development' ? err : {}
   });
-  
+
 });
 
 // SERVER
