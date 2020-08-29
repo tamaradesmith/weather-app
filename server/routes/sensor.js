@@ -44,6 +44,7 @@ router.get('/:id/reading', async (req, res) => {
   const sensorId = req.params.id;
   try {
     const lastSensorReading = await SensorQuery.getLastReading(sensorId)
+    console.log("lastSensorReading", lastSensorReading);
     res.send(lastSensorReading);
   } catch (error) {
     const message = new Error({ sensor: sensorId, code: error.message })
@@ -92,6 +93,7 @@ router.get('/:id/partner', async (req, res) => {
 router.get('/:id/:period', async (req, res) => {
   try {
     const { id, period } = req.params;
+    console.log("period", period);
     let readings
     try {
       readings = await SensorQuery.getReadingsBySensor(id, period);
