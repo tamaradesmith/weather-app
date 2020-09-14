@@ -78,8 +78,8 @@ app.use(function (err, req, res, next) {
 // SERVER
 
 const PORT = 4000;
-// const ADDRESS = '0.0.0.0';
+const ADDRESS = '0.0.0.0';
 
-app.listen(PORT, () => {
+app.listen(PORT, ADDRESS, () => {
   console.log(`Listening => Port: ${PORT}`)
 });

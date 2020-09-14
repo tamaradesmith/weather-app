@@ -44,7 +44,6 @@ router.get('/:id/reading', async (req, res) => {
   const sensorId = req.params.id;
   try {
     const lastSensorReading = await SensorQuery.getLastReading(sensorId)
-    console.log("lastSensorReading", lastSensorReading);
     res.send(lastSensorReading);
   } catch (error) {
     const message = new Error({ sensor: sensorId, code: error.message })
@@ -60,7 +59,7 @@ router.get('/:id/highslows', async (req, res) => {
     const highslows = await SensorQuery.getHighsAndLows(sensorId);
     res.send(highslows);
   } catch (error) {
-    console.log("error", error);
+    console.error("error", error);
     res.send(error.message);
   }
 });
@@ -69,10 +68,9 @@ router.get('/:id/day', async (req, res) => {
   try {
     const sensorId = req.params.id;
     const daily = await SensorQuery.getDayReading(sensorId);
-    console.log("daily", daily);
     res.send(daily);
   } catch (error) {
-    console.log("error", error);
+    console.error("error", error);
     res.send(error.message);
   }
 });
@@ -85,7 +83,7 @@ router.get('/:id/partner', async (req, res) => {
     const sensor = await SensorQuery.getSensor(partner[0].partner)
     res.send(sensor)
   } catch (error) {
-    console.log(error.message)
+    console.error(error.message)
   }
 })
 
@@ -93,13 +91,12 @@ router.get('/:id/partner', async (req, res) => {
 router.get('/:id/:period', async (req, res) => {
   try {
     const { id, period } = req.params;
-    console.log("period", period);
     let readings
     try {
       readings = await SensorQuery.getReadingsBySensor(id, period);
 
     } catch (error) {
-    console.log("error readings", error.message);
+    console.error("error readings", error.message);
 
     }
     const chart = await SensorQuery.getChartType(id);
@@ -113,7 +110,7 @@ router.get('/:id/:period', async (req, res) => {
       const readingFormated = SensorHelpers.formateReadings(period, readings, chart);
       res.send(readingFormated)
     } catch (error) {
-      console.log(error);
+      console.error(error);
     }
   } catch (error) {
     res.send(error.message);
