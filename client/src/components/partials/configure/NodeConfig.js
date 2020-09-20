@@ -182,7 +182,6 @@ function NodeConfig(props) {
       ipaddress: formData.get('ipAddress'),
       active: (formData.get(`active`) === "on") ? true : false
     };
-    console.log("getNodeInfo -> newNode", newNode);
     checkFields(newNode, inputs, nodeForm);
   };
 
@@ -311,7 +310,6 @@ function NodeConfig(props) {
     setNodeId(await nodeDB.id);
     const nodeInfo = await Node.getNode(nodeDB.id);
     setNode(nodeInfo);
-    console.log("createNode -> nodeDB.value", nodeDB.value);
     if (nodeDB.value === true) {
       document.querySelector('#message').classList.remove('hidden');
       document.querySelector("#message").classList.add("message-div");
@@ -326,7 +324,7 @@ function NodeConfig(props) {
       setDevice(await deviceDb);
       setSensorCount(0);
     } else {
-      console.log("error :", deviceCount);
+      console.error("error :", deviceCount);
     };
   };
 

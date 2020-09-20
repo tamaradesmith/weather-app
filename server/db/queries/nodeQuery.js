@@ -110,7 +110,7 @@ module.exports = {
     const deviceXML = await axios.get(`http://${ip[0].ipaddress}/devicelist.xml`
     )
       .catch(err => {
-        console.log(err.message)
+        console.error(err.message)
       });
     return deviceXML.data;
   },

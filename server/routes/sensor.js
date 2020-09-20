@@ -12,7 +12,7 @@ router.get('/', async (req, res) => {
     const sensors = await SensorQuery.getSensors();
     res.send(sensors);
   } catch (error) {
-    res.send(error.message)
+    res.send(error.message);
   }
 });
 
@@ -83,7 +83,9 @@ router.get('/:id/partner', async (req, res) => {
     const sensor = await SensorQuery.getSensor(partner[0].partner)
     res.send(sensor)
   } catch (error) {
-    console.error(error.message)
+    console.error(error.message);
+    res.send(error.message);
+
   }
 })
 
@@ -97,25 +99,26 @@ router.get('/:id/:period', async (req, res) => {
 
     } catch (error) {
     console.error("error readings", error.message);
-
+      res.send(error.message);
     }
     const chart = await SensorQuery.getChartType(id);
     const partner = await SensorQuery.getPartner(id);
     if ("partner", partner.length !== 0) {
       const partnerReadings = await SensorQuery.getReadingsBySensor(partner[0].partner, period);
       const partnerChart = await SensorQuery.getChartType(parseInt(partner[0].partner));
-      readings = ['partner', { sensor: readings, chart: chart }, { sensor: partnerReadings, chart: partnerChart }]
+      readings = ['partner', { sensor: readings, chart: chart }, { sensor: partnerReadings, chart: partnerChart }];
     };
     try {
       const readingFormated = SensorHelpers.formateReadings(period, readings, chart);
       res.send(readingFormated)
     } catch (error) {
       console.error(error);
-    }
+      res.send(error.message);
+    };
   } catch (error) {
     res.send(error.message);
-  }
-})
+  };
+});
 
 // Save Reading to DB
 

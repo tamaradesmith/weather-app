@@ -71,7 +71,6 @@ function LineChartTwo(props) {
 
   function drawChart() {
     document.querySelector('.rowChart').innerHTML = null;
-    console.log(data[0])
     const margin = { top: 20, right: 15, bottom: 60, left: 40 },
       width = stateWidth - margin.left - margin.right,
       height = stateHeight - margin.top - margin.bottom;

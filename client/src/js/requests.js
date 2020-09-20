@@ -10,7 +10,7 @@ const Site = {
       return res.json();
     }
     catch (error) {
-      console.log(error);
+      console.error(error.message);
     };
   },
   async getLocations(siteId) {
@@ -62,7 +62,7 @@ const Node = {
       })
       return res.json();
     } catch (error) {
-      console.log(error)
+      console.error(error.message)
     }
 
   },
@@ -115,7 +115,7 @@ const Sensor = {
       });
       return res.json();
     } catch (error) {
-      console.log(error.message);
+      console.error(error.message);
     };
 
   },
@@ -126,7 +126,7 @@ const Sensor = {
       });
       return res.json();
     } catch (error) {
-      console.log(error.message);
+      console.error(error.message);
     };
   },
 
@@ -137,7 +137,7 @@ const Sensor = {
       });
       return res.json();
     } catch (error) {
-      console.log(error.message);
+      console.error(error.message);
     }
   },
   async getSensorsReadings(sensors) {
@@ -147,7 +147,7 @@ const Sensor = {
       });
       return res.json();
     } catch (error) {
-      console.log(error.message);
+      console.error(error.message);
     };
   },
   // temperature  
@@ -158,7 +158,7 @@ const Sensor = {
       });
       return res.json();
     } catch (error) {
-      console.log(error.message);
+      console.error(error.message);
     };
   },
   async getReadings(sensorId, period) {
@@ -168,7 +168,7 @@ const Sensor = {
       })
       return res.json();
     } catch (error) {
-      console.log(error.message);
+      console.error(error.message);
     };
   },
   async getPartnerSensor(sensorId){
@@ -178,7 +178,7 @@ const Sensor = {
       })
       return res.json();
     } catch (error) {
-      console.log(error.message);
+      console.error(error.message);
     };
   }
 };
@@ -230,7 +230,7 @@ const User = {
       },
       body: JSON.stringify(user)
     }).catch(err => {
-      console.log("this is an error", err);
+      console.error("error: ", err.message);
     });
     return res.json();
   },

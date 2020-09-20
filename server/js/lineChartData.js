@@ -55,7 +55,7 @@ module.exports = {
 
       data = (chart.formate) ? HighsLows.getHighLowsWeek(readings, 7) : AvgLine.avgWeek(readings, 7);
     } catch (error) {
-      console.log("weekLine -> error", error.message);
+      console.error("weekLine -> error", error.message);
     }
     return data;
   },
@@ -65,7 +65,7 @@ module.exports = {
     try {
       data = (chart.formate) ? HighsLows.getHighLowsMonth(readings, 30) : AvgLine.avgMonth(readings, 31);
     } catch (error) {
-      console.log("MonthLine -> error", error);
+      console.error("MonthLine -> error", error);
     }
     return data;
   },
@@ -75,7 +75,7 @@ module.exports = {
     try {
       data = (chart.formate) ? HighsLows.getHighLowsYear(readings) : HighsLows.getHighLowsYear(readings) ;
     } catch (error) {
-      console.log("MonthLine -> error", error.message);
+      console.error("MonthLine -> error", error.message);
     }
     return data;
   },

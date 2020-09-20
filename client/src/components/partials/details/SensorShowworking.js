@@ -18,7 +18,6 @@ function SensorShow(props) {
   
     async function getReading() {
       const sensorReadings = await Sensor.getLast24Readings(props.match.params.id)
-      console.log("getReading -> sensorReadings", sensorReadings);
         setData(sensorReadings);
     }
 
@@ -95,13 +94,11 @@ function SensorShow(props) {
   }, []);
 
   useEffect(()=>{
-    console.log(data)
     getWidthAndHeigth();
   },[data])
 
   useEffect(() => {
     if (stateHeight !== 0 && stateWidth !== 0) {
-      console.log(data);
       drawChart();
     }
   }, [data]);

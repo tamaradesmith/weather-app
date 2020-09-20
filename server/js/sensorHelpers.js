@@ -43,7 +43,6 @@ module.exports = {
 
 
   formateParnters(readings, period) {
-    console.log('parnters')
     readings.shift()
     let extra = null;
 
@@ -79,7 +78,6 @@ module.exports = {
       return readingResult;
     });
     const matchReading = this.matchDates(result, extra)
-    console.log("formateParnters -> matchReading", matchReading);
     return matchReading
   },
 

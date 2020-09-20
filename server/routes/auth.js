@@ -9,7 +9,6 @@ router.get('/',  async (req, res) => {
   const id = req.signedCookies.user || await UserQuery.getDefaultUser();
   const user = await UserQuery.getOne(id);
   res.send(user[0]);
-
 });
 
 router.post('/signup', async (req, res, next) => {
@@ -43,8 +42,7 @@ router.post('/login', async (req, res, next) => {
     UserQuery.GetByUsername(req.body.username)
       .then(user => {
         if (user) {
-          console.log("user", user);
-          bcrypt.compare(req.body.password, user.password).catch(error => console.log(error.message))
+          bcrypt.compare(req.body.password, user.password).catch(error => console.error(error.message))
             .then((result) => {
               if (result) {
                 const isSecure = req.app.get('env') != 'development';
@@ -71,7 +69,7 @@ router.post('/login', async (req, res, next) => {
           next(new Error("Invaild login"))
         }
       }).catch(error=>{
-        console.log(error.message)
+        console.error(error.message)
       });
   } else {
     next(new Error('Invaild login'))

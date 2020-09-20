@@ -22,7 +22,7 @@ module.exports = {
         };
       });
     })).catch(error => {
-      console.log("searchForNodes Promise.all -> error", error)
+      console.error("searchForNodes Promise.all -> error", error)
     });
     if (count + 9 > 190) {
       return nodes;
@@ -38,7 +38,6 @@ module.exports = {
       try {
         const node = await axios.get(`http://${BASE_IP}${index}/rest/node/name`);
         const name = this.getValue(node.data)
-        console.log("search -> name", name);
         clearTimeout(timer);
         const nodeInfo = { ip: BASE_IP + index, name }
         if (node != null) {
@@ -69,10 +68,10 @@ module.exports = {
         });
       }
       catch (error_1) {
-        console.log(error_1);
+        console.error(error_1);
       }
     })).catch(error => {
-      console.log(error)
+      console.error(error)
     });
     return nodeInfo
   },

@@ -17,19 +17,23 @@ module.exports = {
 
   // get sensor by id;
   async getSensor(id) {
-
-    const sensor = await knex('sensors')
-      .select("sensors.active", "sensors.name", "sensors.id", "sensors.description", "locations.name as location", 'sensor_types.type as type',)
-      .join('devices', 'devices.id', 'sensors.device_id')
-      .join('nodes', 'nodes.id', 'node_id')
-      .join('locations', "locations.id", "location_id")
-      .join("sensor_types", 'sensor_types.id', "sensors.type_id")
-      .where("sensors.id", id)
-    const sensorProperties = await knex('sensor_properties').select('*').where('sensor_id', id)
-    sensorProperties.forEach(proptery => {
-      sensor[0][proptery.name] = proptery.value
-    })
-    return sensor[0]
+    try {
+      const sensor = await knex('sensors')
+        .select("sensors.active", "sensors.name", "sensors.id", "sensors.description", "locations.name as location", 'sensor_types.type as type', 'sub_types.sub_type')
+        .join('devices', 'devices.id', 'sensors.device_id')
+        .join('nodes', 'nodes.id', 'node_id')
+        .join('locations', "locations.id", "location_id")
+        .join("sensor_types", 'sensor_types.id', "sensors.type_id")
+        .join("sub_types", 'sensors.sub_type_id', "sub_types.id")
+        .where("sensors.id", id)
+      const sensorProperties = await knex('sensor_properties').select('*').where('sensor_id', id)
+      sensorProperties.forEach(proptery => {
+        sensor[0][proptery.name] = proptery.value
+      })
+      return sensor[0]
+    } catch (error) {
+      console.error(error.message);
+    }
   },
 
   // SPECIAL QUERIES
@@ -88,16 +92,16 @@ module.exports = {
     let date = new Date();
     date.setHours(00, 00, 00)
     const reading = await knex('readings')
-    .where({ sensor_id: sensorId })
-    .andWhere('time', '>=', date)
-    .sum('value as daily')
+      .where({ sensor_id: sensorId })
+      .andWhere('time', '>=', date)
+      .sum('value as daily')
     return reading[0];
-      
 
 
-  //  .select('product')
-  //   .sum('revenue')
-  //   .from('orders')
+
+    //  .select('product')
+    //   .sum('revenue')
+    //   .from('orders')
   },
   async getReadingsBySensor(sensorId, period) {
     period = period > 1 ? period - 1 : period

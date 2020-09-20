@@ -180,7 +180,7 @@ function MixChart(props) {
       try {
         drawChart();
       } catch (error) {
-        console.log("MixChart -> error", error.message);
+        console.error("MixChart -> error", error.message);
       };
     } else {
       document.querySelector('#chart').innerHTML = `<p>${props.message}</p>`;

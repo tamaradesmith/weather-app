@@ -1,6 +1,5 @@
 import React, { useEffect } from 'react';
 import * as d3 from "d3";
-// import { format } from 'date-fns';
 
 
 function LineChart(props) {
@@ -14,7 +13,6 @@ function LineChart(props) {
   function dateformate() {
     switch (parseInt(period)) {
       case 1:
-
         rotate = 30;
         offset = 10;
         ticks = 24;
